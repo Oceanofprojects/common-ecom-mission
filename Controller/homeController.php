@@ -28,7 +28,7 @@ class homeController extends commonController
     public function index()
     {
         $this->view("index", array(
-            "title" => "Employees"
+            "title" => "Home Page"
         ));
     }
 
