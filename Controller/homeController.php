@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
+require_once __DIR__ . "/../controller/commonController.php"; //COMMON CONTOLLER
 
 class homeController extends commonController
 {
@@ -28,7 +28,7 @@ class homeController extends commonController
     public function index()
     {
         $this->view("index", array(
-            "title" => "Home Page"
+            "title" => "Employees"
         ));
     }
 

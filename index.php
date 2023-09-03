@@ -1,6 +1,5 @@
 <?php
-echo "MANi";
-require_once 'Config/global.php';
+require_once 'config/global.php';
 
 if (isset($_GET["controller"])) {
     $controllerObj = loadController($_GET["controller"]);
@@ -13,12 +12,12 @@ if (isset($_GET["controller"])) {
 function loadController($controller)
 {
     switch ($controller) {
-        case 'home':
-            require_once 'Controller/homeController.php';
-            $controllerObj = new homeController();
-            break;
+        // case 'employees':
+        //     require_once 'controller/employeesController.php';
+        //     $controllerObj = new EmployeesController();
+        //     break;
         default:
-            require_once 'Controller/homeController.php';
+            require_once 'controller/homeController.php';
             $controllerObj = new homeController();
             break;
     }

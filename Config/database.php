@@ -3,7 +3,7 @@ define("DB_DRIVER", "mysql");
 define("DB_HOST", "localhost");
 define("DB_USER", "root");
 define("DB_PASS", "");
-define("DB_DATABASE", "employee_data"); //DATABASE
+define("DB_DATABASE", "employee_data"); //EDITED
 define("DB_CHARSET", "utf8");
 
 ?>
