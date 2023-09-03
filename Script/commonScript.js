@@ -32,7 +32,7 @@ function init_rule() {
                 text: null
             }
         },
-        makeAction: function () {
+        makeAction: function() {
             if (this.popUp.alertBox.active) {
                 if (this.popUp.alertBox.text == null || (this.popUp.alertBox.text).length == 0) {
                     console.log('Empty alert popup used in commonAjaxRule');
@@ -115,14 +115,14 @@ function sendData(displayMsg, form, callback) {
     }
 }
 
-function performAjx(reqUrl, reqType, datas, callback) {
+function performAjx(reqUrl, reqType, datas = '', callback) {
     return $.ajax({
         url: reqUrl,
         type: reqType,
         data: datas,
-        success: function (e) {
-            res = JSON.parse(e);
-            responseHandler('', res);
+        success: function(e) {
+            return JSON.parse(e);
+            //           responseHandler('', res);FOR AUTO HANDLE
         }
     }).done(callback);
 }
@@ -136,7 +136,7 @@ function responseHandler(displayMsg = '', res) {
     }
 
     //CHECKING RESPONSE STATUS
-    $('input,select,textarea').css('border', '1px solid #555a');
+    //    $('input,select,textarea').css('border', '1px solid #555a');
     if (res.status == "success" || res.status == true) {
         if (displayMsg !== '') {
             $(displayMsg).text('success').css('color', 'green');

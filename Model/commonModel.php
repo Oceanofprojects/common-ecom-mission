@@ -5,7 +5,7 @@ class commonModel
 {
     private $table;
     public $query;
-    
+
     public function generateQuery($arData = ''){
         if(is_array($arData)){
             $this->arColVal = $arData;
@@ -50,16 +50,16 @@ class commonModel
         //FIND COLUMNS TO ACCESS THE DATA
         if (isset($this->arColVal['data']) == 1) {
             if (count($this->arColVal['data']) == 0) {
-                $data = '*'; //IF COLUMNS NAME ARAY IS EMPTY, IT'S TAKES DEFAULT (*) 
+                $data = '*'; //IF COLUMNS NAME ARAY IS EMPTY, IT'S TAKES DEFAULT (*)
             } else {
-                $data = $this->dataSep('sep', $this->arColVal['data']); //MAKING COLUMN LIST SEPARATED BY (,)    
+                $data = $this->dataSep('sep', $this->arColVal['data']); //MAKING COLUMN LIST SEPARATED BY (,)
             }
         }else{
             return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Data field is must'];
         }
 
         //GENERATING CONDITIONS
-        
+
 
         if(isset($this->arColVal['condition']) == 1 && (count($this->arColVal['condition']) != 0)){
             if(isset($this->arColVal['condition']['manual'])){
@@ -98,7 +98,7 @@ class commonModel
         }
 
 
-        //QUERY GENERATION BASED ON ACTION VALUE    
+        //QUERY GENERATION BASED ON ACTION VALUE
         if (strtoupper($this->arColVal['action']) == 'INSERT') {
             $insertcolname = '(' . $this->getSepKey($this->arColVal['data']) . ') ';
             $insertColVal = 'VALUES (' . $this->getSepVal($this->arColVal['data']) . ')';
@@ -109,16 +109,16 @@ class commonModel
             if(count($this->arColVal['data']) !== 0){
                 $this->query = $action . ' ' . $this->table . ' SET ' . $data = $this->dataSep('up_sep', $this->arColVal['data']) . ' ' . $condition;
             }else{
-                return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Data param empty!, Param must for UPDATE']; 
+                return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Data param empty!, Param must for UPDATE'];
             }
         } else if (strtoupper($this->arColVal['action']) == 'DELETE') {
             $this->query = $action . ' FROM ' . $this->table . ' ' . $condition;
         } else if (strtoupper($this->arColVal['action']) == 'JOIN') {
-            if (isset($this->arColVal['join_param'])) { 
+            if (isset($this->arColVal['join_param'])) {
                 if(count($this->arColVal['join_param']) !== 0){
                     $this->query = 'SELECT ' . $data . ' FROM '.$this->table.' '.$this->createJoins($this->table,$this->arColVal['join_param']).$condition. ' ' . $order . ' ' . $limit;
                 }else{
-                    return ['status' => 'failed', 'data' => [], 'msg' => 'Err : join_param Attr values must for build JOIN query']; 
+                    return ['status' => 'failed', 'data' => [], 'msg' => 'Err : join_param Attr values must for build JOIN query'];
                 }
             } else {
                 return ['status' => 'failed', 'data' => [], 'msg' => 'Err : join_param Attr must for JOIN query'];
@@ -132,29 +132,29 @@ class commonModel
          */
         if(isset($_REQUEST['DEBUG_INFO']) && strtoupper($_REQUEST['DEBUG_INFO']) == 'YES'){
             echo json_encode(['DEBUG_STATUS'=>true,'DEBUG_MSG'=>'DEBUG_VIEW Enabled','DEBUG_QUERY_STATUS'=>'Query generated successfully.','DEBUG_QUERY'=>$this->query]);
-            exit;            
+            exit;
         }else if (isset($_REQUEST['DEBUG_MODE']) && strtoupper($_REQUEST['DEBUG_MODE']) == 'YES') {
             echo "<table border='1'><tr><th>Data Field</th><th>Data</th></tr><tr><td>DEBUG_MODE</td><td>true</td></tr><tr><td>DEBUG_MSG</td><td>DEBUG_MODE Enabled.</td></tr><tr><td>Query Status</td><td>Query generated successfully</td></tr><tr><td>Query</td><td>{$this->query}</td></tr></table>";exit;
         }
 
-        //PREPARE QUERY
-        return $this->query;
-
-        // $sql = $this->connection->prepare($this->query);
-        
-        // //RUNNING QUERY
-        // if ($sql->execute()) {
-        //     if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
-        //         //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
-        //         $res = $sql->fetchAll(PDO::FETCH_ASSOC);//GETTING ALL DATA
-        //             return $this->outPut((isset($this->arColVal['type']) == 1 && count($this->arColVal['type']) !== 0) ? $this->arColVal['type'][0] : 'array', $res);
-                
-        //     } else {
-        //             return $this->outPut((isset($this->arColVal['type']) == 1 && count($this->arColVal['type']) !== 0) ? $this->arColVal['type'][0] : 'array', '');                
-        //     }
-        // } else {
-        //     return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Query Exec Failed','details'=>['code'=>$sql->errorInfo()[1],'message'=>$sql->errorInfo()[2]]];
-        // }
+        if(isset($this->arColVal['query-exc']) && $this->arColVal['query-exc'] == true){
+          //PREPARE QUERY
+          $sql = $this->db->prepare($this->query);
+          //RUNNING QUERY
+          if ($sql->execute()) {
+              if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
+                  //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
+                  $res = $sql->fetchAll(PDO::FETCH_ASSOC);//GETTING ALL DATA
+                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', $res);
+              } else {
+                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', '');
+              }
+          } else {
+              return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Query Exec Failed','details'=>['code'=>$sql->errorInfo()[1],'message'=>$sql->errorInfo()[2]]];
+          }
+        }else{
+          return $this->query;
+        }
     }
 
     public function createJoins($primary_tbl,$joins){
@@ -174,14 +174,14 @@ class commonModel
             return ['status' => 'success', 'data' => $qResult, 'msg' => 'Query Successfuly Executed'];
         }
     }
-    
+
     public function dataSep($type, $arData)
     { //COLUMN VALUE SEPARATER OR LIST MAKER (It's generating values based on $type variable(sep -> (,) and con -> (sql AND)))
 
         //INIT Combine Operator START
         if(isset($this->arColVal['conditionCombineOpt'])){
             if(strlen(str_replace(' ','',$this->arColVal['conditionCombineOpt'])) == 0){
-                $combineOpt = ' AND ';//If arr value empty 
+                $combineOpt = ' AND ';//If arr value empty
             }else{
                 $combineOpt = ' '.$this->arColVal['conditionCombineOpt'].' ';
             }
@@ -193,7 +193,7 @@ class commonModel
         $data = '';
         for ($i = 0; $i < count($arData); $i++) {
             if ($type == 'con') { //WHERE CONDITION SEP
-                
+
                 for($y=0;$y<count($expressions);$y++){//Expression Handling (=,<=,>=,<,>,!=)
                     if(preg_match('@'.$expressions[$y].'@',$arData[$i])){
                          $expression = $expressions[$y];
@@ -205,7 +205,7 @@ class commonModel
                 }
 
                 $sepCalVal = explode($expression, $arData[$i]);
-                
+
                 if(isset($this->arColVal['like'])){
                     if($this->arColVal['like']){
                         if(strlen(str_replace("'","",str_replace(' ','',$sepCalVal[1]))) !== 0){
@@ -243,7 +243,7 @@ class commonModel
                 }
 
             } elseif ($type == 'up_sep') { //UPDATE SEP
-                $sepCalVal = explode('=', $arData[$i]);   
+                $sepCalVal = explode('=', $arData[$i]);
                     if (($i + 1) == count($arData)) { //FINDING LAST VALUE TO AVOID SEPARETION ENTRY(,)
                         $data .= "`" . $sepCalVal[0] . "`=" . $sepCalVal[1].'';
                     } else {
@@ -298,16 +298,16 @@ class commonModel
         return $data;
     }
 
-    public function genRnd($cateV = 'numeric',$size = 5){ 
+    public function genRnd($cateV = 'numeric',$size = 5){
         if(is_string($cateV)){
             $cate = $cateV;
         }else{
             $cate = 'numeric';
             $size = $cateV;
         }
-        
+
         $alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        
+
         if($cate == 'numeric' || $cate == 'NUMERIC'){
             $fromDigi = $toDigi = null;
             for($i=0;$i<$size;$i++){
