@@ -1,5 +1,5 @@
 <?php
-
+echo "MANi";
 require_once 'Config/global.php';
 
 if (isset($_GET["controller"])) {
