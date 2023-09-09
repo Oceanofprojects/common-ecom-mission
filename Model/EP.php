@@ -195,7 +195,11 @@ class EP extends commonModel{
 			}
 	}
 	public function addToFav(){
-		$c_id = $_GET['c_id'];
+		if($this->cid == null){
+			echo json_encode(['status'=>0,'flag'=>0,'data'=>'err in fav','message'=>'Please login to make action !']);
+			exit;
+		}
+		$c_id = $this->cid;
 		$p_id = $_GET['p_id'];
 
 		$arr = ['tbl_name'=>'myfav','action'=>'select','data'=>[],'condition'=>["p_id='".$p_id."'","cid='".$c_id."'"],'query-exc'=>true];

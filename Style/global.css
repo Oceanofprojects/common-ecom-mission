@@ -1,6 +1,7 @@
 * {
     padding: 0px;
     margin: 0px;
+    font-family: sans-serif;
 }
 
 .item-container {
@@ -113,4 +114,59 @@
 
 .quantity-control small {
     padding: 0px 5px;
+}
+#common_dis_msg_box{
+  width:50%;
+padding:10px 20px;
+position:fixed;
+left:0px;
+bottom:0px;
+z-index:100;
+text-align: center;
+display: none;
+font-size:10pt;
+font-weight: bolder;
+border-radius:5px;
+}
+
+
+.mycart,
+.myfav{
+    height: 100vh;
+    width: 100%;
+    background: #fff;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 5;
+    display: none;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+#mycarttbl,
+#myfavtbl {
+    width: 90%;
+    border-collapse: collapse;
+}
+
+#mycarttbl th {
+    background: #123;
+    color: #ddd;
+    text-transform: capitalize;
+}
+
+#mycarttbl th,
+#mycarttbl td {
+    border: .2px solid rgba(0, 0, 0, .3);
+    padding: 5px;
+}
+
+#mycarttbl tr:nth-child(even) {
+    background: rgba(0, 0, 0, .1);
+
+}
+
+#mycarttbl td {
+    text-align: left;
 }

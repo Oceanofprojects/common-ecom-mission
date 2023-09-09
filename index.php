@@ -1,6 +1,6 @@
 <?php
-require_once 'config/global.php';
 
+require_once 'config/global.php';
 if (isset($_GET["controller"])) {
     $controllerObj = loadController($_GET["controller"]);
     launchAction($controllerObj);
@@ -23,6 +23,7 @@ function loadController($controller)
     }
     return $controllerObj;
 }
+
 
 function launchAction($controllerObj)
 {

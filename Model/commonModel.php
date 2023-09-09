@@ -51,8 +51,14 @@ class commonModel
         if (isset($this->arColVal['data']) == 1) {
             if (count($this->arColVal['data']) == 0) {
                 $data = '*'; //IF COLUMNS NAME ARAY IS EMPTY, IT'S TAKES DEFAULT (*)
-            } else {
+            }else{
+              if(isset($this->arColVal['data']['manual'])){
+                $data = $this->arColVal['data']['manual'][0];
+              }else if(isset($this->arColVal['data']['auto'])){
+                $data = $this->dataSep('sep', $this->arColVal['data']['auto']); //MAKING COLUMN LIST SEPARATED BY (,)
+              }else{
                 $data = $this->dataSep('sep', $this->arColVal['data']); //MAKING COLUMN LIST SEPARATED BY (,)
+              }
             }
         }else{
             return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Data field is must'];
@@ -94,7 +100,6 @@ class commonModel
             }
         } else {
             $limit = '';
-            $order = '';
         }
 
 

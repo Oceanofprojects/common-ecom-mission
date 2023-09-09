@@ -6,8 +6,7 @@ function loadComponent(type, data) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" onclick=\"add_fav(\'' + data.data[i].p_id +
-              '\',\'' + uid +
-              '\')\"></h6><div class=\"img-src\" style=\"background:url(assets/product_images/' +
+              '\')\"></h6><div class=\"img-src\" style=\"background:ur(assets/product_images/' +
               data.data[i].p_img +
               ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center">' +
               data.data[i].p_name +
@@ -27,4 +26,18 @@ function loadComponent(type, data) {
 function quantityControlComponent() {
     v = '<div style="padding-top:5px;border-top:.2px solid rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items: center;"><div class="quantity-control"><h2>KG</h2><span class="fa fa-minus" onclick="decr_quantity(2,20,40)"></span><small id="quantity_2">0</small><span class="fa fa-plus" onclick="incr_quantity(2,20,40)"></span></div><span class="fa fa-long-arrow-right"></span><div><span id="dis-cart-price-2">0</span><sup>rs</sup></div></div>';
     return v;
+}
+
+function myfavComponent(data){
+  $('.myfav').fadeIn(100);
+  $('#myfavtbl').empty();
+  $('#myfavtbl').append(
+      "<tr><th>sno</th><th>Product ID</th><th>Added On</th><th>Option</th>");
+  for (ci = 0; ci < data.data.length; ci++) {
+      $('#myfavtbl').append("<tr><td>" + (ci + 1) +
+          "</td><td><a href='view_product.php?pid=" + data.data[ci].p_id + "'>" + data
+          .data[ci].p_id + "</a></td><td>" + data.data[ci].created_at +
+          "</td><td><button class=\"btn\" onclick=\"add_fav_tmp_ctrl('" + data.data[
+              ci].p_id + "'," + uid + ")\">Remove</button></td></tr>");
+  }
 }

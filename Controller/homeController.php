@@ -2,12 +2,21 @@
 
 require_once __DIR__ . "/../controller/commonController.php"; //COMMON CONTOLLER
 
+
+
 class homeController extends commonController
 {
 
     public function __construct()
     {
         //init
+        require_once __DIR__ . "/../model/productModel.php";
+
+        $this->validateResults = []; //init for auto validate looping arr in commonController.php
+
+        //Product Model
+
+        $this->productMdl = new products();
     }
     /**
      * Execute the corresponding action.
@@ -15,20 +24,30 @@ class homeController extends commonController
      */
     public function run($action)
     {
-        switch ($action) {
-            case "index":
-                $this->index(); //DONE
-                break;
-            default:
-                $this->index(); //DONE
-                break;
-        }
+        $algo = 'sha256';
+      $skey = 9050;
+      if(isset($_GET) && count($_GET)){
+        $req['key'] = $_GET['key'];
+      }else{
+        $req['key'] = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6';
+      }
+
+      if(hash_equals(hash_hmac($algo,'get_all',$skey),$req['key'])){
+        $this->index();
+      }else if(hash_equals(hash_hmac($algo,'addToFav',$skey),$req['key'])){
+        echo json_encode($this->productMdl->addToFav());
+      }else if(hash_equals(hash_hmac($algo,'getMyFav',$skey),$req['key'])){
+        echo json_encode($this->productMdl->myfav());
+      }else{
+        $this->index();
+      }
     }
 
     public function index()
     {
         $this->view("index", array(
-            "title" => "Employees"
+            "title" => "Home",
+            "data"=>$this->productMdl->get_all()
         ));
     }
 

@@ -1,34 +1,20 @@
-function get_all(x = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6') {
-    performAjx('model/EP.php', 'get', 'key=' + x, (res) => {
-        if (typeof(res) !== 'undefined') {
-            loadComponent('nor-card-view', JSON.parse(res));
-        }
-    });
-}
+// function get_all(x = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6') {
+//     performAjx('model/EP.php', 'get', 'key=' + x, (res) => {
+//         if (typeof(res) !== 'undefined') {
+//             loadComponent('nor-card-view', JSON.parse(res));
+//         }
+//     });
+// }
 
-function add_fav(p_id, c_id) {
-  performAjx('model/EP.php', 'get','key=f0fbe9802db9070478c7bf0a10abf99e0ea9088ea9d9334bd7d4d778f20de42e&c_id=' + c_id + '&p_id=' + p_id, (res) => {
-    console.log(res)
-  });
-    if (c_id.trim().length !== 0) {
-        // $.ajax({
-        //     url: 'EP.php?key=addToFav&c_id=' + c_id + '&p_id=' + p_id,
-        //     type: 'get',
-        //     success: function(add_fav_res) {
-        //         data = JSON.parse(add_fav_res);
-        //         if (parseInt(data.status)) {
-        //             if (parseInt(data.flag)) {
-        //                 get_all(search);
-        //             }
-        //         } else {
-        //             alert(data.data)
-        //         }
-        //     }
-        // });
-
-    } else {
-        alert('Please login to save product !');
+function add_fav(p_id) {
+  performAjx('index.php', 'get','key=f0fbe9802db9070478c7bf0a10abf99e0ea9088ea9d9334bd7d4d778f20de42e&controller=home&action=index&p_id=' + p_id, (res) => {
+    d = JSON.parse(res);
+    if(d.status){
+      dis_msg_box('#000','lightgreen',d.message);
+    }else{
+      dis_msg_box('#000','tomato',d.message);
     }
+  });
 }
 
 
@@ -104,4 +90,42 @@ function check_price_digit(x) {
             return x.toFixed(2);
         }
     }
+}
+
+function dis_msg_box(color,bgcolor,content){
+  $('#common_dis_msg_box').fadeIn(500);
+  $('#common_dis_msg_box').css('background-color',bgcolor);
+  $('#common_dis_msg_box').css('color',color);
+  $('#msg_content_to_display').text(content);
+  setTimeout(function(){
+  $('#common_dis_msg_box').fadeOut(500);
+  },2000);
+}
+
+function getFav() {
+    $.ajax({
+        url: 'EP.php?key=myfav&uid=' + uid,
+        type: 'get',
+        success: function(e) {
+            data = JSON.parse(e);
+            if (parseInt(data.status)) {
+
+
+            }
+        }
+    });
+}
+function getMyFav(){
+  performAjx('index.php', 'get','key=94f224e95c2fe21dfe0085d5665bc248d55a0c1be7dc574729ebaa12d97b4ed3&controller=home&action=index', (res) => {
+    myfavComponent(JSON.parse(res))
+  });
+}
+//94f224e95c2fe21dfe0085d5665bc248d55a0c1be7dc574729ebaa12d97b4ed3
+function cls_my_fav() {
+    $('.myfav').fadeOut(100);
+}
+
+function dis_my_fav() {
+  getMyFav();
+    $('.myfav').fadeIn(100);
 }

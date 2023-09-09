@@ -1,14 +1,15 @@
 <style>
 .menu {
-    position: sticky;
+    /* position: sticky;
     top: 0px;
-    left: 0px;
+    left: 0px; */
     display: flex;
     justify-content: space-around;
     align-items: center;
     background: #fff;
     padding: 15px 5px;
     box-shadow: 10px 0px 10px 1px rgba(0, 0, 0, .2);
+    z-index:50
 }
 
 .menu img {
@@ -22,13 +23,16 @@
 }
 
 .menu li {
-    list-style: none
+    list-style: none;
+    margin:0px 10px;
+    font-size:15px
 }
 
 .menu li a {
     text-decoration: none;
     color: #000;
-    padding: 0px 20px
+    padding: 0px 5px;
+    font-size: 12pt
 }
 
 .menu li a:hover {
@@ -39,6 +43,16 @@
     display: none
 }
 </style>
+<?php
+require_once 'model/productModel.php';
+
+$cusObj = new products();
+if($cusObj->getUserId()[0]){
+  $extraLinks = '<li class="fa fa-heart-o"><a href="#" onclick="dis_my_fav()">My fav</a></li><li class="fa fa-shopping-cart"><a href="#">Cart</a></li><li class="fa fa-user-circle"><a href="#">Account</a></li>';
+}else{
+  $extraLinks = '<li><a href="#" class="fa fa-sign-in">Login</a></li>';
+}
+?>
 <header class="menu">
     <div>
         <img src="assets/common-images/logo.png" alt="asasas">
@@ -46,11 +60,10 @@
     </div>
     <nav>
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Search</a></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Offer</a></li>
-            <li><a href="#">Login</a></li>
+            <li class="fa fa-home"><a href="#">Home</a></li>
+            <li class="fa fa-search"><a href="#">Search</a></li>
+            <li class="fa fa-percent"><a href="#">Offer</a></li>
+            <?php echo $extraLinks;?>
         </ul>
     </nav>
 </header>

@@ -1,40 +1,70 @@
 <html>
 
 <head>
-    <title>Home Page</title>
+    <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <script src="script/commonScript.js"></script>
     <script src="script/jquery.min.js"></script>
-
     <script src="script/action.js"></script>
     <script src="script/components.js"></script>
     <link rel="stylesheet" href="style/global.css">
+
 </head>
+<?php
+if(isset($_COOKIE['uid'])){
+//  print_r($_COOKIE);
+}else{
+  setcookie('uid',3802279867,time() + (86400 * 30),"/");
+}
+?>
 
 <body>
     <?php
     require_once __DIR__.'/../sections/header.php';
     ?>
-    <script>
-get_all();
-    </script>
+    <style>
 
+    </style>
+    <div id="common_dis_msg_box">
+    		<div id="msg_content_to_display"></div>
+    	</div>
     <br><br><br>
     <div class="item-container">
-
+      <?php
+      if(count($data['data'])!==0){
+        echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
+      }else{
+        echo "ZERO";
+      }
+      ?>
     </div>
+
+    <div class="myfav">
+        <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
+            onclick="cls_my_fav()"></h4>
+        <h1 align="center">MY FAV</h1>
+        <br>
+
+        <br>
+        <center>
+            <table id="myfavtbl" style="text-align:center">
+            </table>
+        </center>
+        <br><br><br>
+    </div>
+
 </body>
 <?php
- //   require_once 'sections/suggestionProducts.php';
+//    require_once 'sections/suggestionProducts.php';
+echo hash_hmac('sha256','getMyFav',9050);
 ?>
+
+
+<script>
+//get_all();
+
+</script>
 
 
 </html>
-<?php
-session_start();
-$_SESSION['1485fe7c0627c439594baf9c3db3d47ec39e6abab732dec42a662067d7374940'] = 3802279867;
-$algo = 'sha256';
-$skey = 9050;
-echo hash_hmac($algo,'uniqueID',$skey);
-?>
