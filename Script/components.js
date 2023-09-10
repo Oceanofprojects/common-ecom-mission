@@ -4,7 +4,7 @@ function loadComponent(type, data) {
       uid =1234;
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
-          $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
+          $('.item-container').append('<div class=\"box\" onclick="window.open(\'index.php?controller=product&action=productDetail&pid='+data.data[i].p_id+'\')"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" onclick=\"add_fav(\'' + data.data[i].p_id +
               '\')\"></h6><div class=\"img-src\" style=\"background:ur(assets/product_images/' +
               data.data[i].p_img +
@@ -28,6 +28,7 @@ function quantityControlComponent() {
     return v;
 }
 
+
 function myfavComponent(data){
   $('.myfav').fadeIn(100);
   $('#myfavtbl').empty();
@@ -37,7 +38,7 @@ function myfavComponent(data){
       $('#myfavtbl').append("<tr><td>" + (ci + 1) +
           "</td><td><a href='view_product.php?pid=" + data.data[ci].p_id + "'>" + data
           .data[ci].p_id + "</a></td><td>" + data.data[ci].created_at +
-          "</td><td><button class=\"btn\" onclick=\"add_fav_tmp_ctrl('" + data.data[
-              ci].p_id + "'," + uid + ")\">Remove</button></td></tr>");
+          "</td><td><button class=\"btn fa fa-trash\" onclick=\"add_fav_tmp_ctrl('" + data.data[
+              ci].p_id + "')\"></button></td></tr>");
   }
 }

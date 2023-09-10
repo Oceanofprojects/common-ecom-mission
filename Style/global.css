@@ -1,3 +1,5 @@
+
+
 * {
     padding: 0px;
     margin: 0px;
@@ -169,4 +171,77 @@ border-radius:5px;
 
 #mycarttbl td {
     text-align: left;
+}
+
+
+.slide_container{
+  height:89%;
+overflow:hidden;
+width:100%;
+text-align: left;
+position: relative;
+top:0px;
+left:0px;
+}
+.slide_layer{
+display: flex;
+height:100%;
+width: 6700px;
+padding:50px 0px;
+transition: 2s;
+}
+.slide_layer .box{
+  margin: 0px 40px;
+  width:100vw;
+  text-align: left;
+  display: flex;
+      justify-content:center;
+      flex-direction: column;
+        position: relative;
+  top:0px;
+  left:0px;
+  background:#fff;
+  box-shadow:0px 15px 20px 2px rgba(0,0,0,.2);
+  border:.2px solid rgba(0,0,0,.1);
+  border-radius: 10px
+}
+.slide_changer{
+  font-size:2em;
+  text-align: right;
+    display: flex;
+      justify-content:space-around;
+align-items: center;
+width:100%;
+}
+
+.slide_changer span{
+  margin:0px 5px;
+  border-radius: 10px;
+}
+
+.slide_changer span:hover{
+  cursor: pointer;
+}
+.slide_changer .testimoninal_indicator span{
+  font-size:10pt;
+}
+.slide_layer .box h1{
+  padding:20px;
+}
+p{
+  font-size:11pt;
+}
+.slide_layer .box p{
+  padding:10px 20px;
+  text-align: justify;
+}
+.testi_logo{
+  height: 50px;
+  margin:0px 10px
+}
+.testi_profile{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+padding:10px 20px
 }

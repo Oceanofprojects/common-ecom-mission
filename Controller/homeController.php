@@ -24,6 +24,10 @@ class homeController extends commonController
      */
     public function run($action)
     {
+      if($action == 'productDetail'){
+        $this->productDetail();
+        exit;
+      }
         $algo = 'sha256';
       $skey = 9050;
       if(isset($_GET) && count($_GET)){
@@ -49,6 +53,14 @@ class homeController extends commonController
             "title" => "Home",
             "data"=>$this->productMdl->get_all()
         ));
+    }
+
+    public function productDetail(){
+      
+      $this->view("productDetails/index", array(
+          "title" => "Home",
+          "data"=>$this->productMdl->get_product()
+      ));
     }
 
 

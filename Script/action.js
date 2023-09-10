@@ -129,3 +129,81 @@ function dis_my_fav() {
   getMyFav();
     $('.myfav').fadeIn(100);
 }
+
+function add_fav_tmp_ctrl(x) {
+    cls_my_fav();
+    add_fav(x);
+}
+
+
+var pos=0;
+  var testi_time=setInterval(scroll,5000);
+  var auto_loop=0;
+  function scroll(){
+    if(auto_loop == 2){
+    clearInterval(testi_time);
+    auto_loop=0;
+    testi_time=setInterval(scroll,5000);
+    }else{
+      pos=new_pos_value();
+//			alert(pos)
+      scroll_bg(pos);
+    }
+  }
+
+function manual_slide(x){
+  clearInterval(testi_time);
+  testi_time=setInterval(scroll,10000);
+  pos=eval('pos '+x+' 100');
+  check_scroll();
+}
+
+function check_scroll(){
+  if(pos > 400){
+    pos = 0;
+  }else if(pos < 0){
+    pos = 400;
+  }else if(pos == 0){
+    pos = 100;
+  }
+  auto_loop+=1;
+  scroll_bg(pos);
+}
+
+function scroll_bg(x){
+  $('.slide_layer').css('margin-left','-'+x+'%');
+  for(i=1;i<=5;i++){
+    $('#indi'+i).removeAttr('class');
+  }
+  for(i=1;i<=5;i++){
+    $('#indi'+i).attr('class','fa fa-square-o');
+  }
+  if(x == 0){
+    $('#indi1').removeAttr('class');
+    $('#indi1').attr('class','fa fa-square');
+  }else if(x == 100){
+    $('#indi2').removeAttr('class');
+    $('#indi2').attr('class','fa fa-square');
+  }else if(x == 200){
+    $('#indi3').removeAttr('class');
+    $('#indi3').attr('class','fa fa-square');
+  }else if(x == 300){
+    $('#indi4').removeAttr('class');
+    $('#indi4').attr('class','fa fa-square');
+  }else if(x == 400){
+    $('#indi5').removeAttr('class');
+    $('#indi5').attr('class','fa fa-square');
+  }
+}
+function new_pos_value(){
+  if(pos > 400 || pos == 400){
+    pos = 0;
+  }else if(pos < 0 ){
+    pos = 400;
+  }else if(pos == 0){
+    pos = 100;
+  }else{
+    pos=pos+100;
+  }
+  return pos;
+}

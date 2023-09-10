@@ -129,6 +129,39 @@ class products extends commonModel{
 
 	}
 
+	public function get_product(){
+		if(isset($_GET['pid'])){
+				$p_id = $_GET['pid'];
+				if($this->cid == null){
+					$arr = [
+						'tbl_name'=>'products',
+						'data'=>[],
+						'action'=>'select',
+						'condition'=>['p_id="'.$p_id.'"'],
+						'query-exc'=>true
+					];
+				}else{
+					$arr = [
+		        'tbl_name'=>'products',
+		        'action'=>'select',
+		        'data'=>[],
+						'condition'=>['manual'=>['p_id="'.$p_id.'"']],
+		        'query-exc'=>true
+		      ];
+				}
+				$flag = $this->generateQuery($arr);
+				if($flag['status']){
+					return ['status'=>true,'data'=>$flag['data'],'message'=>'Product details fetched'];
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'Err in get product details'];
+				}
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Something went wrong. please try again.'];
+		}
+
+	}
+
+
 
 }//CLASS END
 
