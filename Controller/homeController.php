@@ -42,6 +42,10 @@ class homeController extends commonController
         echo json_encode($this->productMdl->addToFav());
       }else if(hash_equals(hash_hmac($algo,'getMyFav',$skey),$req['key'])){
         echo json_encode($this->productMdl->myfav());
+      }else if(hash_equals(hash_hmac($algo,'addToCart',$skey),$req['key'])){
+        echo json_encode($this->productMdl->addToCart());
+      }else if(hash_equals(hash_hmac($algo,'myCart',$skey),$req['key'])){
+        echo json_encode($this->productMdl->mycart());
       }else{
         $this->index();
       }
@@ -56,9 +60,9 @@ class homeController extends commonController
     }
 
     public function productDetail(){
-      
+
       $this->view("productDetails/index", array(
-          "title" => "Home",
+          "title" => "Product detail",
           "data"=>$this->productMdl->get_product()
       ));
     }

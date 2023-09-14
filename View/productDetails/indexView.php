@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>as</title>
+    <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <script src="script/commonScript.js"></script>
@@ -14,17 +14,6 @@
   </head>
   <body>
     <style>
-    * {
-        padding: 0px;
-        margin: 0px
-    }
-  body{
-    background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.8)),url('assets/common-images/leave_bg.jpg');
-    background-position: center;
-    background-attachment:fixed;
-    background-size: cover;
-  }
-
     .details {
         display: flex;
         justify-content: space-around;
@@ -67,7 +56,7 @@
     }
 
     .details-box-head {
-        background: linear-gradient(0deg, transparent, rgba(0, 0, 0, .3) 95%);
+        background:#FFD580;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -77,9 +66,9 @@
     .details-box-head a {
         text-decoration: none;
         font-size: 13pt;
-        color:#555;
+        color:#fff;
         margin: 10px;
-        background-color:rgba(256,256,256,.9);
+        background-color:#555;
         padding: 10px;
         border-radius: 5px
     }
@@ -95,7 +84,8 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .6), rgba(0, 0, 0, .4) 50%, transparent);
+        background:#FFD580;
+        //background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .6), rgba(0, 0, 0, .4) 50%, transparent);
     }
 
     .details-sub-imgs img {
@@ -112,7 +102,6 @@
     </style>
     <?php
     require_once __DIR__.'/../../sections/header.php';
-    print_r($data);
     if($data['data']['data'] == 0){
       echo "Err in viewing product";
       exit;
@@ -125,12 +114,12 @@
     <br><br><br>
     <center>
     <section class="details">
-        <div class="details-box-layer" style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;">
+        <div class="details-box-layer">
             <div class="details-box-head">
                 <a href="#" class="fa fa-share-alt"></a>
                 <a href="#" class="fa fa-shopping-cart" onclick="add_fav('<?php echo $resData['p_id'];?>')"></a>
             </div>
-            <div class="details-box-main-img"></div>
+            <div class="details-box-main-img" style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;"></div>
             <div class="details-sub-imgs">
                 <img
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
@@ -145,6 +134,14 @@
 
         <div class="details-box-content-layer">
             <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
+            <div class="t">
+ONGOING
+            </div>
+            <script>
+            i=1;
+            $('.t').append(check_stock(1,<?php echo $resData['stock']?>, <?php echo $resData['offer'];?>,'<?php echo $resData['unit'];?>','<?php echo $resData['p_name'];?>','<?php echo $resData['p_id'];?>'));
+
+            </script>
             <p width="100%"><?php echo $resData['p_desc'];?></p>
             <table>
               <tr style="background:#555a;">

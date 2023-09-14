@@ -47,10 +47,14 @@
 require_once __DIR__.'/../model/productModel.php';
 $cusObj = new products();
 if($cusObj->getUserId()[0]){
-  $extraLinks = '<li class="fa fa-heart-o"><a href="#" onclick="dis_my_fav()">My fav</a></li><li class="fa fa-shopping-cart"><a href="#">Cart</a></li><li class="fa fa-user-circle"><a href="#">Account</a></li>';
+  $extraLinks = '<li class="fa fa-heart-o"><a href="#" onclick="dis_my_fav()">My fav</a></li>
+  <li class="fa fa-shopping-cart"><a href="#" onclick="dis_my_cart()">Cart</a></li><li class="fa fa-user-circle"><a href="#">Account</a></li>';
 }else{
   $extraLinks = '<li><a href="#" class="fa fa-sign-in">Login</a></li>';
 }
+
+require_once 'myfav.php';
+
 ?>
 <header class="menu">
     <div>

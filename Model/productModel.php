@@ -161,29 +161,85 @@ class products extends commonModel{
 
 	}
 
+	public function addToCart(){
+		$uid=$this->cid;
+		$p_id=$_GET['p_id'];
+		$quant=$_GET['qnt'];
+		if($uid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
+			exit;
+		}
 
+		if($this->cartItemExists($this->cid,$p_id)){
+			$arr = [
+				'tbl_name'=>'mycart',
+				'action'=>'update',
+				'data'=>['quantity='.$quant,'updated_at=now()'],
+				'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
+				'query-exc'=>true
+			];
+			$flag = $this->generateQuery($arr);
+			if($flag['status']){
+				echo json_encode(['status'=>1,'data'=>[],'message'=>'Product Updated','cartnum'=>$this->get_cart_indicate($uid)]);
+			}
+		}else{
+			$randid = $this->genRnd('numeric',5);
+			$dt = date('Y-m-d');
+			$arr = [
+				'tbl_name'=>'mycart',
+				'action'=>'insert',
+				'data'=>["cart_id='$randid'","cid='$uid'","p_id='$p_id'","quantity=$quant","_date='$dt'","created_at=current_timestamp","updated_at=now()"],
+				'query-exc'=>true
+			];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+				echo json_encode(['status'=>1,'data'=>[],'message'=>'Product added','cartnum'=>$this->get_cart_indicate($uid)]);
+			}
+		}
+		exit;
+	}
+
+	public function cartItemExists($uid,$p_id){
+		$arr = [
+			'tbl_name'=>'mycart',
+			'action'=>'select',
+			'data'=>[],
+			'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			if(count($flag['data'])!==0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+
+	public function mycart(){
+		$uid = $this->cid;
+		if($uid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
+		}else{
+			if(isset($_GET['date'])){
+				$d=$_GET['date'];
+				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
+			}else{
+				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
+			}
+			$sql = $this->db->prepare($q);
+				if($sql->execute()){
+					$res=$sql->fetchAll(PDO::FETCH_ASSOC);
+					echo json_encode(['status'=>1,'data'=>$res]);
+			}
+		}
+		exit;
+
+	}
 
 }//CLASS END
 
 
-
-
-
-//$obj = new products();
-//print_r($_GET);exit;
-// if($_GET['key'] == 'test'){
-// 	echo $obj->cartItemExists(1234,'p1');
-// }
-// $algo = 'sha256';
-// $skey = 9050;
-//
-// if(hash_equals(hash_hmac($algo,'get_all',$skey),$Req['key'])){
-// 		$obj->get_all();
-// }else if(hash_equals(hash_hmac($algo,'addToFav',$skey),$_REQUEST['key'])){
-// 	$obj->addToFav();
-// }else{
-// 	echo "EMPTY";
-// 	echo json_encode(['status'=>0,'data'=>[]]);
-// }
 
 ?>

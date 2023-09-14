@@ -27,10 +27,10 @@ function gen_fav_ind(x) {
     return (x == '' || x == null) ? 'fa fa-heart-o' : 'fa fa-heart';
 }
 
-function check_stock(x, stock, off_price, unit, p_name, p_id, uid) {
+function check_stock(x, stock, off_price, unit, p_name, p_id) {
     if (stock <= 0) {
         return "<h3 style='text-align:center;color:tomato'>OUT OF STOCK</h3><br><button  onclick=\"add_fav('" +
-            p_id + "','" + uid + "')\" class=\"fa fa-heart btn-active \">&nbsp;&nbsp;Add to fav</button>";
+            p_id + "')\" class=\"fa fa-heart btn-active \">&nbsp;&nbsp;Add to fav</button>";
     } else {
         return '<div style=\"padding-top:5px;border-top:.2px solid rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items: center;\"><div class="quantity-control"><h2>' +
             unit + '</h2><span class="fa fa-minus" onclick="decr_quantity(' + (x + 1) + ',' + stock + ',' +
@@ -39,8 +39,7 @@ function check_stock(x, stock, off_price, unit, p_name, p_id, uid) {
             off_price +
             ')"></span></div><span class=\"fa fa-long-arrow-right\"></span><div><span id=\"dis-cart-price-' + (x +
                 1) + '\">0</span><sup>rs</sup></div></div><button id=\"id-ty-' + (x + 1) +
-            '\" onclick=\"add_to_cart(' + (i + 1) + ',\'' + p_id + '\',\'' + off_price + '\',\'' + p_name +
-            '\')\" class=\"fa fa-shopping-cart btn-active id-ty-' + (x + 1) + '\">&nbsp;&nbsp;Add to cart</button>';
+            '\" onclick=\"add_to_cart('+(x + 1)+',\'' + p_id + '\')\" class=\"fa fa-shopping-cart btn-active id-ty-' + (x + 1) + '\">&nbsp;&nbsp;Add to cart</button>';
     }
 }
 
@@ -136,74 +135,155 @@ function add_fav_tmp_ctrl(x) {
 }
 
 
-var pos=0;
-  var testi_time=setInterval(scroll,5000);
-  var auto_loop=0;
-  function scroll(){
-    if(auto_loop == 2){
-    clearInterval(testi_time);
-    auto_loop=0;
-    testi_time=setInterval(scroll,5000);
-    }else{
-      pos=new_pos_value();
-//			alert(pos)
-      scroll_bg(pos);
+var res = {
+"status": true,
+"data": [
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+},
+{
+"sno": "44",
+"name": "mani",
+"location":"chennai",
+"rating": "4 stars",
+"message":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+"created_at": "2023-09-09 22:04:02"
+}
+
+],
+"message": "My Fav fetched"
+}
+var currentId = 0;
+
+if(res.data.length!==0){
+  setTimeout(loadNewTesti,1000);
+}
+
+function lSlide(){
+  if(res.data.length > currentId){
+    if(currentId == 0){
+      currentId = res.data.length;
     }
+    currentId=currentId-1;
   }
-
-function manual_slide(x){
-  clearInterval(testi_time);
-  testi_time=setInterval(scroll,10000);
-  pos=eval('pos '+x+' 100');
-  check_scroll();
+  $('.slider-box').css({'transform':'rotateY(90deg)'});
+  setTimeout(loadNewTesti,1000);
+}
+function rSlide(){
+  if((res.data.length-1) > currentId){
+    currentId+=1;
+  }else if((res.data.length-1) == currentId){
+    currentId = 0;
+  }
+  $('.slider-box').css({'transform':'rotateY(90deg)'});
+  setTimeout(loadNewTesti,1000);
 }
 
-function check_scroll(){
-  if(pos > 400){
-    pos = 0;
-  }else if(pos < 0){
-    pos = 400;
-  }else if(pos == 0){
-    pos = 100;
-  }
-  auto_loop+=1;
-  scroll_bg(pos);
+function loadNewTesti(){
+  x = res.data[currentId];
+  $('#testi_name').text(x.name+', ');
+  $('#testi_city').text(x.location);
+  $('#testi_rating').text('Rating : '+x.rating);
+  $('#testi_message').text(x.message);
+  $('#testi_time').text(x.created_at);
+ $('.slider-box').css('transform','rotateY(0deg)');
 }
 
-function scroll_bg(x){
-  $('.slide_layer').css('margin-left','-'+x+'%');
-  for(i=1;i<=5;i++){
-    $('#indi'+i).removeAttr('class');
-  }
-  for(i=1;i<=5;i++){
-    $('#indi'+i).attr('class','fa fa-square-o');
-  }
-  if(x == 0){
-    $('#indi1').removeAttr('class');
-    $('#indi1').attr('class','fa fa-square');
-  }else if(x == 100){
-    $('#indi2').removeAttr('class');
-    $('#indi2').attr('class','fa fa-square');
-  }else if(x == 200){
-    $('#indi3').removeAttr('class');
-    $('#indi3').attr('class','fa fa-square');
-  }else if(x == 300){
-    $('#indi4').removeAttr('class');
-    $('#indi4').attr('class','fa fa-square');
-  }else if(x == 400){
-    $('#indi5').removeAttr('class');
-    $('#indi5').attr('class','fa fa-square');
-  }
-}
-function new_pos_value(){
-  if(pos > 400 || pos == 400){
-    pos = 0;
-  }else if(pos < 0 ){
-    pos = 400;
-  }else if(pos == 0){
-    pos = 100;
+
+function add_to_cart(pos,p_id) {
+  qnt = parseInt($('#quantity_'+pos).text());
+  if(qnt == 0){
+    dis_msg_box('#000','tomato','Zero quantity, Please increase quantity.');
   }else{
-    pos=pos+100;
+    performAjx('index.php', 'get','key=428b9259d7c24affcd994d23f74adc3090fbb8ae647ee79b703ec7c6356d44a3&controller=home&action=index&qnt='+qnt+'&p_id=' + p_id, (res) => {
+      d = JSON.parse(res);
+      if(d.status){
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
   }
-  return pos;
+}
+
+
+var mycart_data;
+
+function dis_my_cart(x) {
+    var arg;
+    if (x == 'cart_filter') {
+        arg = 'key=2327115e33e067c37233fe38f3a68ed9b9e95a7b7c8b6d169358c72703ed9e24&date=' + $('#cart_filter').val();
+    } else {
+        arg = 'key=2327115e33e067c37233fe38f3a68ed9b9e95a7b7c8b6d169358c72703ed9e24';
+    }
+    performAjx('index.php', 'get',arg, (res) => {
+      d = JSON.parse(res)
+      if(d.status){
+        mycartComponent(JSON.parse(res));
+      }
+    });
+}
+
+function cls_my_cart() {
+    $('.mycart').fadeOut(100);
+}
+
+
+REMOVE FROM CARt
+
+
+function removefrommycart(x) {
+    performAjx('index.php', 'get','key=4a107946f7b882778ffc1aff5ab8b7bcf8eed223f32cb23ee2a78379f01663f1&cartid='+x, (res) => {
+      d = JSON.parse(res)
+      if(d.status){
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
 }

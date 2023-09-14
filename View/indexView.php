@@ -40,24 +40,28 @@ if(isset($_COOKIE['uid'])){
       ?>
     </div>
 
-    <div class="myfav">
+    <div class="mycart">
         <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
-            onclick="cls_my_fav()"></h4>
-        <h1 align="center">MY FAV</h1>
+            onclick="cls_my_cart()"></h4>
+        <h1 align="center">MY CART</h1>
         <br>
-
+        <div style="display:flex;justify-content:space-around;align-items: center;">
+            <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
+            <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
+        </div>
+        <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
+            onchange="dis_my_cart('cart_filter')">
         <br>
         <center>
-            <table id="myfavtbl" style="text-align:center">
+            <table id="mycarttbl">
             </table>
         </center>
         <br><br><br>
     </div>
-
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','getMyFav',9050);
+echo hash_hmac('sha256','removefrommycart',9050);
 ?>
 
 
