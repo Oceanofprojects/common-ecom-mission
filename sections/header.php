@@ -58,7 +58,7 @@ require_once 'myfav.php';
 ?>
 <header class="menu">
     <div>
-        <img src="assets/common-images/logo.png" alt="asasas">
+        <a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><img src="assets/common-images/logo.png" alt="Logo"></a>
         <span id="menu_icon">X</span>
     </div>
     <nav>

@@ -55,17 +55,18 @@ class homeController extends commonController
     {
         $this->view("index", array(
             "title" => "Home",
-            "data"=>$this->productMdl->get_all()
+            "data"=>$this->productMdl->get_all(),
+            "cate_list"=>$this->productMdl->get_cate_list()
         ));
     }
 
-    public function productDetail(){
-
-      $this->view("productDetails/index", array(
-          "title" => "Product detail",
-          "data"=>$this->productMdl->get_product()
-      ));
-    }
+    // public function productDetail(){
+    //
+    //   $this->view("productDetails/index", array(
+    //       "title" => "Product detail",
+    //       "data"=>$this->productMdl->get_product()
+    //   ));
+    // }
 
 
 }

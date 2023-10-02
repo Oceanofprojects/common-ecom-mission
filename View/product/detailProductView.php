@@ -197,7 +197,7 @@ ONGOING
   <h2 align="center">Customers Reviews</h2><br>
   <?php
       require_once 'sections/reviews.php';
+            require_once 'sections/footer.php';
   ?>
-<br><br><br>
   </body>
 </html>

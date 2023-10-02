@@ -178,6 +178,7 @@ class products extends commonModel{
 				'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
 				'query-exc'=>true
 			];
+
 			$flag = $this->generateQuery($arr);
 			if($flag['status']){
 				echo json_encode(['status'=>1,'data'=>[],'message'=>'Product Updated','cartnum'=>$this->get_cart_indicate($uid)]);
@@ -204,7 +205,7 @@ class products extends commonModel{
 			'tbl_name'=>'mycart',
 			'action'=>'select',
 			'data'=>[],
-			'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
+			'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'" and _date=date(now())']],
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
@@ -217,13 +218,34 @@ class products extends commonModel{
 		}
 	}
 
+	public function get_cate_list(){
+		$q="select distinct cate,cate_img from products";
+		$sql = $this->db->prepare($q);
+		if($sql->execute()){
+			$res=$sql->fetchAll(PDO::FETCH_ASSOC);
+			if(count($res) == 0){
+				return ['status'=>true,'data'=>[],'message'=>'Zero fetch'];
+			}else{
+				return ['status'=>true,'data'=>$res,'message'=>'Successfully fetched'];
+			}
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Err in fetching cate list'];
+		}
+	}
+
 	public function mycart(){
 		$uid = $this->cid;
 		if($uid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
 		}else{
+			$oldCart = false;//default - false
 			if(isset($_GET['date'])){
 				$d=$_GET['date'];
+				if($d == date('Y-m-d')){//if current - false
+					$oldCart = false;
+				}else{
+					$oldCart = true;
+				}
 				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
 			}else{
 				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
@@ -231,7 +253,7 @@ class products extends commonModel{
 			$sql = $this->db->prepare($q);
 				if($sql->execute()){
 					$res=$sql->fetchAll(PDO::FETCH_ASSOC);
-					echo json_encode(['status'=>1,'data'=>$res]);
+					echo json_encode(['status'=>1,'data'=>$res,'old_r'=>$oldCart,'t'=>$q]);
 			}
 		}
 		exit;

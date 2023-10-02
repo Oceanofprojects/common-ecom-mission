@@ -274,7 +274,6 @@ function cls_my_cart() {
 }
 
 
-REMOVE FROM CARt
 
 
 function removefrommycart(x) {
@@ -286,4 +285,41 @@ function removefrommycart(x) {
         dis_msg_box('#000','tomato',d.message);
       }
     });
+}
+
+function validate(){
+	if($('#cate_name').val().trim()==''){
+		return [false,'warning','Category field required !'];
+	}else if($('#file').val().trim()==''){
+		return [false,'warning','Please select image !'];
+	}else if($('#p_name').val().trim()==''){
+		return [false,'warning','Product name field required !'];
+	}else if($('#price').val().trim()==''){
+		return [false,'warning','Price field required !'];
+	}else if($('#unit').val().trim()==''){
+		return [false,'warning','Unit field required !'];
+	}else if($('#stock').val().trim()==''){
+		return [false,'warning','Stock field required !'];
+	}else if($('#tags').val().trim()==''){
+		return [false,'warning','Tags field required !'];
+	}else{
+		return [true,'success',''];
+	}
+}
+
+function add_item(){
+  flag = validate();
+  if(flag[0]){
+    performAjx('index.php', 'get',$('#frm').serialize()+'&controller=product', (res) => {
+      d = JSON.parse(res)
+      if(d.status){
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
+  }else{
+    bg = (flag[1] == 'warning')?'tomato':'lightgreen';
+    dis_msg_box('#000',bg,flag[2]);
+  }
 }

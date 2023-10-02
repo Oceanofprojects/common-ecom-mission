@@ -1,14 +1,13 @@
 function loadComponent(type, data) {
     if (type == 'nor-card-view') {
       $('.item-container').empty();
-      uid =1234;
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" onclick=\"add_fav(\'' + data.data[i].p_id +
               '\')\"></h6><div class=\"img-src\" style=\"background:ur(assets/product_images/' +
               data.data[i].p_img +
-              ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&action=productDetail&pid='+data.data[i].p_id+'\')">' +
+              ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
               data.data[i].p_name +
               '</h3><p><span style=\"color:#555;text-decoration:line-through;text-decoration-color:red;\">' +
               data.data[i].price + 'rs</span><sup>' + data.data[i].offer +
@@ -17,8 +16,19 @@ function loadComponent(type, data) {
               check_stock(i, data.data[i].stock, off_price, data.data[i].unit, data.data[
                   i].p_name, data.data[i].p_id) + '</div>');
       }
-//        layout = '<div class="box"><div style = "display:flex;justify-content:space-between;align-items:center"><h6 class="fa fa-share-alt" style="color:#555"onclick="add_fav(\'3QC469\',\'1234\')"></h6><h6 class="fa fa-heart-o" onclick="add_fav(\'3QC469\',\'1234\')"></h6></div><div class = "img-src" style = "background:lime;background-size:cover;background-position:center;border-radius:5px"></div><br> <h3 style="color:#555a" align="center">Brinjal</h3><p><span style = "color:#555;text.-decoration:line-through;text-decoration-color:red;">40rs</span> <sup>0%</sup>&nbsp;&nbsp;<span>40rs& nbsp;<small style="color:lime;font-size:8pt;" class="fa fa-check-circle-o"></small></span></p>'+quantityControlComponent()+'<button id = "id-ty-2" onclick = "add_to_cart(2,\'3QC469\',\'40\',\'Brinjal\')" class="fa fa-shopping-cart btn-active id-ty-2">&nbsp;&nbsp;Add to cart</button></div> ';
-  //      $('.item-container').append(layout);
+    }
+    if(type == 'category-card-view'){
+//      console.log(data.length)
+      itr = (data.length > 5)?5:data.length;
+      $('.cate-container').empty();
+      for(i=0;i<itr;i++){
+        $('.cate-container').append('<a href="#"><div class="cate-box" style="background:url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1>90%</h1></div>');
+      }
+      // <a href="#">
+      //   <div class="cate-box" style="background:url('assets/category_images/fruits.jpg');background-size:cover;background-position:center">
+      //     <p>Cate1</p>
+      //     <h1>90%</h1>
+      //   </div>
     }
     //    alert(x + ' : ' + x1)
 }
@@ -53,16 +63,28 @@ function mycartComponent(data){
         $('#mycarttbl').append(
             "<tr><th>sno</th><th>Item</th><th>price</th><th>quantity</th><th>total</th><th>Option</tr>"
         );
-        for (ci = 0; ci < data.data.length; ci++) {
-            $('#mycarttbl').append("<tr><td>" + data.data[ci].cart_id + "</td><td>" + data.data[
-                    ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data
-                .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (data.data[ci]
-                    .price * data.data[ci].quantity) +
-                "rs</td><td><button class='btn fa fa-trash' onclick='removefrommycart(" +
-                data.data[ci].cart_id + ")'></button></td></tr>");
-            total_price += data.data[ci].price * data.data[ci].quantity;
-            //					console.log(data.data[ci].cart_id);
-        }
+        if(data.data.length == 0){
+          $('#mycarttbl').append("<tr><td colspan='6' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
+        }else{
+            for (ci = 0; ci < data.data.length; ci++) {
+              if(data.old_r == true){
+                $('#mycarttbl').append("<tr><td>" + data.data[ci].cart_id + "</td><td>" + data.data[
+                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data
+                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (data.data[ci]
+                        .price * data.data[ci].quantity) +
+                    "rs</td><td>-</td></tr>");
+              }else{
+                $('#mycarttbl').append("<tr><td>" + data.data[ci].cart_id + "</td><td>" + data.data[
+                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data
+                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (data.data[ci]
+                        .price * data.data[ci].quantity) +
+                    "rs</td><td><button class='btn fa fa-trash' onclick='removefrommycart(" +
+                    data.data[ci].cart_id + ")'></button></td></tr>");
+                  }
+                total_price += data.data[ci].price * data.data[ci].quantity;
+                //					console.log(data.data[ci].cart_id);
+            }
+          }
         $('#mycarttbl').append("<tr><td colspan='6'><h1 align='center'>Total : " + total_price +
             "rs</h1></td></tr>");
   }

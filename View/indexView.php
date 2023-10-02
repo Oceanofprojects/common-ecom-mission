@@ -1,3 +1,10 @@
+<!-- updates
+
+
+if zero product or cate (show empyt box)
+for cate box want precentage num  -->
+
+
 <html>
 
 <head>
@@ -22,6 +29,8 @@ if(isset($_COOKIE['uid'])){
 <body>
     <?php
     require_once __DIR__.'/../sections/header.php';
+    require_once __DIR__.'/../sections/mainSlider.php';
+
     ?>
     <style>
 
@@ -29,7 +38,12 @@ if(isset($_COOKIE['uid'])){
     <div id="common_dis_msg_box">
     		<div id="msg_content_to_display"></div>
     	</div>
-    <br><br><br>
+    <br><br>
+    <div class="head-info">
+      <h1>Best Products</h1>
+      <p> kas oa saks alks alks als alms alms </p>
+    </div>
+<br><br>
     <div class="item-container">
       <?php
       if(count($data['data'])!==0){
@@ -58,10 +72,40 @@ if(isset($_COOKIE['uid'])){
         </center>
         <br><br><br>
     </div>
+
+    <br><br>
+    <div class="head-info">
+      <h1>Categories</h1>
+      <p> kas oa saks alks alks als alms alms </p>
+    </div>
+<br><br>
+<div class="cate-container">
+  <?php
+  if(count($data['cate_list']['data'])!==0){
+    echo "<script>loadComponent('category-card-view',".json_encode($data['cate_list']['data']).")</script>";
+  }else{
+    echo "cate illa ZERO";
+  }
+  ?>
+</div>
+<!-- <a href="#">
+  <div class="cate-box" style="background:url('assets/category_images/fruits.jpg');background-size:cover;background-position:center">
+    <p>Cate1</p>
+    <h1>90%</h1>
+  </div>
+</a> -->
+<br>
+<center>
+  <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More Categories</a>
+</center><br><br>
+
+    <?php
+      require_once __DIR__.'/../sections/footer.php';
+    ?>
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','removefrommycart',9050);
+//echo hash_hmac('sha256','addProduct',9050);
 ?>
 
 

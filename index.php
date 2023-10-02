@@ -12,10 +12,10 @@ if (isset($_GET["controller"])) {
 function loadController($controller)
 {
     switch ($controller) {
-        // case 'employees':
-        //     require_once 'controller/employeesController.php';
-        //     $controllerObj = new EmployeesController();
-        //     break;
+        case 'product':
+            require_once 'controller/productController.php';
+            $controllerObj = new productController();
+            break;
         default:
             require_once 'controller/homeController.php';
             $controllerObj = new homeController();
