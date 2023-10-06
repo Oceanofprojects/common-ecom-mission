@@ -22,12 +22,8 @@ class productController extends commonController
      * Execute the corresponding action.
      *
      */
-    public function run($action)
-    {//here no no use for action var
-      // if($action == 'productDetail'){
-      //   $this->productDetail();
-      //   exit;
-      // }
+    public function run($action){
+    //here no no use for action var
         $algo = 'sha256';
       $skey = 9050;
       if(isset($_GET) && count($_GET)){
@@ -41,6 +37,8 @@ class productController extends commonController
         print_r($_GET);
       }else if(hash_equals(hash_hmac($algo,'viewProduct',$skey),$req['key'])){
         $this->productDetail();
+      }else if(hash_equals(hash_hmac($algo,'category',$skey),$req['key'])){
+        $this->category();
       }else{
         $this->index();
       }
@@ -58,6 +56,13 @@ class productController extends commonController
       $this->view("product/addProduct", array(
           "title" => "Add Product",
           "data"=>$this->productMdl->get_cate_list()
+      ));
+    }
+
+    public function category(){
+      $this->view("category/index", array(
+          "title" => "Category",
+          "data"=>$this->productMdl->getProductByCate($_GET['cate'])
       ));
     }
 //    addProduct

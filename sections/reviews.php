@@ -16,3 +16,6 @@
 
     <h1 onclick="rSlide()" class="fa fa-chevron-right slide-btn"></h1>
 </section>
+<script type="text/javascript">
+  alert(t)
+</script>

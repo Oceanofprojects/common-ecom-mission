@@ -7,10 +7,10 @@
   <!-- Slides here -->
   <div class="glide__track" data-glide-el="track">
     <ul class="glide__slides">
-      <li class="glide__slide" style="background:url('assets/slide_images/img1.jpg');background-size:100%;background-position: center;height:80vh;width:100%;"><a href="#">View product</a></li>
-      <li class="glide__slide" style="background:url('assets/slide_images/img2.jpg');background-size:100%;background-position: center;height:80vh;width:100%;">Slide 2</li>
-      <li class="glide__slide" style="background:url('assets/slide_images/img3.png');background-size:100%;background-position: center;height:80vh;width:100%;">Slide 3</li>
-			<li class="glide__slide" style="background:url('assets/slide_images/img4.jpg');background-size:100%;background-position: center;height:80vh;width:100%;">Slide 4</li>
+      <li class="glide__slide" style="background:url('assets/slide_images/img1.jpg');background-size:cover;background-position: center;height:80vh;width:100%;"><a href="#">View product&nbsp;<span class="fa fa-angle-double-right"></span></a></li>
+      <li class="glide__slide" style="background:url('assets/slide_images/img2.jpg');background-size:cover;background-position: center;height:80vh;width:100%;"><a href="#">View product&nbsp;<span class="fa fa-angle-double-right"></span></a></li>
+      <li class="glide__slide" style="background:url('assets/slide_images/img3.png');background-size:cover;background-position: center;height:80vh;width:100%;"><a href="#">View product&nbsp;<span class="fa fa-angle-double-right"></span></a></li>
+			<li class="glide__slide" style="background:url('assets/slide_images/img4.jpg');background-size:cover;background-position: center;height:80vh;width:100%;"><a href="#">View product&nbsp;<span class="fa fa-angle-double-right"></span></a></li>
     </ul>
   </div>
   <!-- <a href="https://www.jqueryscript.net/tags.php?/Navigation/">Navigation</a> -->

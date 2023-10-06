@@ -260,6 +260,42 @@ class products extends commonModel{
 
 	}
 
+	public function getProductByCate($cate){
+		if($this->cid == null){
+			$tmptbl = 'products';
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'select',
+				'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
+				'limit'=>10,
+				'order'=>['p_id','asc'],
+				'query-exc'=>true
+			];
+		}else{
+			$tmptbl = 'products';
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid"]],
+				'join_param'=>[
+					['myfav','left_join','p_id','p_id']
+				],
+				'condition'=>['manual'=>['cate="'.$cate.'"']],
+				'limit'=>10,
+				'order'=>['p_id','asc'],
+				'query-exc'=>true
+			];
+		}
+		$flag = $this->generateQuery($arr);
+    if($flag['status']){
+			$res=$flag['data'];
+			return ['status'=>1,'data'=>$res,'cartnum'=>$this->get_cate_num()];
+		}else{
+			return ['r'=>1,'status'=>0,'data'=>[$q]];
+		}
+
+	}
+
 }//CLASS END
 
 

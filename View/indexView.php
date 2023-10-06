@@ -2,7 +2,10 @@
 
 
 if zero product or cate (show empyt box)
-for cate box want precentage num  -->
+for cate box want precentage num
+want review data dyn not static
+show empty when 0 reviews
+  -->
 
 
 <html>
@@ -11,6 +14,7 @@ for cate box want precentage num  -->
     <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+
     <script src="script/commonScript.js"></script>
     <script src="script/jquery.min.js"></script>
     <script src="script/action.js"></script>
@@ -88,31 +92,41 @@ if(isset($_COOKIE['uid'])){
   }
   ?>
 </div>
-<!-- <a href="#">
-  <div class="cate-box" style="background:url('assets/category_images/fruits.jpg');background-size:cover;background-position:center">
-    <p>Cate1</p>
-    <h1>90%</h1>
-  </div>
-</a> -->
 <br>
 <center>
   <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More Categories</a>
-</center><br><br>
+</center><br><br><br><br>
+
+
+<!-- customers review -->
+<div class="head-info">
+  <h1>Customer's Review</h1>
+  <p> kas oa saks alks alks als alms alms </p>
+</div>
+<br><br>
+<script type="text/javascript">
+  t = "THE MSG";
+</script>
+<?php
+
+require_once __DIR__.'/../sections/reviews.php';
+
+echo __DIR__.'/../sections/reviews.php?d=0';//$d = "mani";
+
+ ?>
+
+<!-- customers review -->
+<br><br><br><br>
 
     <?php
-      require_once __DIR__.'/../sections/footer.php';
+
+    require_once __DIR__.'/../sections/footer.php';
     ?>
+
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-//echo hash_hmac('sha256','addProduct',9050);
+echo hash_hmac('sha256','category',9050);
 ?>
-
-
-<script>
-//get_all();
-
-</script>
-
 
 </html>

@@ -201,11 +201,12 @@ border-radius:5px;
   padding:0px 10px;
 }
 #testi_message{
-  max-height:150px;
+  max-height:100px;
  overflow:scroll;
  overflow-x:hidden
 }
 .slide-profile{
+  padding:10px 0px;
   display:flex;
   justify-content:flex-start;
   align-items:center;
@@ -215,13 +216,15 @@ border-radius:5px;
 .slide-profile img{
   margin-right:15px;
   height:50px;width:50px;
-  border:1px solid rgba(0,0,0,.2);
+  border-radius:25px;
+//  border:1px solid rgba(0,0,0,.2);
 }
 .slide-btn{
 padding:15px;
 border-radius:100px;
 background-color: rgba(0,0,0,.1);
-border:.1px solid rgba(0,0,0,.1)
+border:.1px solid rgba(0,0,0,.1);
+cursor: pointer;
 }
 
 .head-info{
@@ -280,4 +283,19 @@ border:.1px solid rgba(0,0,0,.1)
   border-radius:10px;
   color:#fff;
   text-shadow: 4px 4px 2px #555
+}
+.glide__slide{
+  position: relative;
+  top:0px;
+  left:0px;
+}
+.glide__slide a{
+  position:absolute;
+  bottom:0px;
+  right:0px;
+  text-decoration:none;
+  padding: 15px;
+  background:orange;
+  color:#000;
+  margin:10px
 }

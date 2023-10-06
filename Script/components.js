@@ -18,11 +18,10 @@ function loadComponent(type, data) {
       }
     }
     if(type == 'category-card-view'){
-//      console.log(data.length)
-      itr = (data.length > 5)?5:data.length;
+      itr = (data.length > 6)?6:data.length;
       $('.cate-container').empty();
       for(i=0;i<itr;i++){
-        $('.cate-container').append('<a href="#"><div class="cate-box" style="background:url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1>90%</h1></div>');
+        $('.cate-container').append('<a href="index.php?cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1>90%</h1></div>');
       }
       // <a href="#">
       //   <div class="cate-box" style="background:url('assets/category_images/fruits.jpg');background-size:cover;background-position:center">
