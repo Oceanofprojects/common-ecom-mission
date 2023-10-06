@@ -13,7 +13,7 @@ show empty when 0 reviews
 <head>
     <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
     <script src="script/commonScript.js"></script>
     <script src="script/jquery.min.js"></script>
@@ -40,16 +40,16 @@ if(isset($_COOKIE['uid'])){
 
     </style>
     <div id="common_dis_msg_box">
-    		<div id="msg_content_to_display"></div>
-    	</div>
+        <div id="msg_content_to_display"></div>
+    </div>
     <br><br>
     <div class="head-info">
-      <h1>Best Products</h1>
-      <p> kas oa saks alks alks als alms alms </p>
+        <h1>Best Products</h1>
+        <p> kas oa saks alks alks als alms alms </p>
     </div>
-<br><br>
+    <br><br>
     <div class="item-container">
-      <?php
+        <?php
       if(count($data['data'])!==0){
         echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
       }else{
@@ -79,35 +79,43 @@ if(isset($_COOKIE['uid'])){
 
     <br><br>
     <div class="head-info">
-      <h1>Categories</h1>
-      <p> kas oa saks alks alks als alms alms </p>
+        <h1>Categories</h1>
+        <p> kas oa saks alks alks als alms alms </p>
     </div>
-<br><br>
-<div class="cate-container">
-  <?php
+    <br><br>
+    <div class="cate-container">
+        <?php
   if(count($data['cate_list']['data'])!==0){
     echo "<script>loadComponent('category-card-view',".json_encode($data['cate_list']['data']).")</script>";
   }else{
     echo "cate illa ZERO";
   }
   ?>
-</div>
-<br>
-<center>
-  <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More Categories</a>
-</center><br><br><br><br>
+    </div>
+    <br>
+    <center>
+        <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More
+            Categories</a>
+    </center><br><br><br><br>
 
 
-<!-- customers review -->
-<div class="head-info">
-  <h1>Customer's Review</h1>
-  <p> kas oa saks alks alks als alms alms </p>
-</div>
-<br><br>
-<script type="text/javascript">
+    <!-- customers review -->
+    <div class="head-info">
+        <h1>Customer's Review</h1>
+        <p> kas oa saks alks alks als alms alms </p>
+    </div>
+    <br><br>
+    <!-- <script type="text/javascript">
   t = "THE MSG";
-</script>
-<?php
+</script> -->
+    <?php
+
+require_once __DIR__.'/../controller/productController.php';
+
+$productCtrllr = new productController();
+
+$productCtrllr->getReviews(['type'=>'all','data'=>'','r-from'=>0,'r-to'=>10]);
+
 
 require_once __DIR__.'/../sections/reviews.php';
 
@@ -115,8 +123,8 @@ echo __DIR__.'/../sections/reviews.php?d=0';//$d = "mani";
 
  ?>
 
-<!-- customers review -->
-<br><br><br><br>
+    <!-- customers review -->
+    <br><br><br><br>
 
     <?php
 

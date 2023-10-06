@@ -18,6 +18,9 @@ class productController extends commonController
 
         $this->productMdl = new products();
     }
+    public function getReviews($data){
+      print_r($data);
+    }
     /**
      * Execute the corresponding action.
      *
