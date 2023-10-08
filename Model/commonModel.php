@@ -68,7 +68,9 @@ class commonModel
 
 
         if(isset($this->arColVal['condition']) == 1 && (count($this->arColVal['condition']) != 0)){
-            if(isset($this->arColVal['condition']['manual'])){
+            if(isset($this->arColVal['condition']['raw-manual'])){
+                $condition = $this->arColVal['condition']['raw-manual'][0];
+            }else if(isset($this->arColVal['condition']['manual'])){
                 $condition = 'WHERE ' . $this->arColVal['condition']['manual'][0];
             }else if(isset($this->arColVal['condition']['auto'])){
                 $condition = 'WHERE ' . $this->dataSep('con', $this->arColVal['condition']['auto']);

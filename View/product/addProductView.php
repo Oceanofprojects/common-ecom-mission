@@ -4,11 +4,12 @@
     <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-    <script src="script/commonScript.js"></script>
-    <script src="script/jquery.min.js"></script>
-    <script src="script/action.js"></script>
-    <script src="script/components.js"></script>
-    <link rel="stylesheet" href="style/global.css">
+ 
+    <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <script src="Script/action.js"></script>
+    <script src="Script/components.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
 <style media="screen">
 .btn{
 padding:10px;

@@ -201,7 +201,7 @@ border-radius:5px;
   padding:0px 10px;
 }
 #testi_message{
-  max-height:100px;
+  max-height:150px;
  overflow:scroll;
  overflow-x:hidden
 }
@@ -270,7 +270,6 @@ cursor: pointer;
 .cate-container .cate-box span{
   background:#000;
   color:#fff;
-  //letter-spacing: 2px;
   position: absolute;
   top:0px;left:0px;
   padding:5px;

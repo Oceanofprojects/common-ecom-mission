@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config/global.php';
+require_once __DIR__.'/Config/global.php';
 if (isset($_GET["controller"])) {
     $controllerObj = loadController($_GET["controller"]);
     launchAction($controllerObj);
@@ -13,11 +13,11 @@ function loadController($controller)
 {
     switch ($controller) {
         case 'product':
-            require_once 'controller/productController.php';
+            require_once __DIR__.'/Controller/productController.php';
             $controllerObj = new productController();
             break;
         default:
-            require_once 'controller/homeController.php';
+            require_once __DIR__.'/Controller/homeController.php';
             $controllerObj = new homeController();
             break;
     }

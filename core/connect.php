@@ -5,7 +5,7 @@ class Connect
     private $host, $user, $pass, $database, $charset;
     public function __construct()
     {
-        $db_cfg = require_once __DIR__.'/../config/database.php'; //EDITED
+        $db_cfg = require_once __DIR__.'/../Config/database.php'; //EDITED
         $this->driver = DB_DRIVER;
         $this->host = DB_HOST;
         $this->user = DB_USER;

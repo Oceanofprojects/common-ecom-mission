@@ -1,6 +1,6 @@
 <!-- updates
 
-
+particular review for category view
 if zero product or cate (show empyt box)
 for cate box want precentage num
 want review data dyn not static
@@ -15,11 +15,11 @@ show empty when 0 reviews
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
-    <script src="script/commonScript.js"></script>
-    <script src="script/jquery.min.js"></script>
-    <script src="script/action.js"></script>
-    <script src="script/components.js"></script>
-    <link rel="stylesheet" href="style/global.css">
+    <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <script src="Script/components.js"></script>
+    <script src="Script/action.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
 
 </head>
 <?php
@@ -39,9 +39,7 @@ if(isset($_COOKIE['uid'])){
     <style>
 
     </style>
-    <div id="common_dis_msg_box">
-        <div id="msg_content_to_display"></div>
-    </div>
+    
     <br><br>
     <div class="head-info">
         <h1>Best Products</h1>
@@ -58,24 +56,7 @@ if(isset($_COOKIE['uid'])){
       ?>
     </div>
 
-    <div class="mycart">
-        <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
-            onclick="cls_my_cart()"></h4>
-        <h1 align="center">MY CART</h1>
-        <br>
-        <div style="display:flex;justify-content:space-around;align-items: center;">
-            <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
-            <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
-        </div>
-        <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
-            onchange="dis_my_cart('cart_filter')">
-        <br>
-        <center>
-            <table id="mycarttbl">
-            </table>
-        </center>
-        <br><br><br>
-    </div>
+
 
     <br><br>
     <div class="head-info">
@@ -110,16 +91,18 @@ if(isset($_COOKIE['uid'])){
 </script> -->
     <?php
 
-require_once __DIR__.'/../controller/productController.php';
+require_once 'Controller/productController.php';
 
 $productCtrllr = new productController();
 
-$productCtrllr->getReviews(['type'=>'all','data'=>'','r-from'=>0,'r-to'=>10]);
+$review = $productCtrllr->getReviews(['type'=>'getAllReview','data'=>'','r-from'=>0,'r-to'=>10]);
+if($review['status']){
+  echo "<script>var review = ".json_encode($review)."</script>";
+  require_once __DIR__.'/../sections/reviews.php';
+}else{
+  echo "<center><span class='fa fa-chain-broken'>&nbsp;&nbsp;".$review['message']."</span></center>";
+}
 
-
-require_once __DIR__.'/../sections/reviews.php';
-
-echo __DIR__.'/../sections/reviews.php?d=0';//$d = "mani";
 
  ?>
 
@@ -130,6 +113,7 @@ echo __DIR__.'/../sections/reviews.php?d=0';//$d = "mani";
 
     require_once __DIR__.'/../sections/footer.php';
     ?>
+    <script src="Script/reviewSlide.js"></script>
 
 </body>
 <?php

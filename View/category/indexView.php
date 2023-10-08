@@ -12,12 +12,11 @@ for cate box want precentage num  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
-    <script src="script/commonScript.js"></script>
-    <script src="script/jquery.min.js"></script>
-    <script src="script/action.js"></script>
-    <script src="script/components.js"></script>
-    <link rel="stylesheet" href="style/global.css">
-
+  <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <script src="Script/components.js"></script>
+    <script src="Script/action.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
 </head>
 
 <body>
@@ -60,7 +59,17 @@ for cate box want precentage num  -->
 <br><br>
 <?php
 
-require_once __DIR__.'/../../sections/reviews.php';
+require_once 'Controller/productController.php';
+
+$productCtrllr = new productController();
+
+$review = $productCtrllr->getReviews(['type'=>'getCateReview','data'=>$_GET['cate'],'r-from'=>0,'r-to'=>10]);
+if($review['status']){
+  echo "<script>var review = ".json_encode($review)."</script>";
+  require_once 'sections/reviews.php';
+}else{
+  echo "<center><span class='fa fa-chain-broken'>&nbsp;&nbsp;".$review['message']."</span></center>";
+}
 
  ?>
 
@@ -71,5 +80,7 @@ require_once __DIR__.'/../../sections/reviews.php';
 
       require_once __DIR__.'/../../sections/footer.php';
     ?>
+    <script src="Script/reviewSlide.js"></script>
+
 </body>
 </html>

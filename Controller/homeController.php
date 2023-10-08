@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../controller/commonController.php"; //COMMON CONTOLLER
+require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
 
 
 
@@ -10,7 +10,7 @@ class homeController extends commonController
     public function __construct()
     {
         //init
-        require_once __DIR__ . "/../model/productModel.php";
+        require_once __DIR__ . "/../Model/productModel.php";
 
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 

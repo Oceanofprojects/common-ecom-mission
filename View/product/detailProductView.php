@@ -5,12 +5,11 @@
     <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-    <script src="script/commonScript.js"></script>
-    <script src="script/jquery.min.js"></script>
-    <script src="script/action.js"></script>
-    <script src="script/components.js"></script>
-    <link rel="stylesheet" href="style/global.css">
-
+  <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <script src="Script/action.js"></script>
+    <script src="Script/components.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
   </head>
   <body>
     <style>
@@ -56,7 +55,7 @@
     }
 
     .details-box-head {
-        background:#FFD580;
+        background:cornflowerblue;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -68,9 +67,9 @@
         font-size: 13pt;
         color:#fff;
         margin: 10px;
-        background-color:#555;
         padding: 10px;
-        border-radius: 5px
+        border-radius: 5px;
+        border:1px solid #ddd;
     }
 
     .details-box-main-img {
@@ -84,7 +83,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background:#FFD580;
+        background:cornflowerblue;
         //background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .6), rgba(0, 0, 0, .4) 50%, transparent);
     }
 
@@ -113,11 +112,18 @@
 
     <br><br><br>
     <center>
-    <section class="details">
+    <section class="details" style="background:#fff">
         <div class="details-box-layer">
             <div class="details-box-head">
                 <a href="#" class="fa fa-share-alt"></a>
-                <a href="#" class="fa fa-shopping-cart" onclick="add_fav('<?php echo $resData['p_id'];?>')"></a>
+                <?php
+                if($data['data']['myFavExit']['status']){
+                  $favIndi = "fa fa-heart";
+                }else{
+                  $favIndi = "fa fa-heart-o";
+                }
+                ?>
+                <a href="#" style="color:#fff" class="<?php echo $favIndi;?>" id="myfav" onclick="add_fav('myfav','<?php echo $resData['p_id'];?>')"></a>
             </div>
             <div class="details-box-main-img" style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;"></div>
             <div class="details-sub-imgs">
@@ -131,7 +137,6 @@
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
             </div>
         </div>
-
         <div class="details-box-content-layer">
             <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
             <div class="t">
@@ -157,7 +162,7 @@ ONGOING
               </tr>
               <tr>
                 <th>Category</th>
-                <td><?php echo $resData['p_name'];?></td>
+                <td><?php echo $resData['p_name'].', <a href="index.php?cate='.$resData['cate'].'&cate_img='.$resData['cate_img'].'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More</a>';?></td>
               </tr>
               <tr>
                 <th>Price</th>
@@ -196,8 +201,20 @@ ONGOING
   <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
   <h2 align="center">Customers Reviews</h2><br>
   <?php
-      require_once 'sections/reviews.php';
-            require_once 'sections/footer.php';
+  require_once 'Controller/productController.php';
+
+  $productCtrllr = new productController();
+  
+  $review = $productCtrllr->getReviews(['type'=>'getPidReview','data'=>$resData['p_id'],'r-from'=>0,'r-to'=>10]);
+  if($review['status']){
+    echo "<script>var review = ".json_encode($review)."</script>";
+    require_once 'sections/reviews.php';
+  }else{
+    echo "<center><span class='fa fa-chain-broken'>&nbsp;&nbsp;".$review['message']."</span></center>";
+  }
+
+  require_once 'sections/footer.php';
   ?>
+    <script src="Script/reviewSlide.js"></script>
   </body>
 </html>
