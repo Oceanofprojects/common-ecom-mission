@@ -2,9 +2,10 @@
 
 <head>
     <title><?php echo $data['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
- 
+
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/action.js"></script>
@@ -50,6 +51,29 @@ display: none;
 sup{
   color:red
 }
+#file1,#file2,#file3,#file4{
+  position:relative;
+  top:0px;left:0px;
+  width:100px;
+}
+#file1:after,#file2:after,#file3:after,#file4:after{
+  content: 'Upload';
+  color:#fff;
+  text-align: center;
+  position:absolute;
+  top:0px;left:0px;
+  padding:10px 0px;
+  width:100%;
+  height:100%;
+  background:cornflowerblue;
+}
+.s-imgs{
+  display:none;
+}
+#opsubimgs:checked ~ .s-imgs{
+  display: block;
+}
+
 </style>
 </head>
 
@@ -72,13 +96,13 @@ sup{
   <table id="tbl_data_1">
     <tr>
       <td>Category<sup>*</sup></td>
-      <td><input type="text" id="key" name="key" value="5265dbb8b63da8f3da8c145702deae1954a7224a585014f0bbc3086a6e499ef6" hidden>
-        <select id="cate_name" name="cate_name">
+      <td>
+        <select id="cate_name" name="cate">
           <?php
           if(count($data['data']['data']) !== 0){
             echo "<option value=''>Select cate list</option>";
             for($i=0;$i<count($data['data']['data']);$i++){
-              echo "<option value='".$data['data']['data'][$i]['cate']."'>".$data['data']['data'][$i]['cate']."</option>";
+              echo "<option value='".base64_encode($data['data']['data'][$i]['cate'].",".$data['data']['data'][$i]['cate_img'])."'>".$data['data']['data'][$i]['cate']."</option>";
             }
           }else{
             echo "<option value=''>Select cate list</option><option value=''>Empty</option>";
@@ -88,11 +112,27 @@ sup{
     </tr>
     <tr>
       <td>image<sup>*</sup></td>
-      <td><input type="text" id="old_img_name" name="old_img_name" hidden><input type="text" name="hidden_img_indi" id="hidden_img_indi" hidden><input type="file" id="file" name="file"><label id="check_box_label"><input type="checkbox" id="img_indi" name="img_indi" value="yes" style="width:25px">Upload new image </label><br><a href="#" id="tmp_img_viewer">Tap to view old Image</a></td>
+      <td><input type="file" id="file1" name="file1" onchange="chFileBg(1)">
+        &nbsp;<span style="color:green" id="fileInd1"></span>
+        <div class="sub_imgs">
+          <br>
+          <input type="checkbox" style="width:10px;display:none" id="opsubimgs"><label for="opsubimgs" style="cursor:pointer;background:#ddd;padding: 5px;color:#123">Upload sub img</label>
+          <div class="s-imgs">
+            <br>
+            <input type="file" id="file2" name="file2" onchange="chFileBg(2)">&nbsp;<span style="color:green" id="fileInd2"></span><br><br>
+            <input type="file" id="file3" name="file3" onchange="chFileBg(3)">&nbsp;<span style="color:green" id="fileInd3"></span><br><br>
+            <input type="file" id="file4" name="file4" onchange="chFileBg(4)">&nbsp;<span style="color:green" id="fileInd4"></span><br><br>
+          </div>
+        </div>
+      </td>
     </tr>
     <tr>
       <td>Name<sup>*</sup></td>
       <td><input type="text"  id="p_name" placeholder="Product name"  name="p_name" ></td>
+    </tr>
+    <tr>
+      <td>Description<sup>*</sup></td>
+      <td><textarea placeholder="Enter product description"  id="desc" name="p_desc"></textarea></td>
     </tr>
     <tr>
       <td>Price<sup>*</sup></td>
@@ -125,5 +165,15 @@ sup{
 </form>
 </section>
 </center>
+<script type="text/javascript">
+  function chFileBg(id){
+    val = document.getElementById('file'+id);
+    if(val.value.trim().length !== 0){
+      $('#fileInd'+id).attr('class','fa fa-check');
+    }else{
+      $('#fileInd'+id).removeClass();
+    }
+  }
+</script>
 </body>
 </html>

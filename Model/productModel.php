@@ -12,7 +12,7 @@ class products extends commonModel{
 		$connect = new Connect();
 		$this->db=$connect->Connection();
 		if(isset($_COOKIE['uid'])){
-			$cflag = $this->getUserId();
+			$cflag = $this->getUserId($_COOKIE['uid']);
 			if($cflag[0]){
 				$this->cid = $cflag[1];
 			}
@@ -106,7 +106,7 @@ class products extends commonModel{
 			$arr['join_param']=[[$cus,'left_join','cid','cid']];
 			$arr['condition']=['manual'=>['review.p_id="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}
-	 	
+
 		$flag = $this->generateQuery($arr);
 		if($flag['status']){
 			if(count($flag['data']) !== 0){
@@ -187,7 +187,7 @@ class products extends commonModel{
 			}else{
 			  return ['status'=>false,'data'=>'favNotExist','message'=>"Err in fetch my fav"];
 			}
-		  }	
+		  }
 	}
 
 	public function get_product(){
@@ -329,6 +329,7 @@ class products extends commonModel{
 				'action'=>'select',
 				'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
 				'limit'=>10,
+				'condition'=>['manual'=>['cate="'.$cate.'"']],
 				'order'=>['p_id','asc'],
 				'query-exc'=>true
 			];
@@ -355,6 +356,54 @@ class products extends commonModel{
 			return ['status'=>0,'data'=>[],'cartnum'=>0];
 		}
 
+	}
+
+	public function addProduct(){
+		$cate = explode(',',base64_decode($_POST['cate']));
+		$_POST['cate'] = $cate[0];
+		$_POST['cate_img'] = $cate[1];
+		$_POST['p_id']=$this->genRnd('alpha_numeric',6);
+		$fileFlag = $this->uploadFile('assets/product_images/','file1');
+		if($fileFlag['status']){
+			$_POST['p_img'] = $fileFlag['data'];
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>$fileFlag['status']];
+		}
+		$arr = [
+			'tbl_name'=>'products',
+			'action'=>'insert',
+			'data'=>$this->genArAssocToColSep($_POST),
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			return ['status'=>true,'data'=>[],'message'=>'Product uploaded Successfully'];
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Failed to upload Product'];
+		}
+	}
+
+	public function uploadFile($path,$fileName){
+		$file_ext = pathinfo($_FILES[$fileName]['name'],PATHINFO_EXTENSION);
+		$newFileName = $this->genRnd('alpha_numeric',10);
+
+		if(file_exists($path.$newFileName.'.'.$file_ext)){
+			//RE-GEN file
+			$newFileName = $this->genRnd('alpha_numeric',10);
+			if(move_uploaded_file($_FILES[$fileName]['tmp_name'],$path.$newFileName.'.'.$file_ext)){
+				$up_file_name = $newFileName.'.'.$file_ext;
+				return ['status'=>true,'data'=>$up_file_name,'message'=>'Images uploaded Successfully'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Failed to upload image !'];
+			}
+		}else{
+			if(move_uploaded_file($_FILES[$fileName]['tmp_name'],$path.$newFileName.'.'.$file_ext)){
+				$up_file_name = $newFileName.'.'.$file_ext;
+				return ['status'=>true,'data'=>$up_file_name,'message'=>'Images uploaded Successfully'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Failed to upload image !'];
+			}
+		}
 	}
 
 }//CLASS END

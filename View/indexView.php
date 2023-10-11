@@ -7,11 +7,11 @@ want review data dyn not static
 show empty when 0 reviews
   -->
 
-
 <html>
 
 <head>
     <title><?php echo $data['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
@@ -24,7 +24,7 @@ show empty when 0 reviews
 </head>
 <?php
 if(isset($_COOKIE['uid'])){
-//  print_r($_COOKIE);
+  setcookie('uid',3802279867,time() + (86400 * 30),"/");
 }else{
   setcookie('uid',3802279867,time() + (86400 * 30),"/");
 }
@@ -39,7 +39,7 @@ if(isset($_COOKIE['uid'])){
     <style>
 
     </style>
-    
+
     <br><br>
     <div class="head-info">
         <h1>Best Products</h1>
@@ -118,7 +118,7 @@ if($review['status']){
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','category',9050);
+//echo hash_hmac('sha256','category',9050);
 ?>
 
 </html>

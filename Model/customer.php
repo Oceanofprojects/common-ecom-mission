@@ -3,12 +3,12 @@
 
 
 trait userData{
-	public function getUserId(){
+	public function getUserId($id){
 			$arr = [
 				'tbl_name'=>'cus_log',
 				'action'=>'select',
 				'data'=>[],
-        'condition'=>['manual'=>['uid="'.$_COOKIE['uid'].'"']],
+        'condition'=>['manual'=>['uid="'.$id.'"']],
 				'query-exc'=>true
 			];
 			$data = $this->generateQuery($arr);

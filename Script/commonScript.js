@@ -126,7 +126,19 @@ function performAjx(reqUrl, reqType, datas = '', callback) {
         }
     }).done(callback);
 }
-
+function performAjxForFiles(reqUrl, datas, extraArgs,callback) {
+  fdata=new FormData($(datas)[0]);
+     $.ajax({
+        url: reqUrl+extraArgs,
+        type:'post',
+        data: fdata,
+        contentType:false,
+        processData:false,
+        success: function(e) {
+            return JSON.parse(e);
+        }
+    }).done(callback);
+}
 
 function responseHandler(displayMsg = '', res) {
     //CHECK DEBUGING MODE

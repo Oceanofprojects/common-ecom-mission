@@ -34,7 +34,7 @@ function gen_fav_ind(x) {
 
 function check_stock(x, stock, off_price, unit, p_name, p_id) {
     if (stock <= 0) {
-        return "<h3 style='text-align:center;color:tomato'>OUT OF STOCK</h3><br><button  onclick=\"add_fav('" +
+        return "<h3 style='text-align:center;color:tomato'>OUT OF STOCK</h3><br><button  onclick=\"add_fav('myfav"+x+"','" +
             p_id + "')\" class=\"fa fa-heart btn-active \">&nbsp;&nbsp;Add to fav</button>";
     } else {
         return '<div style=\"padding-top:5px;border-top:.2px solid rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items: center;\"><div class="quantity-control"><h2>' +
@@ -106,19 +106,19 @@ function dis_msg_box(color,bgcolor,content){
   },2000);
 }
 
-function getFav() {
-    $.ajax({
-        url: 'EP.php?key=myfav&uid=' + uid,
-        type: 'get',
-        success: function(e) {
-            data = JSON.parse(e);
-            if (parseInt(data.status)) {
-
-
-            }
-        }
-    });
-}
+// function getFav() {
+//     $.ajax({
+//         url: 'EP.php?key=myfav&uid=' + uid,
+//         type: 'get',
+//         success: function(e) {
+//             data = JSON.parse(e);
+//             if (parseInt(data.status)) {
+//
+//
+//             }
+//         }
+//     });
+// }
 function getMyFav(){
   performAjx('index.php', 'get','key=94f224e95c2fe21dfe0085d5665bc248d55a0c1be7dc574729ebaa12d97b4ed3&controller=home&action=index', (res) => {
     myfavComponent(JSON.parse(res))
@@ -198,10 +198,12 @@ function removefrommycart(x) {
 function validate(){
 	if($('#cate_name').val().trim()==''){
 		return [false,'warning','Category field required !'];
-	}else if($('#file').val().trim()==''){
+	}else if(document.getElementById('file1').value.trim()==''){
 		return [false,'warning','Please select image !'];
 	}else if($('#p_name').val().trim()==''){
 		return [false,'warning','Product name field required !'];
+	}else if($('#desc').val().trim()==''){
+		return [false,'warning','Product description field required !'];
 	}else if($('#price').val().trim()==''){
 		return [false,'warning','Price field required !'];
 	}else if($('#unit').val().trim()==''){
@@ -218,7 +220,7 @@ function validate(){
 function add_item(){
   flag = validate();
   if(flag[0]){
-    performAjx('index.php', 'get',$('#frm').serialize()+'&controller=product', (res) => {
+    performAjxForFiles('index.php','#frm','?controller=product&key=5265dbb8b63da8f3da8c145702deae1954a7224a585014f0bbc3086a6e499ef6', (res) => {
       d = JSON.parse(res)
       if(d.status){
         dis_msg_box('#000','lightgreen',d.message);
@@ -230,4 +232,20 @@ function add_item(){
     bg = (flag[1] == 'warning')?'tomato':'lightgreen';
     dis_msg_box('#000',bg,flag[2]);
   }
+}
+
+var menutmp=0;
+function op_search(){
+  if(menutmp%2==0){
+  coursep_menu();
+  $('#search_product').focus();
+  $('.search_layer').css('top','0px');
+  }else{
+  coursep_menu();
+  $('.search_layer').css('top','-100%');
+  }
+  menutmp++;
+}
+function coursep_menu(){
+  $('.menu').toggle(100);
 }

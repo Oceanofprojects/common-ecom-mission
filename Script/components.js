@@ -5,7 +5,7 @@ function loadComponent(type, data) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" id=\"myfav'+i+'\" onclick=\"add_fav(\'myfav'+i+'\',\'' + data.data[i].p_id +
-              '\')\"></h6><div class=\"img-src\" style=\"background:ur(assets/product_images/' +
+              '\')\"></h6><div class=\"img-src\" style=\"image-rendering: pixelated;background:url(assets/product_images/' +
               data.data[i].p_img +
               ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
               data.data[i].p_name +

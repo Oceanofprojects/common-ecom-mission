@@ -9,6 +9,7 @@ for cate box want precentage num  -->
 
 <head>
     <title><?php echo $data['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
@@ -20,14 +21,22 @@ for cate box want precentage num  -->
 </head>
 
 <body>
-    <div id="common_dis_msg_box">
+
+  <?php
+  require_once __DIR__.'/../../sections/header.php';
+  ?>
+    <!-- <div id="common_dis_msg_box">
     		<div id="msg_content_to_display"></div>
-    	</div>
+    	</div> -->
 
 
-    <div style="display:flex;justify-content: center;align-items: center;background:url('<?php echo 'assets/category_images/'.$_GET['cate_img'];?>');background-position: center;background-size: cover;height:300px;width:100%" id="img" alt="Product category">
-      <div class="head-info" style="background:rgba(0,0,0,.5);padding:0px 20px">
-        <h1 style="color:#fff"><?php echo $_GET['cate'];?></h1>
+    <div style="display:flex;justify-content:flex-start;align-items:center;background:linear-gradient(45deg,#ec4a33 50%,transparent 50%),url('<?php echo 'assets/category_images/'.$_GET['cate_img'];?>');background-position: center;background-size: cover;height:200px;width:100%" id="img" alt="Product category">
+      <div class="head-info" style="padding:10px 20px;">
+        <h1 style="max-width:200px;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color:#fff;text-align:center;margin:0px 10px;background:rgba(0,0,0,.2);padding:10px"><?php echo $_GET['cate'];?></h1>
+        <br>
+        <div style="display:flex;justify-content:center;align-items:center;">
+          <h6  style="color:#fff"><a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6" style="text-decoration:none;color:#fff">Home</a>&nbsp;&nbsp;<span class="fa fa-chevron-right"></span>&nbsp;&nbsp;Category</h6>
+        </div>
       </div>
     </div>
 

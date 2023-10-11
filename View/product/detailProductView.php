@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title><?php echo $data['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
   <script src="Script/commonScript.js"></script>
@@ -55,7 +56,7 @@
     }
 
     .details-box-head {
-        background:cornflowerblue;
+        background:#cdc;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -69,7 +70,7 @@
         margin: 10px;
         padding: 10px;
         border-radius: 5px;
-        border:1px solid #ddd;
+        border:1px solid #fff;
     }
 
     .details-box-main-img {
@@ -83,7 +84,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background:cornflowerblue;
+        background:#cdc;
         //background: linear-gradient(0deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .6), rgba(0, 0, 0, .4) 50%, transparent);
     }
 
@@ -123,7 +124,7 @@
                   $favIndi = "fa fa-heart-o";
                 }
                 ?>
-                <a href="#" style="color:#fff" class="<?php echo $favIndi;?>" id="myfav" onclick="add_fav('myfav','<?php echo $resData['p_id'];?>')"></a>
+                <a href="#" style="color:#fff" class="<?php echo $favIndi;?>" id="myfav1" onclick="add_fav('myfav1','<?php echo $resData['p_id'];?>')"></a>
             </div>
             <div class="details-box-main-img" style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;"></div>
             <div class="details-sub-imgs">
@@ -204,7 +205,7 @@ ONGOING
   require_once 'Controller/productController.php';
 
   $productCtrllr = new productController();
-  
+
   $review = $productCtrllr->getReviews(['type'=>'getPidReview','data'=>$resData['p_id'],'r-from'=>0,'r-to'=>10]);
   if($review['status']){
     echo "<script>var review = ".json_encode($review)."</script>";
