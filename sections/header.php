@@ -400,11 +400,11 @@ if($cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0))[0]){
         <h1 align="center">MY CART</h1>
         <br>
         <div style="display:flex;justify-content:space-around;align-items: center;">
+					<input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
+							onchange="dis_my_cart('cart_filter')">
             <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
-            <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
         </div>
-        <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
-            onchange="dis_my_cart('cart_filter')">
+
         <br>
         <center>
             <table id="mycarttbl">

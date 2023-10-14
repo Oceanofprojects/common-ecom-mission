@@ -51,12 +51,12 @@ display: none;
 sup{
   color:red
 }
-#file1,#file2,#file3,#file4{
+#file1{
   position:relative;
   top:0px;left:0px;
   width:100px;
 }
-#file1:after,#file2:after,#file3:after,#file4:after{
+#file1:after{
   content: 'Upload';
   color:#fff;
   text-align: center;
@@ -66,12 +66,6 @@ sup{
   width:100%;
   height:100%;
   background:cornflowerblue;
-}
-.s-imgs{
-  display:none;
-}
-#opsubimgs:checked ~ .s-imgs{
-  display: block;
 }
 
 </style>
@@ -117,12 +111,6 @@ sup{
         <div class="sub_imgs">
           <br>
           <input type="checkbox" style="width:10px;display:none" id="opsubimgs"><label for="opsubimgs" style="cursor:pointer;background:#ddd;padding: 5px;color:#123">Upload sub img</label>
-          <div class="s-imgs">
-            <br>
-            <input type="file" id="file2" name="file2" onchange="chFileBg(2)">&nbsp;<span style="color:green" id="fileInd2"></span><br><br>
-            <input type="file" id="file3" name="file3" onchange="chFileBg(3)">&nbsp;<span style="color:green" id="fileInd3"></span><br><br>
-            <input type="file" id="file4" name="file4" onchange="chFileBg(4)">&nbsp;<span style="color:green" id="fileInd4"></span><br><br>
-          </div>
         </div>
       </td>
     </tr>

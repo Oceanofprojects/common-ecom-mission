@@ -54,36 +54,41 @@ function myfavComponent(data){
 
 function mycartComponent(data){
     total_price = 0;
+    off_total_price = 0;
 
-    if (parseInt(data.status)) {
+    if (data.status) {
         $('.mycart').fadeIn(100);
         $('#mycarttbl').empty();
         $('#mycarttbl').append(
-            "<tr><th>sno</th><th>Item</th><th>price</th><th>quantity</th><th>total</th><th>Option</tr>"
+            "<tr><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr>"
         );
         if(data.data.length == 0){
-          $('#mycarttbl').append("<tr><td colspan='6' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
+          $('#mycarttbl').append("<tr><td colspan='7' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
         }else{
             for (ci = 0; ci < data.data.length; ci++) {
-              if(data.old_r == true){
-                $('#mycarttbl').append("<tr><td>" + data.data[ci].cart_id + "</td><td>" + data.data[
-                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data
-                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (data.data[ci]
-                        .price * data.data[ci].quantity) +
+              off_price = calc_offer(data.data[ci].price,data.data[ci].offer);
+              if(data.old_r == true && data.data[ci].cart_edit_flag == '1' || data.old_r == true && data.data[ci].cart_edit_flag == '0' || data.old_r == false && data.data[ci].cart_edit_flag == '0'){
+                $('#mycarttbl').append("<tr><td>" + data.data[
+                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
+                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (off_price * data.data[ci].quantity) +
                     "rs</td><td>-</td></tr>");
-              }else{
-                $('#mycarttbl').append("<tr><td>" + data.data[ci].cart_id + "</td><td>" + data.data[
-                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data
-                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (data.data[ci]
-                        .price * data.data[ci].quantity) +
+              }else if(data.old_r == false && data.data[ci].cart_edit_flag == '1'){
+                $('#mycarttbl').append("<tr id='cartDataRow"+ci+"'><td>" + data.data[
+                        ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
+                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (off_price * data.data[ci].quantity) +
                     "rs</td><td><button class='btn fa fa-trash' onclick='removefrommycart(" +
-                    data.data[ci].cart_id + ")'></button></td></tr>");
-                  }
-                total_price += data.data[ci].price * data.data[ci].quantity;
+                    data.data[ci].cart_id + ","+ci+")'></button></td></tr>");
+                }
+                  total_price += data.data[ci].price * data.data[ci].quantity;
+                off_total_price += off_price * data.data[ci].quantity;
                 //					console.log(data.data[ci].cart_id);
             }
           }
-        $('#mycarttbl').append("<tr><td colspan='6'><h1 align='center'>Total : " + total_price +
-            "rs</h1></td></tr>");
+          $('#mycarttbl').append("<tr><td colspan='7'><h3 align='center'>Total Price " + total_price +"rs</h3></td></tr><tr><td colspan='7'><h3 align='center'>( - ) Saving "+(total_price-off_total_price)+"rs</h3></td></tr><tr><td colspan='7'><h1 align='center'>Total Cost "+off_total_price+"rs</h1></td></tr><tr><td colspan='7' style='text-align:center'><button style='background:cornflowerblue;' id='checkout' class='btn fa fa-check-circle' onclick='checkout()'>&nbsp;Check out</button></td></tr>");
+          // <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
+
+
+        // $('#mycarttbl').append("<tr><td colspan='6'><h3 align='center'>Total : " + total_price +
+        //     "rs</h3></td><td><h3>Off price : "+off_total_price+"</h3></td></tr>");
   }
 }

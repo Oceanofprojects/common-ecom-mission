@@ -85,7 +85,7 @@ class commonModel
         //GENERATE RESULT ARRANGEMENT(ASC,DESC)
         if (isset($this->arColVal['order']) == 1) {
                 if(count($this->arColVal['order']) !== 0){
-                    $order = 'ORDER BY `' . $this->arColVal['order'][0] . '` ' . strtoupper($this->arColVal['order'][1]);
+                    $order = 'ORDER BY ' . $this->arColVal['order'][0] . ' ' . strtoupper($this->arColVal['order'][1]);
                 }else{
                 $order = '';
                 }

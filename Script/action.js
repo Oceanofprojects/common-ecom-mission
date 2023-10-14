@@ -172,7 +172,7 @@ function dis_my_cart(x) {
     performAjx('index.php', 'get',arg, (res) => {
       d = JSON.parse(res)
       if(d.status){
-        mycartComponent(JSON.parse(res));
+        mycartComponent(d);
       }
     });
 }
@@ -184,10 +184,11 @@ function cls_my_cart() {
 
 
 
-function removefrommycart(x) {
-    performAjx('index.php', 'get','key=4a107946f7b882778ffc1aff5ab8b7bcf8eed223f32cb23ee2a78379f01663f1&cartid='+x, (res) => {
+function removefrommycart(x,rowID) {
+    performAjx('index.php', 'get','controller=product&key=4a107946f7b882778ffc1aff5ab8b7bcf8eed223f32cb23ee2a78379f01663f1&cartid='+x, (res) => {
       d = JSON.parse(res)
       if(d.status){
+        dis_my_cart(x);//load cart again
         dis_msg_box('#000','lightgreen',d.message);
       }else{
         dis_msg_box('#000','tomato',d.message);

@@ -250,7 +250,7 @@ class products extends commonModel{
 			$arr = [
 				'tbl_name'=>'mycart',
 				'action'=>'insert',
-				'data'=>["cart_id='$randid'","cid='$uid'","p_id='$p_id'","quantity=$quant","_date='$dt'","created_at=current_timestamp","updated_at=now()"],
+				'data'=>["cart_id='$randid'","cid='$uid'","p_id='$p_id'","quantity=$quant","_date='$dt'","cart_edit_flag=1","created_at=current_timestamp","updated_at=now()"],
 				'query-exc'=>true
 			];
 		$flag = $this->generateQuery($arr);
@@ -297,9 +297,22 @@ class products extends commonModel{
 	public function mycart(){
 		$uid = $this->cid;
 		if($uid == null){
-			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
+			echo json_encode(['status'=>false,'data'=>[],'message'=>'Please login to make action !.']);
 		}else{
 			$oldCart = false;//default - false
+			$tmptbl='products';
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.unit,$tmptbl.price,$tmptbl.offer,mycart.quantity,mycart.cart_id,mycart.cart_edit_flag"]],
+				'join_param'=>[
+					['mycart','right_join','p_id','p_id']
+				],
+				'order'=>['products.s_no','asc'],
+				'query-exc'=>true
+
+			];
+
 			if(isset($_GET['date'])){
 				$d=$_GET['date'];
 				if($d == date('Y-m-d')){//if current - false
@@ -307,15 +320,18 @@ class products extends commonModel{
 				}else{
 					$oldCart = true;
 				}
-				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
+				$arr['condition'] = ["_date='{$d}'","cid='{$uid}'"];
+//				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
 			}else{
-				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
+				$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}'"];
+//				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
 			}
-			$sql = $this->db->prepare($q);
-				if($sql->execute()){
-					$res=$sql->fetchAll(PDO::FETCH_ASSOC);
-					echo json_encode(['status'=>1,'data'=>$res,'old_r'=>$oldCart,'t'=>$q]);
-			}
+			$flag = $this->generateQuery($arr);
+				if($flag['status']){
+					echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
+				}else{
+					echo json_encode(['status'=>false,'data'=>[],'message'=>'Err in fetch cart','old_r'=>true]);
+				}
 		}
 		exit;
 
@@ -403,6 +419,27 @@ class products extends commonModel{
 			}else{
 				return ['status'=>false,'data'=>[],'message'=>'Failed to upload image !'];
 			}
+		}
+	}
+
+	public function removefrommycart($cartid){
+		if($this->cid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to make changes !'];
+		}else{
+				$arr = [
+					'tbl_name'=>'mycart',
+					'action'=>'delete',
+					'data'=>[],
+					'condition'=>['cart_id='.$cartid,"cid='".$this->cid."'"],
+					'query-exc'=>true
+				];
+
+				$flag = $this->generateQuery($arr);
+				if($flag['status']){
+					return ['status'=>true,'data'=>[],'message'=>'Item removed from cart'];
+				}else{
+					return ['status'=>false,'data'=>'Err in removing item from cart.'];
+				}
 		}
 	}
 

@@ -118,7 +118,7 @@ if($review['status']){
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-//echo hash_hmac('sha256','category',9050);
+echo hash_hmac('sha256','removefrommycart',9050);
 ?>
 
 </html>

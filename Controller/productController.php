@@ -42,6 +42,8 @@ class productController extends commonController
         $this->productDetail();
       }else if(hash_equals(hash_hmac($algo,'category',$skey),$req['key'])){
         $this->category();
+      }else if(hash_equals(hash_hmac($algo,'removefrommycart',$skey),$req['key'])){
+        echo json_encode($this->productMdl->removefrommycart($_GET['cartid']));
       }else{
         $this->index();
       }
