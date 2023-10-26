@@ -19,19 +19,20 @@
         justify-content: space-around;
         flex-wrap: wrap;
         max-width:70%;
-        min-width:400px;
+        min-width:250px;
         border:.3px solid rgba(0, 0, 0, 0.2);
         border-radius:10px
     }
 
     .details-box-layer {
         flex: 1;
-        margin: 20px;
+    min-width:250px;
+        margin:10px;
     }
 
     .details-box-content-layer {
         flex: 2;
-        min-width: 200px;
+        min-width: 250px;
         margin:10px;
     }
 
@@ -56,7 +57,7 @@
     }
 
     .details-box-head {
-        background:#cdc;
+        background:#123;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -101,6 +102,8 @@
     }
     </style>
     <?php
+
+
     require_once __DIR__.'/../../sections/header.php';
     if($data['data']['data'] == 0){
       echo "Err in viewing product";
@@ -127,27 +130,20 @@
                 <a href="#" style="color:#fff" class="<?php echo $favIndi;?>" id="myfav1" onclick="add_fav('myfav1','<?php echo $resData['p_id'];?>')"></a>
             </div>
             <div class="details-box-main-img" style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;"></div>
-            <div class="details-sub-imgs">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwixnX9_EXei7itvuaLzBWKhrCj0ypC78jLA&usqp=CAU">
-            </div>
-        </div>
-        <div class="details-box-content-layer">
+            <br>
             <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
-            <div class="t">
-ONGOING
+            <br>
+            <div class="t" style="min-width:200px;width:40%">
             </div>
+            <br>
             <script>
-            i=1;
-            $('.t').append(check_stock(1,<?php echo $resData['stock']?>, <?php echo $resData['offer'];?>,'<?php echo $resData['unit'];?>','<?php echo $resData['p_name'];?>','<?php echo $resData['p_id'];?>'));
+            $('.t').append(check_stock(1,<?php echo $resData['stock']?>, calc_offer(<?php echo $resData['price'];?>,<?php echo $resData['offer'];?>),'<?php echo $resData['unit'];?>','<?php echo $resData['p_name'];?>','<?php echo $resData['p_id'];?>'));
 
             </script>
+
+        </div>
+        <div class="details-box-content-layer">
+            <br> <h2>Product Details</h2>
             <p width="100%"><?php echo $resData['p_desc'];?></p>
             <table>
               <tr style="background:#555a;">
@@ -181,10 +177,10 @@ ONGOING
                 <th>Stock left</th>
                 <td><?php echo $resData['stock'];?></td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <th>Last update</th>
                 <td><?php echo $resData['update_at'];?></td>
-              </tr>
+              </tr> -->
             </table>
         </div>
 
@@ -195,8 +191,18 @@ ONGOING
   <h2 align="center">Suggestion Product</h2><br><br><br>
 
   <?php
+
+  $productCtrllr = new productController();
+
+//print_r($data['suggestion']);
       require_once 'sections/suggestionProducts.php';
+
+    echo "<script>loadComponent('suggestion-card-view',".json_encode($data['suggestion']).")</script>";
+
   ?>
+<!--   <script type="text/javascript">
+    loadComponent('suggestion-card-view',{});
+  </script> -->
   <br><br>
 
   <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
@@ -204,15 +210,23 @@ ONGOING
   <?php
   require_once 'Controller/productController.php';
 
-  $productCtrllr = new productController();
 
   $review = $productCtrllr->getReviews(['type'=>'getPidReview','data'=>$resData['p_id'],'r-from'=>0,'r-to'=>10]);
+//  var_dump($review['status']);
   if($review['status']){
     echo "<script>var review = ".json_encode($review)."</script>";
     require_once 'sections/reviews.php';
+  echo "<br><br><br>";
   }else{
+    echo "<script>var review = {'data':[]};</script>";
     echo "<center><span class='fa fa-chain-broken'>&nbsp;&nbsp;".$review['message']."</span></center>";
   }
+
+  echo '  <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
+  <h2 align="center">Write your Reviews</h2><br>';
+$p_id=$resData['p_id'];
+  require_once 'sections/reviewForm.php';
+  echo "<br><br><br>";
 
   require_once 'sections/footer.php';
   ?>

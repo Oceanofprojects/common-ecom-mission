@@ -6,11 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
-    <script src="Script/commonScript.js"></script>
-    <script src="Script/jquery.min.js"></script>
-    <script src="Script/action.js"></script>
-    <script src="Script/components.js"></script>
-    <link rel="stylesheet" href="Style/global.css">
+    <script src="../../Script/commonScript.js"></script>
+    <script src="../../Script/jquery.min.js"></script>
+    <script src="../../Script/components.js"></script>
+    <link rel="stylesheet" href="../../Style/global.css">
     <style media="screen">
     #frm {
         width: 50%;
@@ -99,7 +98,7 @@ width:90%;
         <div id="msg_content_to_display"></div>
     </div>
     <br><br>
-    <h1 align="center">Add Product</h1>
+    <h1 align="center">Edit Product</h1>
     <br><br>
     <center>
         <!-- <div class="search">
@@ -112,19 +111,17 @@ width:90%;
             <form id="frm" action="" enctype="multipart/form-data">
                 <table id="tbl_data_1">
                     <tr>
+                        <td>Search<sup></sup></td>
+                        <td>
+                            <input type="text" style="width:70%" id="search_txt" placeholder="Search Product name">
+                            <input type="button" onclick="searchProduct('search_txt')"
+                                style="width:20%;background:orange;border-radius:5px;" id="search" value="Go">
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Category<sup>*</sup></td>
                         <td>
                             <select id="cate_name" name="cate">
-                                <?php
-          if(count($data['data']['data']) !== 0){
-            echo "<option value=''>Select cate list</option>";
-            for($i=0;$i<count($data['data']['data']);$i++){
-              echo "<option value='".base64_encode($data['data']['data'][$i]['cate'].",".$data['data']['data'][$i]['cate_img'])."'>".$data['data']['data'][$i]['cate']."</option>";
-            }
-          }else{
-            echo "<option value=''>Select cate list</option><option value=''>Empty</option>";
-          }
-           ?>
                             </select>
                         </td>
                     </tr>
@@ -176,6 +173,8 @@ width:90%;
             </form>
         </section>
     </center>
+    <script src="../../Script/action.js"></script>
+
     <script type="text/javascript">
     function chFileBg(id) {
         val = document.getElementById('file' + id);

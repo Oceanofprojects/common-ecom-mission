@@ -21,7 +21,78 @@ function add_fav(ele,p_id) {
     }
   });
 }
+function remove_fav(ele,p_id){
+    performAjx('index.php', 'get','key=f0fbe9802db9070478c7bf0a10abf99e0ea9088ea9d9334bd7d4d778f20de42e&controller=home&action=index&p_id=' + p_id, (res) => {
+      d = JSON.parse(res);
+      if(d.status){
+        dis_my_fav();
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
+}
 
+function signup(){
+  performAjx('../../index.php', 'get','key=a2abe3fa78380c0d025613301912c523df07b99824536a8e087736d1ff6f7ab6&controller=customer&'+$('#frm').serialize(), (res) => {
+    d = JSON.parse(res);
+    if(d.status && d.validateFlag){
+      $('#dis_err').text('');
+      $('#frm')[0].reset();
+      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6');
+    }else{
+      $('#dis_err').text(d.msg).css('color','tomato');
+    }
+  });
+}
+function login(){
+  if($('#cus_idnty').val().trim().length == 0){
+    $('#dis_err').text('Please enter Name or Mobile or Email or CID').css('color','tomato');
+  }else if($('#pwd').val().trim().length == 0){
+    $('#dis_err').text('Please enter your password').css('color','tomato');
+  }else{
+    performAjx('../../index.php', 'get','key=3d95f6ccf7e91c1cd9ef2e1533131466c515c5d559419556a2a439e7110d7716&controller=customer&'+$('#frm').serialize(), (res) => {
+      d = JSON.parse(res);
+      if(d.status){
+        $('#dis_err').text('');
+        $('#frm')[0].reset();
+      window.open('../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6');
+      }else{
+        $('#dis_err').text(d.msg).css('color','tomato');
+      }
+    });
+  }
+}
+
+function rating(x){
+  for(i=1;i<=5;i++){
+      $('#star'+i).removeClass();
+      $('#star'+i).attr('class','fa fa-star-o');
+      $('#star'+i).css('color','#ddda');
+  }
+
+  for(i=1;i<=x;i++){
+      $('#star'+i).removeClass();
+      $('#star'+i).attr('class','fa fa-star');
+      $('#star'+i).css('color','goldenrod');
+  }
+  $('#rating').val(x);
+}
+
+function sendReview(){
+  if($('#review_msg').val().trim().length == 0){
+    dis_msg_box('#000','tomato','Please enter review message');
+  }else{
+    performAjx('index.php', 'get','key=da77e8367e2b26bc9b2f928ca3b0b9f2db7cdb3bd28c565fe3741065238bb331&controller=product&'+$('#reviewFrm').serialize(), (res) => {
+      d = JSON.parse(res);
+      if(d.status){
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
+  }
+}
 
 function calc_offer(price, offer) {
     offer_price = price * offer / 100;
@@ -130,8 +201,11 @@ function cls_my_fav() {
 }
 
 function dis_my_fav() {
-  getMyFav();
+  $('#myfavtbl').empty();
+  $('#myfavtbl').append(
+    "<tr><th>sno</th><th>Product ID</th><th>Added On</th><th>Option</th></tr><tr><th colspan='4' align='center'><br>Fetching FAV ....</th></tr>");
     $('.myfav').fadeIn(100);
+  getMyFav();
 }
 
 function add_fav_tmp_ctrl(x) {
@@ -151,6 +225,9 @@ function add_to_cart(pos,p_id) {
     performAjx('index.php', 'get','key=428b9259d7c24affcd994d23f74adc3090fbb8ae647ee79b703ec7c6356d44a3&controller=home&action=index&qnt='+qnt+'&p_id=' + p_id, (res) => {
       d = JSON.parse(res);
       if(d.status){
+        $('#id-ty-'+pos).text(' Item added');
+        $('#id-ty-'+pos).removeClass();
+        $('#id-ty-'+pos).attr('class','fa fa-shopping-cart btn-de-active');
         dis_msg_box('#000','lightgreen',d.message);
       }else{
         dis_msg_box('#000','tomato',d.message);
@@ -163,17 +240,22 @@ function add_to_cart(pos,p_id) {
 var mycart_data;
 
 function dis_my_cart(x) {
+  $('.mycart').fadeIn(100);
+  $('#mycarttbl').empty();
+  $('#mycarttbl').append(
+      "<tr><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr><tr><th colspan='7'><br>Fetching Cart list ...</th></tr>"
+  );
     var arg;
-    if (x == 'cart_filter') {
+    if (x == 'cart_date_filter') {
         arg = 'key=2327115e33e067c37233fe38f3a68ed9b9e95a7b7c8b6d169358c72703ed9e24&date=' + $('#cart_filter').val();
+    }else if (x == 'cart_type_filter') {
+      arg = 'key=2327115e33e067c37233fe38f3a68ed9b9e95a7b7c8b6d169358c72703ed9e24&type='+$('#cart_type').val()+'&date='+$('#cart_filter').val();
     } else {
         arg = 'key=2327115e33e067c37233fe38f3a68ed9b9e95a7b7c8b6d169358c72703ed9e24';
     }
     performAjx('index.php', 'get',arg, (res) => {
-      d = JSON.parse(res)
-      if(d.status){
+      d = JSON.parse(res);
         mycartComponent(d);
-      }
     });
 }
 
@@ -250,3 +332,48 @@ function op_search(){
 function coursep_menu(){
   $('.menu').toggle(100);
 }
+
+
+function logout(){
+  performAjx('index.php', 'get','controller=customer&key=db9f28956ed0d7d1c9004b39d056ca9d3e512125b3eb196070f1f9526318e9a1', (res) => {
+    d = JSON.parse(res)
+    if(d.status){
+      dis_msg_box('#000','lightgreen',d.message);
+    }else{
+      dis_msg_box('#000','tomato',d.message);
+    }
+  });
+}
+
+function checkout(){
+  performAjx('index.php', 'get','controller=product&key=c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf', (res) => {
+    d = JSON.parse(res)
+    
+    if(d.status){
+      dis_msg_box('#000','lightgreen',d.message);
+    }else{
+      dis_msg_box('#000','tomato',d.message);
+    }
+  });
+}
+
+function searchProduct(eleId) {
+  if($('#'+eleId).val().trim().length==0){
+    alert('Search required');
+  }else{
+    txt=$('#'+eleId).val().trim();
+      performAjx('../../index.php', 'get','controller=product&key=8fac78974f959202bd400f5a04f1df06c8bdafc2282ce53ee5b08ee953c07619&search_txt='+txt, (res) => {
+      d = JSON.parse(res);
+      if(d.status){
+          alert('FETCHED:'+d.data)
+      }else{
+        alert('No result found')
+      } 
+      console.log(d)
+      });    
+
+  }
+
+}
+
+//c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf

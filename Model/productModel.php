@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../core/connect.php';
 require_once __DIR__.'/../Model/commonModel.php';
-require_once __DIR__.'/../Model/customer.php';
+require_once __DIR__.'/../Model/customerModel.php';
 
 class products extends commonModel{
 	use userData;
@@ -30,7 +30,7 @@ class products extends commonModel{
         'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
         'limit'=>10,
         'order'=>['p_id','asc'],
-        'query-exc'=>true
+       'query-exc'=>true
       ];
     }else{
       $tmptbl = 'products';
@@ -39,7 +39,7 @@ class products extends commonModel{
         'action'=>'join',
         'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid"]],
         'join_param'=>[
-          ['myfav','left_join','p_id','p_id']
+          ['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
         ],
         'limit'=>10,
         'order'=>['p_id','asc'],
@@ -47,13 +47,19 @@ class products extends commonModel{
       ];
     }
     $flag = $this->generateQuery($arr);
-    if($flag['status']){
+	if($flag['status']){
 			$res=$flag['data'];
 			return ['status'=>1,'data'=>$res,'cartnum'=>$this->get_cate_num()];
 		}else{
 			return ['status'=>0,'data'=>[],'cartnum'=>0];
 		}
 	}
+
+	public function get_suggestion($datas){
+		$cate = $datas[0];//Get cate
+		return "asasasasasasasas";
+	}
+
 	public function addToFav(){
 		if($this->cid == null){
 			echo json_encode(['status'=>0,'flag'=>0,'data'=>'err in fav','message'=>'Please login to make action !']);
@@ -87,7 +93,7 @@ class products extends commonModel{
 		$arr = [
 			'tbl_name'=>'review',
 			'action'=>'join',
-			'data'=>['manual'=>["$cus.profile,CONCAT($cus.c_fname,' ',$cus.c_lname) as name,$cus.location,review.review,review.rating,review.created_at,review.sno,review.p_id"]],
+			'data'=>['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id"]],
 	       'query-exc'=>true
 		];
 		if($req['type'] == 'getCateReview'){
@@ -193,26 +199,11 @@ class products extends commonModel{
 	public function get_product(){
 		if(isset($_GET['pid'])){
 				$p_id = $_GET['pid'];
-				if($this->cid == null){
-					$arr = [
-						'tbl_name'=>'products',
-						'data'=>[],
-						'action'=>'select',
-						'condition'=>['p_id="'.$p_id.'"'],
-						'query-exc'=>true
-					];
-				}else{
-					$arr = [
-		        'tbl_name'=>'products',
-		        'action'=>'select',
-		        'data'=>[],
-						'condition'=>['manual'=>['p_id="'.$p_id.'"']],
-		        'query-exc'=>true
-		      ];
-				}
-				$flag = $this->generateQuery($arr);
-				if($flag['status']){
-					return ['status'=>true,'data'=>$flag['data'],'message'=>'Product details fetched','myFavExit'=>$this->myfavExist($p_id)];
+				$q = "SELECT res.* FROM products AS res WHERE res.cate=(SELECT cate FROM products WHERE p_id='".$p_id."') ORDER BY RAND() LIMIT 10";
+				$sql = $this->db->prepare($q);
+				if($sql->execute()){
+					$res = $sql->fetchAll(PDO::FETCH_ASSOC);
+					return ['status'=>true,'data'=>$res,'message'=>'Product details fetched','myFavExit'=>$this->myfavExist($p_id)];
 				}else{
 					return ['status'=>false,'data'=>[],'message'=>'Err in get product details','myFavExit'=>$this->myfavExist($p_id)];
 				}
@@ -235,7 +226,7 @@ class products extends commonModel{
 			$arr = [
 				'tbl_name'=>'mycart',
 				'action'=>'update',
-				'data'=>['quantity='.$quant,'updated_at=now()'],
+				'data'=>['cart_edit_flag=1','quantity='.$quant,'updated_at=now()'],
 				'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
 				'query-exc'=>true
 			];
@@ -279,6 +270,24 @@ class products extends commonModel{
 		}
 	}
 
+	public function getProductById($p_id){
+		$arr = [
+			'tbl_name'=>'products',
+			'action'=>'select',
+			'data'=>['p_name'],
+			'condition'=>['manual'=>['p_id="'.$p_id.'"']],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			if(count($flag['data'])!==0){
+				return [true,$flag['data'][0]['p_name']];
+			}else{
+				return [false,''];
+			}
+		}
+	}
+
 	public function get_cate_list(){
 		$q="select distinct cate,cate_img from products";
 		$sql = $this->db->prepare($q);
@@ -312,8 +321,22 @@ class products extends commonModel{
 				'query-exc'=>true
 
 			];
+			if(isset($_GET['date']) && isset($_GET['type'])){
+				$d=$_GET['date'];
+				if($d == date('Y-m-d')){//if current - false
+					$oldCart = false;
+				}else{
+					$oldCart = true;
+				}
 
-			if(isset($_GET['date'])){
+				if($_GET['type'] == 'current'){//if current cart list or Ordered cart based on CART_EDIT_FLAG
+					$type = 1;
+				}else{
+					$type = 0;
+				}
+				$arr['condition'] = ["_date='{$d}'","cid='{$uid}'","cart_edit_flag=".$type];
+
+			}else if(isset($_GET['date'])){
 				$d=$_GET['date'];
 				if($d == date('Y-m-d')){//if current - false
 					$oldCart = false;
@@ -323,10 +346,16 @@ class products extends commonModel{
 				$arr['condition'] = ["_date='{$d}'","cid='{$uid}'"];
 //				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
 			}else{
-				$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}'"];
+				$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}' AND cart_edit_flag=1"];
 //				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
 			}
+
+			// if(isset($_GET['type'])){
+			// 	unset($arr['condition']);
+			// }
+
 			$flag = $this->generateQuery($arr);
+//			echo $flag;exit;
 				if($flag['status']){
 					echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
 				}else{
@@ -356,9 +385,9 @@ class products extends commonModel{
 				'action'=>'join',
 				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid"]],
 				'join_param'=>[
-					['myfav','left_join','p_id','p_id']
+					['myfav','left_join','p_id','p_id',' AND myfav.cid='.$this->cid]
 				],
-				'condition'=>['manual'=>['cate="'.$cate.'"']],
+				'condition'=>['manual'=>[$tmptbl.'.cate="'.$cate.'"']],
 				'limit'=>10,
 				'order'=>['p_id','asc'],
 				'query-exc'=>true
@@ -442,6 +471,226 @@ class products extends commonModel{
 				}
 		}
 	}
+
+	public function sendReview($data){
+		if($this->cid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
+		}else{
+			$cid = $this->cid;
+			$p_id = $data['p_id'];
+			$rating = $data['rating'];
+			$review = $data['reviewmsg'];
+			$arr = [
+				'tbl_name' => 'review',
+				'action' => 'insert',
+				'data' => ["cid='$cid'","p_id='$p_id'","rating='$rating'","review='$review'"],
+				'query-exc'=>true
+			];
+			$flag=$this->generateQuery($arr);
+			if($flag['status'] == 'success'){
+				return ['status'=>true,'data'=>[],'message'=>'Your review added successfully.'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
+			}
+		}
+
+	}
+
+	public function checkout(){
+										/*
+								CALC TWO ARRAY DATA INTO ONE DATA DONE
+								UPDATE PRODUCT TBL QNTY
+								INSERT NEW ORDER
+								UPDATE CART DATA EDIT -> DISABLE 
+								VIEW DATA INTO AMOUT PAY
+								*/
+		if($this->cid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
+		}else{
+			$cart_date = date('Y-m-d');
+			$arr = [
+				'tbl_name' => 'mycart',
+				'action' => 'select',
+				'data' => [],
+				'condition'=>['cid='.$this->cid,"_date='".$cart_date."'","cart_edit_flag=1"],
+				'query-exc'=>true
+			];
+			$flag=$this->generateQuery($arr);
+			if($flag['status'] == 'success'){
+				if(count($flag['data'])!==0){
+					for($i=0;$i<count($flag['data']);$i++){//get customer ordered  product ID and qunty sep
+						$cus_or_pr_id_list[] = '"'.$flag['data'][$i]['p_id'].'"';
+						$cur_or_data_list[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'qnty'=>$flag['data'][$i]['quantity']];
+						$product_detail[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'p_name'=>$this->getProductById($flag['data'][$i]['p_id'])[1],'qnty'=>$flag['data'][$i]['quantity']]; 
+					}
+					$arr = [
+						'tbl_name' => 'products',
+						'action' => 'select',
+						'data' => ['p_id','stock'],
+						'condition'=>['manual'=>['p_id IN('.implode(',',$cus_or_pr_id_list).')']],
+						'query-exc'=>true
+					];
+					$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						if(count($flag['data'])!==0){
+							$pro_data_list = $flag['data'];
+							//IMP SEC CALC PRODUCT QUANTITY AND UPDATE DB
+							sort($cur_or_data_list);
+							sort($pro_data_list);
+							for($i=0;$i<count($pro_data_list);$i++){
+								$qnty = ($pro_data_list[$i]['stock']-$cur_or_data_list[$i]['qnty']);
+								if($qnty < 0){
+									$p_name = $this->getProductById($pro_data_list[$i]['p_id']);
+									$outOfStockItems[]=($p_name[0])?$p_name[1]:'';
+									//outof stock return
+									return ['status'=>false,'data'=>[],'message'=>"Sorry, (".implode(',',$outOfStockItems).") product is OUT OF STOCK, Please remove from cart !."];
+								}else{
+									$orderRes[$i] = ['p_id'=>$pro_data_list[$i]['p_id'],'quantity'=>$qnty];
+								}
+							}//CALC ORDE END
+							
+							//UPDATE QUNT in DB
+							$qntyUpdt = 0;
+							for($i=0;$i<count($orderRes);$i++){
+								$q = "UPDATE products SET stock=".$orderRes[$i]['quantity']." WHERE p_id='".$orderRes[$i]['p_id']."'"; 
+								$sql = $this->db->prepare($q);
+								if ($sql->execute()) {
+									$qntyUpdt++;
+								}
+							}
+							if($qntyUpdt !== count($orderRes)){
+								return ['status'=>false,'data'=>[],'message'=>"Oops somthing went wrong, Please contact your admin (Err in upQnty)"];
+							}
+							//UPDATE QUNT in DB END
+					
+							//CREATE NEW ORDER
+					$createOrder = $this->createNewOrder($cart_date,$product_detail);
+					if($createOrder['status']){
+						//DISABLE CART EDIT OPTION
+						if($this->disableCartEdit(implode(',',$cus_or_pr_id_list),$cart_date)){
+							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in MENU>ACCOUNT>TRACK."];
+						//END OF CART PROCCESS	
+						}else{
+							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
+						}//END OF CART PROCCESS						
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, Please contact your admin (Err in Create order)'];
+					}
+					//CREATE ORDER END
+						}else{
+							return ['status'=>false,'data'=>[],'message'=>'Something went wrong contact your admin(Err in customer ordered item not found in prList)'];
+						}
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Something went wrong contact your admin(Err in fetch product list)'];
+					}
+
+				}else{
+				return ['status'=>false,'data'=>[],'message'=>'cart list zero'];
+				}
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
+			}
+		}
+	  }
+
+	  public function disableCartEdit($ids,$cart_date){
+		$arr = [
+			'tbl_name' => 'mycart',
+			'action' => 'UPDATE',
+			'data' => ['cart_edit_flag=0'],
+			'condition'=>['manual'=>['p_id IN('.$ids.') AND _date="'.$cart_date.'"']],
+			'query-exc'=>true
+		];
+		$flag=$this->generateQuery($arr);
+		if($flag['status'] == 'success'){
+		return ['status'=>true,'data'=>[],'message'=>"Ids disabled successfully"];
+		}else{
+		return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in diblEit)"];
+		}
+	  }
+
+	  public function createNewOrder($cart_date,$product_list){
+		// $orderExist=$this->orderExist($cart_date);//IF exist it carry status and Order ID
+		// if($orderExist['status']){
+		// 	return ['status'=>true,'data'=>$orderExist['data'],'message'=>'Already order ID in Pending stage'];
+		// }else{
+			$order_id = $this->genRnd('alpha_numeric',10);
+			$order_status = 'Pending';
+			$arr = [
+				'tbl_name' => 'myorder',
+				'action' => 'insert',
+				'data' => ["order_id='".$order_id."'","cid='$this->cid'","product_list='".json_encode($product_list)."'","cart_date='$cart_date'","cart_status='$order_status'"],
+				'query-exc'=>true
+			];
+			$flag=$this->generateQuery($arr);
+			if($flag['status'] == 'success'){
+				return ['status'=>true,'data'=>$order_id,'message'=>$flag['msg']];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
+			}
+//		}
+	  }
+
+	  public function orderExist($cart_date){
+		$arr = [
+			'tbl_name' => 'myorder',
+			'action' => 'select',
+			'data' => ['order_id'],
+			'condition'=>['manual'=>["cart_date = '".$cart_date."' AND cart_status='Pending' AND cid='$this->cid'"]],
+			'query-exc'=>true
+		];
+		$flag=$this->generateQuery($arr);
+		if($flag['status'] == 'success'){
+			if(count($flag['data']) !==0){
+				return ['status'=>true,'data'=>$flag['data'][0]['order_id'],'message'=>''];
+			}else{
+				return ['status'=>false,'data'=>'','message'=>''];
+			}
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
+		}
+	  }
+
+	  public function search($val){
+		if($this->cid == null){
+			$tmptbl = 'products';
+			$arr = [
+			  'tbl_name'=>$tmptbl,
+			  'action'=>'select',
+			  'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
+			  'limit'=>20,
+			  'order'=>['p_id','asc'],
+			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR cate LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
+			 'query-exc'=>true
+			];
+		  }else{
+			$tmptbl = 'products';
+			$arr = [
+			  'tbl_name'=>$tmptbl,
+			  'action'=>'join',
+			  'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.p_id AS favExistCid"]],
+			  'join_param'=>[
+				['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
+			  ],
+			  'limit'=>20,
+			  'order'=>['p_id','asc'],
+			  'condition'=>['manual'=>["$tmptbl.p_id LIKE '%$val% 'OR $tmptbl.p_name LIKE '%$val%'  OR $tmptbl.cate LIKE '%$val%' OR $tmptbl.p_desc LIKE '%$val%' OR $tmptbl.tags LIKE '%$val%'"]],
+			  'query-exc'=>true
+			];
+		  }
+		  $flag = $this->generateQuery($arr);
+//		  return $flag;
+		  if($flag['status'] == 'success'){
+			if(count($flag['data']) !==0){
+				return ['status'=>true,'data'=>$flag['data'],'message'=>'Success fetched'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Zero fetch'];
+			}
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
+		}
+
+	  }
 
 }//CLASS END
 

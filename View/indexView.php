@@ -22,13 +22,6 @@ show empty when 0 reviews
     <link rel="stylesheet" href="Style/global.css">
 
 </head>
-<?php
-if(isset($_COOKIE['uid'])){
-  setcookie('uid',3802279867,time() + (86400 * 30),"/");
-}else{
-  setcookie('uid',3802279867,time() + (86400 * 30),"/");
-}
-?>
 
 <body>
     <?php
@@ -58,7 +51,7 @@ if(isset($_COOKIE['uid'])){
 
 
 
-    <br><br>
+    <br><br><br><br><br><br>
     <div class="head-info">
         <h1>Categories</h1>
         <p> kas oa saks alks alks als alms alms </p>
@@ -73,12 +66,13 @@ if(isset($_COOKIE['uid'])){
   }
   ?>
     </div>
-    <br>
+    <br><br><br><br>
     <center>
         <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More
             Categories</a>
-    </center><br><br><br><br>
+    </center>
 
+    <br><br><br><br><br><br>
 
     <!-- customers review -->
     <div class="head-info">
@@ -114,11 +108,11 @@ if($review['status']){
     require_once __DIR__.'/../sections/footer.php';
     ?>
     <script src="Script/reviewSlide.js"></script>
-
+    <!-- <br><br><br> -->
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','removefrommycart',9050);
+echo hash_hmac('sha256','search',9050);
 ?>
 
 </html>

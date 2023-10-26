@@ -23,6 +23,8 @@ for cate box want precentage num  -->
 <body>
 
   <?php
+
+
   require_once __DIR__.'/../../sections/header.php';
   ?>
     <!-- <div id="common_dis_msg_box">

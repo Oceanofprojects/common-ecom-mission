@@ -16,6 +16,10 @@ function loadController($controller)
             require_once __DIR__.'/Controller/productController.php';
             $controllerObj = new productController();
             break;
+        case 'customer':
+            require_once __DIR__.'/Controller/customerController.php';
+            $controllerObj = new customerController();
+            break;    
         default:
             require_once __DIR__.'/Controller/homeController.php';
             $controllerObj = new homeController();

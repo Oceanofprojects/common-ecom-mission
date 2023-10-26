@@ -44,10 +44,17 @@ class productController extends commonController
         $this->category();
       }else if(hash_equals(hash_hmac($algo,'removefrommycart',$skey),$req['key'])){
         echo json_encode($this->productMdl->removefrommycart($_GET['cartid']));
+      }else if(hash_equals(hash_hmac($algo,'search',$skey),$req['key'])){
+        echo json_encode($this->productMdl->search($_GET['search_txt']));
+      }else if(hash_equals(hash_hmac($algo,'sendReview',$skey),$req['key'])){
+        echo json_encode($this->productMdl->sendReview($_GET));
+      }else if(hash_equals(hash_hmac($algo,'checkout',$skey),$req['key'])){
+        echo json_encode($this->productMdl->checkout());
       }else{
         $this->index();
       }
     }
+
 
     public function index()
     {
@@ -73,12 +80,39 @@ class productController extends commonController
 //    addProduct
 
     public function productDetail(){
+      $products = $this->productMdl->get_product();
+      if($products['status']){
+        $selected_product['status'] = true;
+        $selected_product['message'] = 'Select product fetched successfully';
+        $selected_product['myFavExit']=$products['myFavExit'];//$this->productMdl->myfavExist($_GET['pid']);
+        $suggest_product['status'] = true;
+        $suggest_product['message'] = 'Suggestion product fetched for Selected product';
+      }
+      $inc1 = 0;
+      $inc2 = 0;
+      for($i=0;$i<count($products['data']);$i++){
+        if($products['data'][$i]['p_id'] == $_GET['pid']){
+          $selected_product['data'][$inc1] = $products['data'][$i];
+          $inc1++;
+        }else{
+          $suggest_product['data'][$inc2] = $products['data'][$i];
+          $inc2++;
+        }
+      }
       $this->view("product/detailProduct", array(
           "title" => "Product detail",
-          "data"=>$this->productMdl->get_product()
+          "data"=>$selected_product,
+          "suggestion"=>$suggest_product
+// SELECT *
+// FROM products
+// WHERE s_no <> 0 and cate = 'Non-veg'
+// ORDER BY RAND()
+// LIMIT 10;
       ));
     }
 
+    // ,
+    // "suggest_data"=>$this->productMdl->get_suggestion()
 
 }
 

@@ -46,6 +46,15 @@ class homeController extends commonController
         echo json_encode($this->productMdl->addToCart());
       }else if(hash_equals(hash_hmac($algo,'myCart',$skey),$req['key'])){
         echo json_encode($this->productMdl->mycart());
+      }else if(hash_equals(hash_hmac($algo,'gotoLogin',$skey),$req['key'])){
+        header("location:View/login/");
+      }else if(hash_equals(hash_hmac($algo,'gotosignup',$skey),$req['key'])){
+        header("location:View/signup/");
+      }else if(hash_equals(hash_hmac($algo,'cpanel',$skey),$req['key'])){
+        $this->view("cpanel/index", array(
+            "title" => "Cpanel",
+            "data"=>[]
+        ));
       }else{
         $this->index();
       }

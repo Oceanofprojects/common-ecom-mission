@@ -29,7 +29,7 @@ class commonModel
                     $colName = $this->arColVal['pre_condition']['isDuplicate'][$preIndi][0];
                     $colValue = $this->arColVal['pre_condition']['isDuplicate'][$preIndi][1];
                     $q = "SELECT * FROM {$this->table} WHERE `{$colName}` = {$colValue}";
-                    $sql = $this->connection->prepare($q);
+                    $sql = $this->db->prepare($q);
                     //RUNNING QUERY
                     if ($sql->execute()) {
                         $res = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -168,7 +168,12 @@ class commonModel
         $joinIdentity = ['LEFT_JOIN'=>'LEFT JOIN','RIGHT_JOIN'=>'RIGHT JOIN','FULL_JOIN'=>'JOIN','JOIN'=>'JOIN'];
             $qr = '';
             for($i=0;$i<count($joins);$i++){
-                $qr.= ' '.$joinIdentity[strtoupper($joins[$i][1])].' '.$joins[$i][0].' ON '.$primary_tbl.'.'.$joins[$i][2].' = '.$joins[$i][0].'.'.$joins[$i][3].' ';
+                if(isset($joins[$i][4])){
+                    $extra_con = $joins[$i][4].' ';
+                }else{
+                    $extra_con = '';
+                }
+                $qr.= ' '.$joinIdentity[strtoupper($joins[$i][1])].' '.$joins[$i][0].' ON '.$primary_tbl.'.'.$joins[$i][2].' = '.$joins[$i][0].'.'.$joins[$i][3].' '.$extra_con;
             }
             return $qr;
     }

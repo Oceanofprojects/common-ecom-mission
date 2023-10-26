@@ -78,6 +78,12 @@ class commonController{
                         }else{
                           return [['status'=>false,'msg'=>'Please Enter '.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
                         }
+                    }else if($validateArgs[$j][1] == 'check' && $validateArgs[$j][2] == 'isConPwd'){//IS PASSWORD
+                        if($data['pwd'] == $data['con_pwd']){
+                            array_push($this->validateResults,['status'=>true,'msg'=>'Condition Passed for :con-PWD','validateFlag'=>true]);
+                        }else{
+                          return [['status'=>false,'msg'=>'Password not match with confirm password','validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
+                        }
                     }else if($validateArgs[$j][1] == 'check' && $validateArgs[$j][2] == 'isPwd'){//IS PASSWORD
                         $upperCase = preg_match('@[A-Z]@', $data[$validateArgs[$j][0]]);
                         $lowerCase = preg_match('@[a-z]@', $data[$validateArgs[$j][0]]);

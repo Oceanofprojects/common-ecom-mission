@@ -15,14 +15,16 @@
 .mini-slider {
     width: 95%;
     display: flex;
+    justify-content:center;
     align-items: center;
-    overflow: scroll;
+    flex-wrap: wrap;
 }
 
 
 .mini-slider-slide-box {
     text-align: center;
-    background-color: #ddcd;
+    background-color: #fff;
+    box-shadow:0px 10px 10px 2.5px rgba(0,0,0,.3);
     padding: 20px 1px;
     margin: 10px;
     border-radius: 5px;
@@ -32,11 +34,9 @@
 .mini-slider-img-dis {
     margin: 10px;
     height: 200px;
-    min-width: 150px;
-    padding: 30px;
-    background: url('https://mms-images-secure-prod.imgix.net/https%3A%2F%2Fmms-images.out.customink.com%2Fmms%2Fimages%2Fcatalog%2Fcolors%2F116200%2Fviews%2Falt%2Ffront_medium_extended.jpg%3Fdesign%3Ddjn0-00by-wu36%26digest%3D0000000023%26ixbg%3D%2523ffffff%26ixfm%3Djpeg%26ixq%3D60%26placeMax%3D1%26placeMaxPct%3D0.8%26placeUseProduct%3D1%26placeUseView%3Dfront?ixlib=rb-1.2.2&fit=fill&dpr=1&bg=ffffff&fm=pjpg&trim=auto&trimmd=0&q=50&auto=compress&w=600&h=600&s=0a3807758fe7f6915636560d3e59d078');
-    background-position: center;
-    background-size: cover;
+    min-width: 240px;
+    padding: 30px 0px;
+    //background: url('');background-position: center;background-size: cover;
 }
 
 .mini-slider-content {
@@ -48,9 +48,32 @@
 .mini-slider-content h3 {
     padding: 15px 0px;
 }
+.slider button{
+    width:90%;
+    padding:10px 0px;
+    background-color:cornflowerblue;
+    color:#123;
+    border:none;
+    outline: none;
+}
+.slider button:hover{
+    background-color: navy;
+    color:#ddd
+}
+
 </style>
+<center>
 <section class="slider">
     <div class="mini-slider" id="mini-slider">
+
+        <!-- <div class="mini-slider-slide-box">
+            <div class="mini-slider-img-dis"></div>
+            <div class="mini-slider-content">
+                <h3>1</h3>
+                <h3>ASMKIASN</h3>
+            </div>
+            <button>View&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></button>
+        </div>
 
         <div class="mini-slider-slide-box">
             <div class="mini-slider-img-dis"></div>
@@ -58,52 +81,34 @@
                 <h3>1</h3>
                 <h3>ASMKIASN</h3>
             </div>
-            <button>View>></button>
+            <button>View&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></button>
         </div>
 
         <div class="mini-slider-slide-box">
             <div class="mini-slider-img-dis"></div>
             <div class="mini-slider-content">
-                <h3>2</h3>
+                <h3>1</h3>
                 <h3>ASMKIASN</h3>
             </div>
-            <button>View>></button>
+            <button>View&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></button>
         </div>
 
         <div class="mini-slider-slide-box">
             <div class="mini-slider-img-dis"></div>
             <div class="mini-slider-content">
-                <h3>3</h3>
+                <h3>1</h3>
                 <h3>ASMKIASN</h3>
             </div>
-            <button>View>></button>
-        </div>
-
-        <div class="mini-slider-slide-box">
+            <button>View&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></button>
+        </div> <div class="mini-slider-slide-box">
             <div class="mini-slider-img-dis"></div>
             <div class="mini-slider-content">
-                <h3>4</h3>
+                <h3>1</h3>
                 <h3>ASMKIASN</h3>
             </div>
-            <button>View>></button>
-        </div>
+            <button>View&nbsp;&nbsp;<span class="fa fa-chevron-right"></span></button>
+        </div> -->
 
-        <div class="mini-slider-slide-box">
-            <div class="mini-slider-img-dis"></div>
-            <div class="mini-slider-content">
-                <h3>5</h3>
-                <h3>ASMKIASN</h3>
-            </div>
-            <button>View>></button>
-        </div>
-
-        <div class="mini-slider-slide-box">
-            <div class="mini-slider-img-dis"></div>
-            <div class="mini-slider-content">
-                <h3>6</h3>
-                <h3>ASMKIASN</h3>
-            </div>
-            <button>View>></button>
-        </div>
     </div>
 </section>
+</center>

@@ -1,5 +1,5 @@
 <section class="slider-layer">
-  <h1 onclick="lSlide()" class="fa fa-chevron-left slide-btn"></h1>
+  <!-- <h1class="fa fa-chevron-left slide-btn"></h1> -->
 
   <div class="slider-box">
 
@@ -14,5 +14,13 @@
       <h5 align="right" id="testi_time"></h5>
     </div>
 
-    <h1 onclick="rSlide()" class="fa fa-chevron-right slide-btn"></h1>
+    <!-- <h1 onclick="rSlide()" class="fa fa-chevron-right slide-btn"></h1> -->
 </section>
+<br><br>
+<center>
+<div style="width:150px;display:flex;justify-content:space-between;align-items:center">
+  <span onclick="lSlide()"  class="btn fa fa-chevron-left slide-btn"></span>
+  <span onclick="rSlide()"  class="btn fa fa-chevron-right slide-btn"></span>
+</div>
+</center>
+
