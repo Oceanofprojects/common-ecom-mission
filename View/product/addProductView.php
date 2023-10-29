@@ -95,6 +95,10 @@ width:90%;
 </head>
 
 <body>
+    <?php
+    require_once 'sections/header.php';
+    ?>
+
     <div id="common_dis_msg_box">
         <div id="msg_content_to_display"></div>
     </div>

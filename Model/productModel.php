@@ -288,6 +288,24 @@ class products extends commonModel{
 		}
 	}
 
+	public function getProductDetailById($id){
+		$arr = [
+			'tbl_name'=>'products',
+			'action'=>'select',
+			'data'=>[],
+			'condition'=>['manual'=>['p_id="'.$id.'"']],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			if(count($flag['data'])!==0){
+				return ['status'=>true,'data'=>$flag['data'],'message'=>'success'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'No results found !'];
+			}
+		}
+	}
+
 	public function get_cate_list(){
 		$q="select distinct cate,cate_img from products";
 		$sql = $this->db->prepare($q);
@@ -357,7 +375,11 @@ class products extends commonModel{
 			$flag = $this->generateQuery($arr);
 //			echo $flag;exit;
 				if($flag['status']){
-					echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
+					if(count($flag['data'])!==0){
+						echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
+					}else{
+						echo json_encode(['status'=>false,'data'=>[],'message'=>'Cart list zero','old_r'=>true]);
+					}
 				}else{
 					echo json_encode(['status'=>false,'data'=>[],'message'=>'Err in fetch cart','old_r'=>true]);
 				}
@@ -657,7 +679,7 @@ class products extends commonModel{
 			$arr = [
 			  'tbl_name'=>$tmptbl,
 			  'action'=>'select',
-			  'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
+			  'data'=>['manual'=>["p_id,p_name,price"]],
 			  'limit'=>20,
 			  'order'=>['p_id','asc'],
 			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR cate LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
@@ -668,7 +690,7 @@ class products extends commonModel{
 			$arr = [
 			  'tbl_name'=>$tmptbl,
 			  'action'=>'join',
-			  'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.p_id AS favExistCid"]],
+			  'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.price"]],
 			  'join_param'=>[
 				['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
 			  ],
@@ -684,7 +706,7 @@ class products extends commonModel{
 			if(count($flag['data']) !==0){
 				return ['status'=>true,'data'=>$flag['data'],'message'=>'Success fetched'];
 			}else{
-				return ['status'=>false,'data'=>[],'message'=>'Zero fetch'];
+				return ['status'=>false,'data'=>[],'message'=>'No results found !'];
 			}
 		}else{
 			return ['status'=>false,'data'=>[],'message'=>$flag['msg']];

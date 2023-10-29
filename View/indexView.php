@@ -112,7 +112,9 @@ if($review['status']){
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','search',9050);
+echo hash_hmac('sha256','moveToEditProduct',9050);
+
+//38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9---MOVETOPRODUCT
 ?>
 
 </html>

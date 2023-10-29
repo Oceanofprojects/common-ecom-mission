@@ -68,7 +68,7 @@ function rating(x){
   for(i=1;i<=5;i++){
       $('#star'+i).removeClass();
       $('#star'+i).attr('class','fa fa-star-o');
-      $('#star'+i).css('color','#ddda');
+      $('#star'+i).css('color','#555a');
   }
 
   for(i=1;i<=x;i++){
@@ -213,7 +213,13 @@ function add_fav_tmp_ctrl(x) {
     add_fav(x);
 }
 
+function dis_search_result(){
+  $('.dis_search_result').show();
+}
 
+function cls_search_result(){
+  $('.dis_search_result').hide();
+}
 
 
 
@@ -357,23 +363,83 @@ function checkout(){
   });
 }
 
-function searchProduct(eleId) {
+function searchProduct(flow,eleId) {
   if($('#'+eleId).val().trim().length==0){
     alert('Search required');
   }else{
-    txt=$('#'+eleId).val().trim();
-      performAjx('../../index.php', 'get','controller=product&key=8fac78974f959202bd400f5a04f1df06c8bdafc2282ce53ee5b08ee953c07619&search_txt='+txt, (res) => {
-      d = JSON.parse(res);
-      if(d.status){
-          alert('FETCHED:'+d.data)
-      }else{
-        alert('No result found')
-      } 
-      console.log(d)
-      });    
+
+    if(flow == 'detailProduct'){
+      //pre init
+      op_search();
+    }
+      $('#result_res_msg,#result_res_indi').text('');
+      $('#result_list').empty();
+      $('#result_res_indi').text('Please wait....');
+      dis_search_result();//open search result
+      txt=$('#'+eleId).val().trim();
+        performAjx('index.php', 'get','controller=product&key=8fac78974f959202bd400f5a04f1df06c8bdafc2282ce53ee5b08ee953c07619&search_txt='+txt, (res) => {
+        d = JSON.parse(res);
+        if(d.status){
+        $('#result_res_indi').text('Search results ('+d.data.length+')');
+        $('#result_res_msg').text('');
+            for(i=0;i<d.data.length;i++){
+              if(flow == 'editProduct'){
+                $('#result_list').append('<li onclick="search_purpose(\'editProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].price+')')+'</li>');
+              }else if(flow == 'detailProduct'){
+                $('#result_list').append('<li onclick="search_purpose(\'detailProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].price+')')+'</li>');
+
+//                $('#result_list').append('<li onclick="search_purpose(\'detailProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+'</li>');
+              }
+          }
+        }else{
+        $('#result_res_msg').text(d.message);
+        $('#result_res_indi').text('Search results ('+d.data.length+')');
+        } 
+        });
 
   }
 
+}
+
+function search_purpose(flow,id){
+  switch(flow){
+    case 'editProduct':
+      performAjx('index.php', 'get','controller=product&key=febbef3e3b764304dc863d3b1bffc7cccfef3d44d873760d8a2b42a4151420a8&pid='+id, (res) => {
+        d = JSON.parse(res);
+        if(d.status){
+          if(d.data.length !==0){
+            fillEditForm(d.data[0]);
+          }else{
+            alert('Selected product empty')
+          }
+        }else{
+          alert(d.message)
+        }
+      });
+      break;
+    case 'detailProduct':
+      window.location.href='index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+id;
+      break;  
+      //index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=
+  }
+
+}
+
+function fillEditForm(data){
+  console.log(data)
+  $('#search_txt').val('');
+  cls_search_result();//close search result
+  $('#cate_name option[id="'+data.cate+'"]').attr('selected',true);
+  $('#disOldImgLink').show();
+  $('#disOldUrl').attr('href','assets/product_images/'+data.p_img);
+//  alert(data.p_cate);
+  $('#p_name').val(data.p_name);
+  $('#desc').val(data.p_desc);
+  $('#price').val(data.price);
+  $('#price').val(data.price);
+  $('#unit').val(data.unit);
+  $('#stock').val(data.stock);
+  $('#tags').val(data.tags);
 }
 
 //c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf

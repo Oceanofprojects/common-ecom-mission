@@ -36,6 +36,8 @@ class productController extends commonController
       }
       if(hash_equals(hash_hmac($algo,'moveToAddProduct',$skey),$req['key'])){
         $this->moveToAddProduct();
+      }else if(hash_equals(hash_hmac($algo,'moveToEditProduct',$skey),$req['key'])){
+        $this->moveToEditProduct();
       }else if(hash_equals(hash_hmac($algo,'addProduct',$skey),$req['key'])){
         echo json_encode($this->productMdl->addProduct());
       }else if(hash_equals(hash_hmac($algo,'viewProduct',$skey),$req['key'])){
@@ -50,7 +52,10 @@ class productController extends commonController
         echo json_encode($this->productMdl->sendReview($_GET));
       }else if(hash_equals(hash_hmac($algo,'checkout',$skey),$req['key'])){
         echo json_encode($this->productMdl->checkout());
+      }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
+        echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
       }else{
+        
         $this->index();
       }
     }
@@ -67,6 +72,13 @@ class productController extends commonController
     public function moveToAddProduct(){
       $this->view("product/addProduct", array(
           "title" => "Add Product",
+          "data"=>$this->productMdl->get_cate_list()
+      ));
+    }
+
+    public function moveToEditProduct(){
+      $this->view("product/editProduct", array(
+          "title" => "Edit Product",
           "data"=>$this->productMdl->get_cate_list()
       ));
     }

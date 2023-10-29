@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
-    <script src="../../Script/commonScript.js"></script>
-    <script src="../../Script/jquery.min.js"></script>
-    <script src="../../Script/components.js"></script>
-    <link rel="stylesheet" href="../../Style/global.css">
+    <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <script src="Script/components.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
     <style media="screen">
     #frm {
         width: 50%;
@@ -90,10 +90,19 @@ width:90%;
         height: 100%;
         background: cornflowerblue;
     }
+
+
+    /*THIS STYLE ONLY FOR EDIT*/
+    #disOldImgLink {
+        display: none;
+    }
     </style>
 </head>
 
 <body>
+    <?php
+    require_once 'sections/header.php';
+    ?>
     <div id="common_dis_msg_box">
         <div id="msg_content_to_display"></div>
     </div>
@@ -114,7 +123,7 @@ width:90%;
                         <td>Search<sup></sup></td>
                         <td>
                             <input type="text" style="width:70%" id="search_txt" placeholder="Search Product name">
-                            <input type="button" onclick="searchProduct('search_txt')"
+                            <input type="button" onclick="searchProduct('editProduct','search_txt')"
                                 style="width:20%;background:orange;border-radius:5px;" id="search" value="Go">
                         </td>
                     </tr>
@@ -122,12 +131,25 @@ width:90%;
                         <td>Category<sup>*</sup></td>
                         <td>
                             <select id="cate_name" name="cate">
+                                <?php
+          if(count($data['data']['data']) !== 0){
+            echo "<option value=''>Select cate list</option>";
+            for($i=0;$i<count($data['data']['data']);$i++){
+              echo "<option id='".$data['data']['data'][$i]['cate']."' value='".base64_encode($data['data']['data'][$i]['cate'].",".$data['data']['data'][$i]['cate_img'])."'>".$data['data']['data'][$i]['cate']."</option>";
+            }
+          }else{
+            echo "<option value=''>Select cate list</option><option value=''>Empty</option>";
+          }
+           ?>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>image<sup>*</sup></td>
-                        <td><input type="file" id="file1" name="file1" onchange="chFileBg(1)">
+                        <td>
+                            <div id="disOldImgLink"><a href="#" id="disOldUrl" target="blank">View Old Image
+                                </a><br>- - - or - - -<br></div>
+                            <input type="file" id="file1" name="file1" onchange="chFileBg(1)">
                             &nbsp;<span style="color:green" id="fileInd1"></span>
 
                         </td>
@@ -165,15 +187,18 @@ width:90%;
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td><input type="button" id="add_item_btn" value="Add Product"
+                        <td>
+                            <input type="text" id="p_id" hidden>
+                        </td>
+                        <td><input type="button" id="add_item_btn" value="Update Product"
                                 style="background:lightgreen;width:100px" onclick="add_item('')"></td>
                     </tr>
                 </table>
             </form>
         </section>
+
     </center>
-    <script src="../../Script/action.js"></script>
+    <script src="Script/action.js"></script>
 
     <script type="text/javascript">
     function chFileBg(id) {

@@ -64,6 +64,7 @@ function mycartComponent(data){
         if(data.data.length == 0){
           $('#mycarttbl').append("<tr><td colspan='7' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
         }else{
+          console.log('C-SIZE:'+data.data.length)
             for (ci = 0; ci < data.data.length; ci++) {
               off_price = calc_offer(data.data[ci].price,data.data[ci].offer);
               if(data.old_r == true && data.data[ci].cart_edit_flag == '1' || data.old_r == true && data.data[ci].cart_edit_flag == '0' || data.old_r == false && data.data[ci].cart_edit_flag == '0'){

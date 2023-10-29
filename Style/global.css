@@ -326,6 +326,37 @@ transition:.2s;
 }
 
 
+.dis_search_result {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(rgba(256, 256, 256, .9), rgba(256, 256, 256, .9));
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index:10;
+  display: none;
+}
+
+.dis_search_result .result {
+  width: 50%;
+  min-width: 200px;
+  text-align: left;
+  height: 100%;
+  overflow: scroll;
+}
+
+.dis_search_result .result ul li {
+  padding: 10px 3px;
+  border-bottom: 1px solid rgba(0, 0, 0, .2)
+}
+
+.dis_search_result .result ul li:hover {
+  background: #555a;
+  color: #fff;
+  cursor: pointer;
+}
+
+
 
 @media only screen and (max-width:800px){
   .slider-box{

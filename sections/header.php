@@ -15,10 +15,13 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 }else if($userState[0] && $userState[2] == 'admin'){//ADMIN VIEW MENU
 		$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
 			<ul class="li2">
-				<li><a href="index.php?key=693111cc2bb117c61331539399dff2af1c212eace7a89fb5a6ea44fb5788327f&controller=home"><span class="fa fa-cloud"></span>Cpanel</a></li>
+                <li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
 				<li><a href="#"><span class="fa fa-truck"></span>Track</a></li>
-				<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
-				<li><a href="#"><span class="fa fa-sign-out"></span>logout</a></li>
+                
+                <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add-P</a></li>
+                <li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit-P</a></li>
+				
+                <li><a href="#"><span class="fa fa-sign-out"></span>logout</a></li>
 			</ul>
 		</li>';
 }else{
@@ -452,10 +455,28 @@ function menu() {
 <div class="search_layer">
     <center>
         <div class="search_box"><input type="search" id="search_product" list="" placeholder="Search here"><span
-                class="fa fa-search" onclick="search_product()" style="color:#555a;cursor:pointer"></span></div>
+                class="fa fa-search" onclick="searchProduct('detailProduct','search_product')"
+                style="color:#555a;cursor:pointer"></span></div>
         <br>
         <span class="fa fa-close"
             style="padding:20px;background:#fff;border-radius: 100%;color:#000;cursor:pointer;border:1px solid #555a;box-shadow:0px 0px 10px 0px rgba(0, 0, 0, .5);"
             onclick="op_search()"></span>
     </center>
 </div>
+<center>
+    <section class="dis_search_result">
+        <div style="display:flex;justify-content:flex-end;align-items:center">
+            <h4 style="text-align:right;cursor:pointer;background:red;padding:10px;margin:10px;color:#fff"
+                class="fa fa-close" onclick="cls_search_result()"></h4>
+        </div>
+        <br><br><br>
+        <h3 id="result_res_indi"></h3>
+        <br>
+        <h4 id="result_res_msg"></h4>
+        <br>
+        <div class="result">
+            <ul id="result_list">
+            </ul>
+        </div>
+    </section>
+</center>
