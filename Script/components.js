@@ -34,6 +34,7 @@ function loadComponent(type, data) {
 }//load components END
 
 
+
 function myfavComponent(data){
 //  $('.myfav').fadeIn(100);
   $('#myfavtbl').empty();

@@ -284,10 +284,10 @@ function removefrommycart(x,rowID) {
     });
 }
 
-function validate(){
+function validate(flow){
 	if($('#cate_name').val().trim()==''){
 		return [false,'warning','Category field required !'];
-	}else if(document.getElementById('file1').value.trim()==''){
+	}else if(document.getElementById('file1').value.trim()=='' && flow=='add'){
 		return [false,'warning','Please select image !'];
 	}else if($('#p_name').val().trim()==''){
 		return [false,'warning','Product name field required !'];
@@ -307,11 +307,30 @@ function validate(){
 }
 
 function add_item(){
-  flag = validate();
+  flag = validate('add');
   if(flag[0]){
     performAjxForFiles('index.php','#frm','?controller=product&key=5265dbb8b63da8f3da8c145702deae1954a7224a585014f0bbc3086a6e499ef6', (res) => {
       d = JSON.parse(res)
       if(d.status){
+        dis_msg_box('#000','lightgreen',d.message);
+      }else{
+        dis_msg_box('#000','tomato',d.message);
+      }
+    });
+  }else{
+    bg = (flag[1] == 'warning')?'tomato':'lightgreen';
+    dis_msg_box('#000',bg,flag[2]);
+  }
+}
+
+
+function edit_item(){
+  flag = validate('');
+  if(flag[0]){
+    performAjxForFiles('index.php','#frm','?controller=product&key=9020315212f791b04b1efbefb974826daee09ace2b3e4f4b451ec13842d0ec76', (res) => {
+      d = JSON.parse(res)
+      if(d.status){
+        $('#frm')[0].reset();
         dis_msg_box('#000','lightgreen',d.message);
       }else{
         dis_msg_box('#000','tomato',d.message);
@@ -354,8 +373,9 @@ function logout(){
 function checkout(){
   performAjx('index.php', 'get','controller=product&key=c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf', (res) => {
     d = JSON.parse(res)
-    
+
     if(d.status){
+      cls_my_cart();
       dis_msg_box('#000','lightgreen',d.message);
     }else{
       dis_msg_box('#000','tomato',d.message);
@@ -394,7 +414,7 @@ function searchProduct(flow,eleId) {
         }else{
         $('#result_res_msg').text(d.message);
         $('#result_res_indi').text('Search results ('+d.data.length+')');
-        } 
+        }
         });
 
   }
@@ -419,7 +439,7 @@ function search_purpose(flow,id){
       break;
     case 'detailProduct':
       window.location.href='index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+id;
-      break;  
+      break;
       //index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=
   }
 
@@ -432,7 +452,8 @@ function fillEditForm(data){
   $('#cate_name option[id="'+data.cate+'"]').attr('selected',true);
   $('#disOldImgLink').show();
   $('#disOldUrl').attr('href','assets/product_images/'+data.p_img);
-//  alert(data.p_cate);
+  $('#p_id').val(data.p_id);
+  $('#p_img').val(data.p_img);
   $('#p_name').val(data.p_name);
   $('#desc').val(data.p_desc);
   $('#price').val(data.price);
@@ -442,4 +463,13 @@ function fillEditForm(data){
   $('#tags').val(data.tags);
 }
 
-//c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf
+
+
+function chFileBg(id) {
+    val = document.getElementById('file' + id);
+    if (val.value.trim().length !== 0) {
+        $('#fileInd' + id).attr('class', 'fa fa-check');
+    } else {
+        $('#fileInd' + id).removeClass();
+    }
+}

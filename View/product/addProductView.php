@@ -190,6 +190,10 @@ width:90%;
         }
     }
     </script>
+    <br><br><br>
+    <?php
+    require_once 'sections/footer.php';
+    ?>
 </body>
 
 </html>

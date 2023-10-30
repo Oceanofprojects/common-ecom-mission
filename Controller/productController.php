@@ -40,6 +40,8 @@ class productController extends commonController
         $this->moveToEditProduct();
       }else if(hash_equals(hash_hmac($algo,'addProduct',$skey),$req['key'])){
         echo json_encode($this->productMdl->addProduct());
+      }else if(hash_equals(hash_hmac($algo,'editProduct',$skey),$req['key'])){
+        echo json_encode($this->productMdl->editProduct());
       }else if(hash_equals(hash_hmac($algo,'viewProduct',$skey),$req['key'])){
         $this->productDetail();
       }else if(hash_equals(hash_hmac($algo,'category',$skey),$req['key'])){
@@ -54,8 +56,20 @@ class productController extends commonController
         echo json_encode($this->productMdl->checkout());
       }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
+      }else if(hash_equals(hash_hmac($algo,'moveToAddCate',$skey),$req['key'])){
+        $this->view("category/addCate", array(
+            "title" => "Create category",
+            "data"=>[]//$this->productMdl->get_all()
+        ));
+      }else if(hash_equals(hash_hmac($algo,'moveToAddSlider',$skey),$req['key'])){
+        $this->view("main/addSlider", array(
+            "title" => "Add slider",
+            "data"=>[]//$this->productMdl->get_all()
+        ));
+      }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
+        echo json_encode($this->productMdl->addSlider());
       }else{
-        
+
         $this->index();
       }
     }

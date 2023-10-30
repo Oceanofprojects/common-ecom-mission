@@ -1,11 +1,3 @@
-<!-- updates
-
-particular review for category view
-if zero product or cate (show empyt box)
-for cate box want precentage num
-want review data dyn not static
-show empty when 0 reviews
-  -->
 
 <html>
 
@@ -27,11 +19,7 @@ show empty when 0 reviews
     <?php
     require_once __DIR__.'/../sections/header.php';
     require_once __DIR__.'/../sections/mainSlider.php';
-
     ?>
-    <style>
-
-    </style>
 
     <br><br>
     <div class="head-info">
@@ -104,15 +92,18 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
+//    echo hash_hmac('sha256','addSlider',9050);
 
     require_once __DIR__.'/../sections/footer.php';
+  
+
     ?>
+
     <script src="Script/reviewSlide.js"></script>
     <!-- <br><br><br> -->
 </body>
 <?php
 //    require_once 'sections/suggestionProducts.php';
-echo hash_hmac('sha256','moveToEditProduct',9050);
 
 //38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9---MOVETOPRODUCT
 ?>

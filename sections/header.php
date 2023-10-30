@@ -15,13 +15,31 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 }else if($userState[0] && $userState[2] == 'admin'){//ADMIN VIEW MENU
 		$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
 			<ul class="li2">
-                <li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
-				<li><a href="#"><span class="fa fa-truck"></span>Track</a></li>
-                
-                <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add-P</a></li>
-                <li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit-P</a></li>
-				
-                <li><a href="#"><span class="fa fa-sign-out"></span>logout</a></li>
+            <li><a href="#"><span class="fa fa-th"></span>Product</a>
+						<ul class="li3">
+			            <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+						</ul></li>
+
+						<li><a href="#"><span class="fa fa-list"></span>Category</a>
+						<ul class="li3">
+			            <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="#"><span class="fa fa-edit"></span>Edit</a></li>
+						</ul></li>
+
+						<li><a href="#"><span class="fa fa-arrow-right"></span>Slider</a>
+						<ul class="li3">
+			            <li><a href="index.php?key=4a0d2d49af2139fd0788700037b4bf3491dfadc131dbf8ebd4c3c2014cded59f&controller=product"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="#"><span class="fa fa-edit"></span>Edit</a></li>
+						</ul></li>
+						<li><a href="#"><span class="fa fa-truck"></span>Track</a></li>
+						<li><a href="#"><span class="fa fa-check"></span>Status</a></li>
+						<li><a href="#"><span class="fa fa-gift"></span>Combo</a></li>
+						<li><a href="#"><span class="fa fa-refresh"></span>Admin</a></li>
+						<li><a href="#"><span class="fa fa-comment"></span>Reviews</a></li>
+						<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
+					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>logout</a></li>
+
 			</ul>
 		</li>';
 }else{
@@ -158,10 +176,11 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 
 .menu .li3 {
-    width: 100%;
+	border:.1px solid #ddda;
+//    width: 100%;
     position: absolute;
     top: -10px;
-    left: -280px;
+    right: 90px;
     display: none;
     background: #fff;
     border-radius: 5px;
@@ -434,12 +453,12 @@ function menu() {
     <h1 align="center">MY CART</h1>
     <br>
     <div style="display:flex;justify-content:space-around;align-items: center;">
-        <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
+        <!-- <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
             onchange="dis_my_cart('cart_date_filter')">
         <select style="margin:10px;padding:5px" id="cart_type" onchange="dis_my_cart('cart_type_filter')">
             <option value="current">Current Cart list</option>
             <option value="ordered">Ordered Cart list</option>
-        </select>
+        </select> -->
         <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
     </div>
 

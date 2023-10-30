@@ -473,6 +473,41 @@ class products extends commonModel{
 		}
 	}
 
+	public function editProduct(){
+		$cate = explode(',',base64_decode($_POST['cate']));
+		$_POST['cate'] = $cate[0];
+		$_POST['cate_img'] = $cate[1];
+		$p_id=$_POST['p_id'];
+		$old_img_name = $_POST['p_img'];
+		unset($_POST['p_img']);
+		unset($_POST['p_id']);
+		if($_FILES['file1']['size'] == 0 && $_FILES['file1']['name'] == ''){
+			//do nothg
+		}else{
+			if(unlink('assets/product_images/'.$old_img_name)){//Del old img
+				$fileFlag = $this->uploadFile('assets/product_images/','file1');
+				if($fileFlag['status']){
+					$_POST['p_img'] = $fileFlag['data'];
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>$fileFlag['status']];
+				}
+			}
+		}
+		$arr = [
+			'tbl_name'=>'products',
+			'action'=>'update',
+			'data'=>$this->genArAssocToColSep($_POST),
+			'condition'=>["p_id='".$p_id."'"],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			return ['status'=>true,'data'=>[],'message'=>'Product updated Successfully'];
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Failed to update Product'];
+		}
+	}
+
 	public function removefrommycart($cartid){
 		if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login to make changes !'];
@@ -523,7 +558,7 @@ class products extends commonModel{
 								CALC TWO ARRAY DATA INTO ONE DATA DONE
 								UPDATE PRODUCT TBL QNTY
 								INSERT NEW ORDER
-								UPDATE CART DATA EDIT -> DISABLE 
+								UPDATE CART DATA EDIT -> DISABLE
 								VIEW DATA INTO AMOUT PAY
 								*/
 		if($this->cid == null){
@@ -543,7 +578,7 @@ class products extends commonModel{
 					for($i=0;$i<count($flag['data']);$i++){//get customer ordered  product ID and qunty sep
 						$cus_or_pr_id_list[] = '"'.$flag['data'][$i]['p_id'].'"';
 						$cur_or_data_list[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'qnty'=>$flag['data'][$i]['quantity']];
-						$product_detail[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'p_name'=>$this->getProductById($flag['data'][$i]['p_id'])[1],'qnty'=>$flag['data'][$i]['quantity']]; 
+						$product_detail[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'p_name'=>$this->getProductById($flag['data'][$i]['p_id'])[1],'qnty'=>$flag['data'][$i]['quantity']];
 					}
 					$arr = [
 						'tbl_name' => 'products',
@@ -570,11 +605,11 @@ class products extends commonModel{
 									$orderRes[$i] = ['p_id'=>$pro_data_list[$i]['p_id'],'quantity'=>$qnty];
 								}
 							}//CALC ORDE END
-							
+
 							//UPDATE QUNT in DB
 							$qntyUpdt = 0;
 							for($i=0;$i<count($orderRes);$i++){
-								$q = "UPDATE products SET stock=".$orderRes[$i]['quantity']." WHERE p_id='".$orderRes[$i]['p_id']."'"; 
+								$q = "UPDATE products SET stock=".$orderRes[$i]['quantity']." WHERE p_id='".$orderRes[$i]['p_id']."'";
 								$sql = $this->db->prepare($q);
 								if ($sql->execute()) {
 									$qntyUpdt++;
@@ -584,17 +619,17 @@ class products extends commonModel{
 								return ['status'=>false,'data'=>[],'message'=>"Oops somthing went wrong, Please contact your admin (Err in upQnty)"];
 							}
 							//UPDATE QUNT in DB END
-					
+
 							//CREATE NEW ORDER
 					$createOrder = $this->createNewOrder($cart_date,$product_detail);
 					if($createOrder['status']){
 						//DISABLE CART EDIT OPTION
 						if($this->disableCartEdit(implode(',',$cus_or_pr_id_list),$cart_date)){
 							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in MENU>ACCOUNT>TRACK."];
-						//END OF CART PROCCESS	
+						//END OF CART PROCCESS
 						}else{
 							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
-						}//END OF CART PROCCESS						
+						}//END OF CART PROCCESS
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, Please contact your admin (Err in Create order)'];
 					}
@@ -713,6 +748,53 @@ class products extends commonModel{
 		}
 
 	  }
+
+		public function addSlider(){
+				for($i=1;$i<=5;$i++){
+					if(isset($_FILES['file'.$i]) && !empty($_FILES['file'.$i]['name'])){
+								$fileFlag = $this->uploadFile('assets/testimg/','file'.$i);
+								if($fileFlag['status']){
+									$addedFiles['main_slide_'.$i]=$fileFlag['data'];
+								}
+					}
+				}
+				if(count($addedFiles)!==0){
+					$arr = [
+						'tbl_name'=>'business_details',
+						'action'=>'update',
+						'data'=>$this->genArAssocToColSep($addedFiles),
+						'condition'=>['sno=1'],
+						'query-exc'=>true
+					];
+
+					$flag = $this->generateQuery($arr);
+					if($flag['status']){
+						return ['status'=>true,'data'=>[],'message'=>'Slide images added'];
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Err in upload slides'];
+					}
+				}
+		}
+
+		public function getSlides(){
+			$arr = [
+				'tbl_name' => 'business_details',
+				'action' => 'select',
+				'data' => ['main_slide_1','main_slide_2','main_slide_3','main_slide_4','main_slide_5'],
+				'condition'=>['sno=1'],
+				'query-exc'=>true
+			];
+			$flag=$this->generateQuery($arr);
+			if($flag['status'] == 'success'){
+				if(count($flag['data']) !==0){
+					return ['status'=>true,'data'=>$flag['data'][0],'message'=>''];
+				}else{
+					return ['status'=>false,'data'=>'','message'=>'Empty slides'];
+				}
+			}else{
+				return ['status'=>false,'data'=>'','message'=>'Err in get slides'];
+			}
+		}
 
 }//CLASS END
 

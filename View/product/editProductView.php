@@ -188,10 +188,11 @@ width:90%;
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" id="p_id" hidden>
+                            <input type="text" id="p_id" name="p_id" hidden>
+                            <input type="text" id="p_img" name="p_img" hidden>
                         </td>
                         <td><input type="button" id="add_item_btn" value="Update Product"
-                                style="background:lightgreen;width:100px" onclick="add_item('')"></td>
+                                style="background:lightgreen;width:100px" onclick="edit_item()"></td>
                     </tr>
                 </table>
             </form>
@@ -201,15 +202,19 @@ width:90%;
     <script src="Script/action.js"></script>
 
     <script type="text/javascript">
-    function chFileBg(id) {
-        val = document.getElementById('file' + id);
-        if (val.value.trim().length !== 0) {
-            $('#fileInd' + id).attr('class', 'fa fa-check');
-        } else {
-            $('#fileInd' + id).removeClass();
-        }
-    }
+    // function chFileBg(id) {
+    //     val = document.getElementById('file' + id);
+    //     if (val.value.trim().length !== 0) {
+    //         $('#fileInd' + id).attr('class', 'fa fa-check');
+    //     } else {
+    //         $('#fileInd' + id).removeClass();
+    //     }
+    // }
     </script>
+    <br><br><br>
+    <?php
+    require_once 'sections/footer.php';
+    ?>
 </body>
 
 </html>
