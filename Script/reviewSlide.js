@@ -42,7 +42,7 @@ function rSlide(){
 function loadNewTesti(){
   $('.slider-box').css({'opacity':'1','box-shadow':'0px 10px 10px 2px rgba(0,0,0,.2)'});
   x = review.data[currentId];
-  $('#testi_profile').attr('src','assets/common-images/profiles/'+x.profile);
+  $('#testi_profile').attr('src','assets/common-images/profiles/'+x.profile+'.jpg');
   $('#testi_name').text(x.name+', ');
   $('#testi_city').text(x.location);
   $('#testi_rating').text('Rating : '+x.rating);

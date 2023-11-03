@@ -103,7 +103,6 @@
     </style>
     <?php
 
-
     require_once __DIR__.'/../../sections/header.php';
     if($data['data']['data'] == 0){
       echo "Err in viewing product";
@@ -159,7 +158,7 @@
               </tr>
               <tr>
                 <th>Category</th>
-                <td><?php echo $resData['p_name'].', <a href="index.php?cate='.$resData['cate'].'&cate_img='.$resData['cate_img'].'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More</a>';?></td>
+                <td><?php echo $resData['p_name'].', <a href="index.php?cate_id='.$resData['cate_id'].'&cate='.$resData['cate'].'&cate_img='.$resData['cate_img'].'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More</a>';?></td>
               </tr>
               <tr>
                 <th>Price</th>
@@ -209,7 +208,6 @@
   <h2 align="center">Customers Reviews</h2><br>
   <?php
   require_once 'Controller/productController.php';
-
 
   $review = $productCtrllr->getReviews(['type'=>'getPidReview','data'=>$resData['p_id'],'r-from'=>0,'r-to'=>10]);
 //  var_dump($review['status']);

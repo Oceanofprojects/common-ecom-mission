@@ -22,29 +22,32 @@ class products extends commonModel{
 	}
 
 	public function get_all(){
+		$tmptbl = 'products';
     if($this->cid == null){
-      $tmptbl = 'products';
-      $arr = [
-        'tbl_name'=>$tmptbl,
-        'action'=>'select',
-        'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
-        'limit'=>10,
-        'order'=>['p_id','asc'],
-       'query-exc'=>true
-      ];
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'join_param'=>[
+					['product_category','left_join','cate_id','cate_id']
+				],
+				'limit'=>10,
+				'order'=>['p_id','asc'],
+       	'query-exc'=>true
+			];
     }else{
-      $tmptbl = 'products';
-      $arr = [
-        'tbl_name'=>$tmptbl,
-        'action'=>'join',
-        'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid"]],
-        'join_param'=>[
-          ['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
-        ],
-        'limit'=>10,
-        'order'=>['p_id','asc'],
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid ,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'join_param'=>[
+					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
+					['product_category','left_join','cate_id','cate_id']
+				],
+				'limit'=>10,
+				'order'=>['p_id','asc'],
         'query-exc'=>true
-      ];
+			];
     }
     $flag = $this->generateQuery($arr);
 	if($flag['status']){
@@ -94,15 +97,18 @@ class products extends commonModel{
 			'tbl_name'=>'review',
 			'action'=>'join',
 			'data'=>['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id"]],
-	       'query-exc'=>true
+	    'query-exc'=>true
 		];
 		if($req['type'] == 'getCateReview'){
 			//cate filter
+			unset($arr['data']);
+			$arr['data']=['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]];
+
 			$arr['join_param']=[
 				[$cus,'left_join','cid','cid'],
 				['products','left_join','p_id','p_id']
 			];
-			$arr['condition']=['manual'=>['products.cate="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
+			$arr['condition']=['manual'=>['products.cate_id="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}else if($req['type'] == 'getAllReview'){
 			//Normal cate fetch
 			$arr['join_param']=[[$cus,'left_join','cid','cid']];
@@ -112,8 +118,13 @@ class products extends commonModel{
 			$arr['join_param']=[[$cus,'left_join','cid','cid']];
 			$arr['condition']=['manual'=>['review.p_id="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}
+		// (SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+		// 'join_param'=>[
+		// 	['product_category','left_join','cate_id','cate_id']
+		// ],
 
 		$flag = $this->generateQuery($arr);
+		//echo $flag;exit;
 		if($flag['status']){
 			if(count($flag['data']) !== 0){
 				return ['status'=>true,'data'=>$flag['data'],'message'=>'Review fetched'];
@@ -199,7 +210,8 @@ class products extends commonModel{
 	public function get_product(){
 		if(isset($_GET['pid'])){
 				$p_id = $_GET['pid'];
-				$q = "SELECT res.* FROM products AS res WHERE res.cate=(SELECT cate FROM products WHERE p_id='".$p_id."') ORDER BY RAND() LIMIT 10";
+//				$q = "SELECT res.* FROM products AS res WHERE res.cate=(SELECT cate FROM products WHERE p_id='".$p_id."') ORDER BY RAND() LIMIT 10";
+$q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '".$p_id."' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '".$p_id."') ORDER BY RAND() LIMIT 10";
 				$sql = $this->db->prepare($q);
 				if($sql->execute()){
 					$res = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -210,7 +222,7 @@ class products extends commonModel{
 		}else{
 			return ['status'=>false,'data'=>[],'message'=>'Something went wrong. please try again.'];
 		}
-
+//SELECT * FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '4ZS112' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '4ZS112')
 	}
 
 	public function addToCart(){
@@ -307,17 +319,20 @@ class products extends commonModel{
 	}
 
 	public function get_cate_list(){
-		$q="select distinct cate,cate_img from products";
-		$sql = $this->db->prepare($q);
-		if($sql->execute()){
-			$res=$sql->fetchAll(PDO::FETCH_ASSOC);
-			if(count($res) == 0){
-				return ['status'=>true,'data'=>[],'message'=>'Zero fetch'];
+
+		$arr = [
+			'tbl_name'=>'product_category',
+			'action'=>'select',
+			'data'=>['manual'=>['distinct cate_name AS cate,cate_id,cate_img']],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			if(count($flag['data'])!==0){
+				return ['status'=>true,'data'=>$flag['data'],'message'=>'Successfully fetched'];
 			}else{
-				return ['status'=>true,'data'=>$res,'message'=>'Successfully fetched'];
+				return ['status'=>true,'data'=>[],'message'=>'Zero fetch'];
 			}
-		}else{
-			return ['status'=>false,'data'=>[],'message'=>'Err in fetching cate list'];
 		}
 	}
 
@@ -389,27 +404,30 @@ class products extends commonModel{
 	}
 
 	public function getProductByCate($cate){
+		$tmptbl = 'products';
 		if($this->cid == null){
-			$tmptbl = 'products';
-			$arr = [
-				'tbl_name'=>$tmptbl,
-				'action'=>'select',
-				'data'=>['manual'=>["p_id,cate,p_img,p_name,price,offer,unit,stock"]],
-				'limit'=>10,
-				'condition'=>['manual'=>['cate="'.$cate.'"']],
-				'order'=>['p_id','asc'],
-				'query-exc'=>true
-			];
-		}else{
-			$tmptbl = 'products';
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.cate,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid"]],
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param'=>[
-					['myfav','left_join','p_id','p_id',' AND myfav.cid='.$this->cid]
+					['product_category','left_join','cate_id','cate_id']
 				],
-				'condition'=>['manual'=>[$tmptbl.'.cate="'.$cate.'"']],
+				'condition'=>['manual'=>['cate_name="'.$cate.'"']],
+				'limit'=>10,
+				'order'=>['p_id','asc'],
+       	'query-exc'=>true
+			];
+		}else{
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'join_param'=>[
+					['myfav','left_join','p_id','p_id',' AND myfav.cid = '.$this->cid],
+					['product_category','left_join','cate_id','cate_id']
+				],
+				'condition'=>['manual'=>['cate_name="'.$cate.'"']],
 				'limit'=>10,
 				'order'=>['p_id','asc'],
 				'query-exc'=>true
@@ -709,34 +727,37 @@ class products extends commonModel{
 	  }
 
 	  public function search($val){
+			$tmptbl = 'products';
 		if($this->cid == null){
-			$tmptbl = 'products';
-			$arr = [
-			  'tbl_name'=>$tmptbl,
-			  'action'=>'select',
-			  'data'=>['manual'=>["p_id,p_name,price"]],
-			  'limit'=>20,
-			  'order'=>['p_id','asc'],
-			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR cate LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
-			 'query-exc'=>true
-			];
-		  }else{
-			$tmptbl = 'products';
 			$arr = [
 			  'tbl_name'=>$tmptbl,
 			  'action'=>'join',
-			  'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.price"]],
-			  'join_param'=>[
-				['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
-			  ],
+			  'data'=>['manual'=>["p_id,p_name,price"]],
+				'join_param'=>[
+			 		['product_category','left_join','cate_id','cate_id']
+			 ],
 			  'limit'=>20,
 			  'order'=>['p_id','asc'],
-			  'condition'=>['manual'=>["$tmptbl.p_id LIKE '%$val% 'OR $tmptbl.p_name LIKE '%$val%'  OR $tmptbl.cate LIKE '%$val%' OR $tmptbl.p_desc LIKE '%$val%' OR $tmptbl.tags LIKE '%$val%'"]],
-			  'query-exc'=>true
+			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR product_category.cate_name LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
+			 'query-exc'=>true
 			];
+
+		  }else{
+				$arr = [
+					'tbl_name'=>$tmptbl,
+					'action'=>'join',
+					'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.price"]],
+					'join_param'=>[
+					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
+					['product_category','left_join','cate_id','cate_id']
+					],
+					'limit'=>20,
+					'order'=>['p_id','asc'],
+					'condition'=>['manual'=>["$tmptbl.p_id LIKE '%$val% 'OR $tmptbl.p_name LIKE '%$val%'  OR product_category.cate_name LIKE '%$val%' OR $tmptbl.p_desc LIKE '%$val%' OR $tmptbl.tags LIKE '%$val%'"]],
+				  'query-exc'=>true
+				];
 		  }
 		  $flag = $this->generateQuery($arr);
-//		  return $flag;
 		  if($flag['status'] == 'success'){
 			if(count($flag['data']) !==0){
 				return ['status'=>true,'data'=>$flag['data'],'message'=>'Success fetched'];
@@ -793,6 +814,27 @@ class products extends commonModel{
 				}
 			}else{
 				return ['status'=>false,'data'=>'','message'=>'Err in get slides'];
+			}
+		}
+
+		public function addCategory(){
+			if(isset($_FILES) && $_FILES['file1']['size'] !==0){
+				$fileFlag = $this->uploadFile('assets/category_images/','file1');
+				if($fileFlag['status']){
+					$upFile=$fileFlag['data'];
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'err in up img'];
+				}
+			}
+			$arr = [
+				'tbl_name'=>'product_category',
+			'action'=>'insert',
+			'data'=>['cate_id="'.$this->genRnd('alpha_numeric',8).'"','cate_name="'.$_POST['cate_name'].'"','cate_img="'.$upFile.'"'],
+			'query-exc'=>true];
+			if($this->generateQuery($arr)['status']){
+				return ['status'=>true,'data'=>[],'message'=>'Category added successfully'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'err in up img in DB'];
 			}
 		}
 

@@ -92,10 +92,10 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-//    echo hash_hmac('sha256','addSlider',9050);
+    echo hash_hmac('sha256','moveToEditCate',9050);
 
     require_once __DIR__.'/../sections/footer.php';
-  
+
 
     ?>
 

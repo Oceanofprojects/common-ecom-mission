@@ -24,7 +24,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 						<li><a href="#"><span class="fa fa-list"></span>Category</a>
 						<ul class="li3">
 			            <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="#"><span class="fa fa-edit"></span>Edit</a></li>
+									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
 						<li><a href="#"><span class="fa fa-arrow-right"></span>Slider</a>
@@ -380,7 +380,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 		</div> -->
 <header class="header_con">
     <div class="logo_layer">
-        <a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31">
+        <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">
             <img src="assets/common-images/logo.png" id="logo">
         </a>
         <h3 class="fa fa-bars" style="color:#555" id="menu_icon" onclick="menu()"></h3>

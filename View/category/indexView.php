@@ -74,7 +74,7 @@ require_once 'Controller/productController.php';
 
 $productCtrllr = new productController();
 
-$review = $productCtrllr->getReviews(['type'=>'getCateReview','data'=>$_GET['cate'],'r-from'=>0,'r-to'=>10]);
+$review = $productCtrllr->getReviews(['type'=>'getCateReview','data'=>$_GET['cate_id'],'r-from'=>0,'r-to'=>10]);
 if($review['status']){
   echo "<script>var review = ".json_encode($review)."</script>";
   require_once 'sections/reviews.php';

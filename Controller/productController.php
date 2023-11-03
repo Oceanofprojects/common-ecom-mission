@@ -42,6 +42,8 @@ class productController extends commonController
         echo json_encode($this->productMdl->addProduct());
       }else if(hash_equals(hash_hmac($algo,'editProduct',$skey),$req['key'])){
         echo json_encode($this->productMdl->editProduct());
+      }else if(hash_equals(hash_hmac($algo,'addCategory',$skey),$req['key'])){
+        echo json_encode($this->productMdl->addCategory());
       }else if(hash_equals(hash_hmac($algo,'viewProduct',$skey),$req['key'])){
         $this->productDetail();
       }else if(hash_equals(hash_hmac($algo,'category',$skey),$req['key'])){

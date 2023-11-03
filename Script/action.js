@@ -306,6 +306,7 @@ function validate(flow){
 	}
 }
 
+
 function add_item(){
   flag = validate('add');
   if(flag[0]){
@@ -322,6 +323,7 @@ function add_item(){
     dis_msg_box('#000',bg,flag[2]);
   }
 }
+
 
 
 function edit_item(){

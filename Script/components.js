@@ -21,7 +21,7 @@ function loadComponent(type, data) {
       itr = (data.length > 6)?6:data.length;
       $('.cate-container').empty();
       for(i=0;i<itr;i++){
-        $('.cate-container').append('<a href="index.php?cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1 style="width:100%;" align="center">Best Product</h1></div>');
+        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1 style="width:100%;" align="center">Best Product</h1></div>');
       }
     }
     if(type == 'suggestion-card-view'){
