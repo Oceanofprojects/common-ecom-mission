@@ -1,6 +1,6 @@
-function loadComponent(type, data) {
+function loadComponent(type, data,arr=[]) {
     if (type == 'nor-card-view') {
-      $('.item-container').empty();
+      // $('.item-container').empty();
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
@@ -16,15 +16,21 @@ function loadComponent(type, data) {
               check_stock(i, data.data[i].stock, off_price, data.data[i].unit, data.data[
                   i].p_name, data.data[i].p_id) + '</div>');
       }
+      
     }
     if(type == 'category-card-view'){
-      itr = (data.length > 6)?6:data.length;
+      if(arr[0] == 'all'){
+        itr = data.length;
+      }else{
+        itr = (data.length > arr[0])?arr[0]:data.length;
+      }
       $('.cate-container').empty();
       for(i=0;i<itr;i++){
-        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+data[i].cate+'</span><h1 style="width:100%;" align="center">Best Product</h1></div>');
+        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>Starts @'+data[i].starting_price+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
       }
     }
     if(type == 'suggestion-card-view'){
+
       $('#mini-slider').empty();
       for (i = 0; i < data.data.length; i++) {
       $('#mini-slider').append('<div class="mini-slider-slide-box"><div class="mini-slider-img-dis" style="background: url(\'assets/product_images/'+data.data[i].p_img+'\');background-position: center;background-size: cover;"></div><h1 style="padding:10px 0px;">'+data.data[i].p_name+'</h1><div class="mini-slider-content"><h5 style="color:#555a;text-decoration:line-through;text-decoration-color:red">'+data.data[i].price+'rs</h5><h6>'+data.data[i].offer+'%</h6><h3>'+calc_offer(data.data[i].price,data.data[i].offer)+'rs</h3></div><button style="cursor:pointer">Buy now&nbsp;&nbsp;<span class="fa fa-shopping-cart"></span></button></div>');

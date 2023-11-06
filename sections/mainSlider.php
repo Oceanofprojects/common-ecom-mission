@@ -12,17 +12,17 @@ $productMdl = new products();
 <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@latest/dist/glide.min.js"></script>
 
 <div class="glide">
-  <!-- Slides here -->
-  <div class="glide__track" data-glide-el="track">
+    <!-- Slides here -->
+    <div class="glide__track" data-glide-el="track">
 
-    <ul class="glide__slides">
-      <?php
+        <ul class="glide__slides">
+            <?php
         $slideRes = $productMdl->getSlides();
         if($slideRes['status']){
           if(count($slideRes['data'])!==0){
             for($i=1;$i<=count($slideRes['data']);$i++){
               if(!empty($slideRes['data']['main_slide_'.$i])){
-                echo '<li class="glide__slide" style="background:url(\'assets/testimg/'.$slideRes['data']['main_slide_'.$i].'\');background-size:cover;background-position:center;height:50vh;width:100%;"><div class=\'mainSlide-inner-layer\'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>';
+                echo '<li class="glide__slide" style="background:url(\'assets/testimg/'.$slideRes['data']['main_slide_'.$i].'\');background-size:cover;background-position:center;height:70vh;width:100%;"><div class=\'mainSlide-inner-layer\'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>';
               }
             }
 
@@ -30,20 +30,22 @@ $productMdl = new products();
         }
 ?>
 
-      <!-- <li class="glide__slide" style="background:url('assets/slide_images/img1.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
+            <!-- <li class="glide__slide" style="background:url('assets/slide_images/img1.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
       <li class="glide__slide" style="background:url('assets/slide_images/img2.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
       <li class="glide__slide" style="background:url('assets/slide_images/img3.png');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
 			<li class="glide__slide" style="background:url('assets/slide_images/img4.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li> -->
-    </ul>
-  </div>
-  <!-- <a href="https://www.jqueryscript.net/tags.php?/Navigation/">Navigation</a> -->
-  <div class="glide__arrows" data-glide-el="controls">
-    <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--left fa fa-chevron-left" data-glide-dir="<"></button>
-    <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--right fa fa-chevron-right" data-glide-dir=">"></button>
-  </div>
-  <!-- Pagination -->
-  <div class="glide__bullets" data-glide-el="controls[nav]">
-    <?php
+        </ul>
+    </div>
+    <!-- <a href="https://www.jqueryscript.net/tags.php?/Navigation/">Navigation</a> -->
+    <div class="glide__arrows" data-glide-el="controls">
+        <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--left fa fa-chevron-left"
+            data-glide-dir="<"></button>
+        <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--right fa fa-chevron-right"
+            data-glide-dir=">"></button>
+    </div>
+    <!-- Pagination -->
+    <div class="glide__bullets" data-glide-el="controls[nav]">
+        <?php
 
     for($i=1;$i<=count($slideRes['data']);$i++){
       if(!empty($slideRes['data']['main_slide_'.$i])){
@@ -52,15 +54,15 @@ $productMdl = new products();
     }
 
     ?>
-    <!-- <button class="glide__bullet" data-glide-dir="=0"></button>
+        <!-- <button class="glide__bullet" data-glide-dir="=0"></button>
     <button class="glide__bullet" data-glide-dir="=1"></button>
     <button class="glide__bullet" data-glide-dir="=2"></button>
 		<button class="glide__bullet" data-glide-dir="=3"></button> -->
-  </div>
+    </div>
 </div>
 <script type="text/javascript">
-	new Glide('.glide').mount();
-	new Glide('.glide', {
+new Glide('.glide').mount();
+new Glide('.glide', {
 
     // Auto change slides after specifed interval.
     autoplay: 4000,
@@ -123,7 +125,7 @@ $productMdl = new products();
     rewindDuration: 800,
 
     // 'ltr' or 'rtl'
-    direction:'rtl',
+    direction: 'rtl',
 
     // The value of the future viewports which have to be visible in the current view
     // e.g. 100 or { before: 100, after: 50 }
@@ -134,18 +136,18 @@ $productMdl = new products();
 
     // Default CSS classes
     classes: {
-      direction: {
-        ltr: 'glide--ltr',
-        rtl: 'glide--rtl'
-      },
-      slider: 'glide--slider',
-      carousel: 'glide--carousel',
-      swipeable: 'glide--swipeable',
-      dragging: 'glide--dragging',
-      cloneSlide: 'glide__slide--clone',
-      activeNav: 'glide__bullet--active',
-      activeSlide: 'glide__slide--active',
-      disabledArrow: 'glide__arrow--disabled'
+        direction: {
+            ltr: 'glide--ltr',
+            rtl: 'glide--rtl'
+        },
+        slider: 'glide--slider',
+        carousel: 'glide--carousel',
+        swipeable: 'glide--swipeable',
+        dragging: 'glide--dragging',
+        cloneSlide: 'glide__slide--clone',
+        activeNav: 'glide__bullet--active',
+        activeSlide: 'glide__slide--active',
+        disabledArrow: 'glide__arrow--disabled'
     }
 
 })

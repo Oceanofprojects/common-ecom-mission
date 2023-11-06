@@ -94,7 +94,7 @@ class commonModel
         }
 
         //GET LIMIT VALUE
-        if (isset($this->arColVal['limit']) == 1 && is_numeric($this->arColVal['limit'])) {
+        if (isset($this->arColVal['limit']) == 1) {
             if (strlen(str_replace(' ','',$this->arColVal['limit'])) == 0) {
                 $limit = '';
             } else {

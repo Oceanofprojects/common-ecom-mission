@@ -1,4 +1,3 @@
-
 <html>
 
 <head>
@@ -34,21 +33,33 @@
       }else{
         echo "ZERO";
       }
+      $rng = '&from='.$data['data']['range'][0].'&to='.$data['data']['range'][1];
       ?>
     </div>
+    <br><br><br><br>
+    <center>
+        <!-- 5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4 -->
+        <!-- index.php?key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product -->
+        <button id="loadMoreProduct"
+            onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
+            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">View
+            More <span class="fa fa-angle-double-down"></span> </button>
+        <!-- <a href="#" id="loadMoreProduct" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none"
+            name="button">View More <span class="fa fa-angle-double-right"></span> </a> -->
+    </center>
 
 
 
     <br><br><br><br><br><br>
     <div class="head-info">
         <h1>Categories</h1>
-        <p> kas oa saks alks alks als alms alms </p>
+        <p>See all product based on category</p>
     </div>
     <br><br>
     <div class="cate-container">
         <?php
   if(count($data['cate_list']['data'])!==0){
-    echo "<script>loadComponent('category-card-view',".json_encode($data['cate_list']['data']).")</script>";
+    echo "<script>loadComponent('category-card-view',".json_encode($data['cate_list']['data']).",[6])</script>";
   }else{
     echo "cate illa ZERO";
   }
@@ -56,7 +67,8 @@
     </div>
     <br><br><br><br>
     <center>
-        <a href="#" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More
+        <a href="index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product"
+            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More
             Categories</a>
     </center>
 
@@ -92,7 +104,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    echo hash_hmac('sha256','moveToEditCate',9050);
+    echo hash_hmac('sha256','trackMyOrder',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

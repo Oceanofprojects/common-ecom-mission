@@ -32,7 +32,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 			            <li><a href="index.php?key=4a0d2d49af2139fd0788700037b4bf3491dfadc131dbf8ebd4c3c2014cded59f&controller=product"><span class="fa fa-plus"></span>Add</a></li>
 									<li><a href="#"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
-						<li><a href="#"><span class="fa fa-truck"></span>Track</a></li>
+						<li><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span class="fa fa-truck"></span>Track</a></li>
 						<li><a href="#"><span class="fa fa-check"></span>Status</a></li>
 						<li><a href="#"><span class="fa fa-gift"></span>Combo</a></li>
 						<li><a href="#"><span class="fa fa-refresh"></span>Admin</a></li>
@@ -176,8 +176,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 
 .menu .li3 {
-	border:.1px solid #ddda;
-//    width: 100%;
+    border: .1px solid #ddda;
+    //    width: 100%;
     position: absolute;
     top: -10px;
     right: 90px;
@@ -287,6 +287,22 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     z-index: 1;
 }
 
+.cartBag {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+.cartBag span {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 8pt;
+    background: transparent;
+    padding: 5px;
+    border-radius: 25px;
+}
+
 @media only screen and (max-width: 1150px) {
     .header_con {
         flex-direction: column;
@@ -392,7 +408,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
                         class="fa fa-home"></span>home</a></li>
             <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li>
             <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>my fav</a></li>
-            <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart"></span>cart</a></li>
+            <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>
             <li onclick=""><a href="#"><span class="fa fa-gift"></span>Combo off</a></li>
             <li><a href="#"><span class="fa fa-percent"></span>offer</a></li>
             <li><a href="#"><span class="fa fa-question-circle"></span>FAQ</a></li>
@@ -402,7 +418,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     </nav>
 </header>
 <div class="whtup-contactus">
-    <a href="#" onclick="dis_my_cart()" style="background:cornflowerblue;" class="fa fa-shopping-bag"></a>
+    <a href="#" onclick="dis_my_cart()" style="background:cornflowerblue;" class="fa fa-shopping-bag cartBag">
+        <span class="cartIndi"></span></a>
 
     <a href="https://api.whatsapp.com/send?phone=+91xxxxxx&text=msg" class="fa fa-whatsapp"></a>
 
@@ -468,6 +485,47 @@ function menu() {
         </table>
     </center>
     <br><br><br>
+    <style>
+    #check-frm {
+        text-align: center;
+        width: 100%;
+    }
+
+    #pay-info {
+        list-style: none;
+        width: 80%;
+        min-width: 250px;
+        text-align: left
+    }
+
+    #pay-info li {
+        padding: 10px 0px;
+    }
+
+    #qr {
+        width: 200px
+    }
+    </style>
+    <form id="check-frm" action="" enctype="multipart/form-data">
+        <center>
+            <img id="qr"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRoQNXRCIFStHk3uVjDWARaIYXPB8bmbkTkeNlUCX7TRorKfbWPOpNHyaSazQm_SMxT6c&usqp=CAU"
+                alt=""><br><br>
+            <ul id="pay-info">
+                <li>
+                    <h1>Payment Instructions</h1>
+                </li>
+                <li>1 : Before transfer money must check Shop/Owner name or UPI ID</li>
+                <li>2 : After success transaction, You have to upload proof for payment.</li>
+                <li>3 : Once proof uploaded, Within 24hrs They will conform your order via social media or call.</li>
+
+            </ul>
+
+
+            <br><br>
+            <input type="file" name="proof" id=""><br><br><br><br><br>
+        </center>
+    </form>
 </div>
 
 

@@ -56,22 +56,44 @@ class productController extends commonController
         echo json_encode($this->productMdl->sendReview($_GET));
       }else if(hash_equals(hash_hmac($algo,'checkout',$skey),$req['key'])){
         echo json_encode($this->productMdl->checkout());
+      }else if(hash_equals(hash_hmac($algo,'getCateById',$skey),$req['key'])){
+        echo json_encode($this->productMdl->getCateById($_GET['cid']));
+      }else if(hash_equals(hash_hmac($algo,'editCategory',$skey),$req['key'])){
+       echo json_encode($this->productMdl->editCategory());
       }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
+      }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
+        $from = $_GET['from'] + $_GET['to'];
+        $to = 5;//get five new product
+        echo json_encode($this->productMdl->get_all(['from-range'=>$from,'to-range'=>$to]));
+      }else if(hash_equals(hash_hmac($algo,'moreCategory',$skey),$req['key'])){
+        $this->view("category/moreCate", array(
+          "title" => "All category",
+          "data"=>$this->productMdl->get_cate_list()
+      ));
       }else if(hash_equals(hash_hmac($algo,'moveToAddCate',$skey),$req['key'])){
         $this->view("category/addCate", array(
             "title" => "Create category",
             "data"=>[]//$this->productMdl->get_all()
+        ));
+      }else if(hash_equals(hash_hmac($algo,'moveToEditCate',$skey),$req['key'])){
+        $this->view("category/editCate", array(
+            "title" => "Edit category",
+            "data"=>$this->productMdl->get_cate_list()
         ));
       }else if(hash_equals(hash_hmac($algo,'moveToAddSlider',$skey),$req['key'])){
         $this->view("main/addSlider", array(
             "title" => "Add slider",
             "data"=>[]//$this->productMdl->get_all()
         ));
+      }else if(hash_equals(hash_hmac($algo,'trackMyOrder',$skey),$req['key'])){
+        $this->view("track_order/index", array(
+            "title" => "Track Orders",
+            "data"=>$this->productMdl->getOrderList()
+        ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
         echo json_encode($this->productMdl->addSlider());
       }else{
-
         $this->index();
       }
     }
@@ -115,16 +137,20 @@ class productController extends commonController
         $selected_product['myFavExit']=$products['myFavExit'];//$this->productMdl->myfavExist($_GET['pid']);
         $suggest_product['status'] = true;
         $suggest_product['message'] = 'Suggestion product fetched for Selected product';
+        $suggest_product['data']=[];//default EMPTY
+
       }
       $inc1 = 0;
       $inc2 = 0;
-      for($i=0;$i<count($products['data']);$i++){
-        if($products['data'][$i]['p_id'] == $_GET['pid']){
-          $selected_product['data'][$inc1] = $products['data'][$i];
-          $inc1++;
-        }else{
-          $suggest_product['data'][$inc2] = $products['data'][$i];
-          $inc2++;
+      if(count($products['data'])!==0){
+        for($i=0;$i<count($products['data']);$i++){
+          if($products['data'][$i]['p_id'] == $_GET['pid']){
+            $selected_product['data'][$inc1] = $products['data'][$i];
+            $inc1++;
+          }else{
+            $suggest_product['data'][$inc2] = $products['data'][$i];
+            $inc2++;
+          }
         }
       }
       $this->view("product/detailProduct", array(

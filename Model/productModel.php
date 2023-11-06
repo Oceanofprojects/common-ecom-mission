@@ -21,7 +21,11 @@ class products extends commonModel{
 		}
 	}
 
-	public function get_all(){
+	public function get_all($range=[]){
+		if(is_array($range) && count($range)!==0){
+			$fromRange = $range['from-range'];
+			$toRange = $range['to-range'];
+		}
 		$tmptbl = 'products';
     if($this->cid == null){
 			$arr = [
@@ -31,7 +35,7 @@ class products extends commonModel{
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'limit'=>10,
+				'limit'=>$fromRange.','.$toRange,
 				'order'=>['p_id','asc'],
        	'query-exc'=>true
 			];
@@ -44,17 +48,17 @@ class products extends commonModel{
 					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'limit'=>10,
+				'limit'=>$fromRange.','.$toRange,
 				'order'=>['p_id','asc'],
-        'query-exc'=>true
+       'query-exc'=>true
 			];
     }
     $flag = $this->generateQuery($arr);
 	if($flag['status']){
 			$res=$flag['data'];
-			return ['status'=>1,'data'=>$res,'cartnum'=>$this->get_cate_num()];
+			return ['status'=>1,'data'=>$res,'cartnum'=>$this->get_cate_num(),'range'=>[$fromRange,$toRange]];
 		}else{
-			return ['status'=>0,'data'=>[],'cartnum'=>0];
+			return ['status'=>0,'data'=>[],'cartnum'=>0,'range'=>[$fromRange,$toRange]];
 		}
 	}
 
@@ -319,11 +323,15 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 	}
 
 	public function get_cate_list(){
-
+		$tmptbl = 'product_category';
 		$arr = [
-			'tbl_name'=>'product_category',
-			'action'=>'select',
-			'data'=>['manual'=>['distinct cate_name AS cate,cate_id,cate_img']],
+			'tbl_name'=>$tmptbl,
+			'action'=>'join',
+			'data'=>['manual'=>["$tmptbl.cate_name AS cate,$tmptbl.cate_id,$tmptbl.cate_img,MIN(products.price) AS starting_price"]],
+			'join_param'=>[
+				['products','left_join','cate_id','cate_id']
+			],
+			'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id"]],
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
@@ -540,7 +548,7 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 
 				$flag = $this->generateQuery($arr);
 				if($flag['status']){
-					return ['status'=>true,'data'=>[],'message'=>'Item removed from cart'];
+					return ['status'=>true,'data'=>[],'message'=>'Item removed from cart','cartnum'=>$this->get_cart_indicate($this->cid)];
 				}else{
 					return ['status'=>false,'data'=>'Err in removing item from cart.'];
 				}
@@ -825,6 +833,8 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 				}else{
 					return ['status'=>false,'data'=>[],'message'=>'err in up img'];
 				}
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Please select category image'];
 			}
 			$arr = [
 				'tbl_name'=>'product_category',
@@ -834,8 +844,73 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			if($this->generateQuery($arr)['status']){
 				return ['status'=>true,'data'=>[],'message'=>'Category added successfully'];
 			}else{
-				return ['status'=>false,'data'=>[],'message'=>'err in up img in DB'];
+				return ['status'=>false,'data'=>[],'message'=>'err in add category'];
 			}
+		}
+
+		public function editCategory(){
+			$arr = [
+				'tbl_name'=>'product_category',
+			'action'=>'update',
+			'data'=>['cate_name="'.$_POST['cate_name'].'"'],
+			'condition'=>['cate_id="'.$_POST['cate_id'].'"'],
+			'query-exc'=>true];
+			if(isset($_FILES) && $_FILES['file1']['size']!==0){
+				$fileFlag = $this->uploadFile('assets/category_images/','file1');
+				if($fileFlag['status']){
+					gc_collect_cycles();
+					if(unlink('assets/category_images/'.$_POST['cate_img'])){//Del old img
+						$upFile=$fileFlag['data'];
+						$arr['data']=['cate_name="'.$_POST['cate_name'].'"','cate_img="'.$upFile.'"'];
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Err in delete old category image'];
+					}
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'err in up img'];
+				}
+			}
+			if($this->generateQuery($arr)['status']){
+				return ['status'=>true,'data'=>[],'message'=>'Category updated successfully'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'err in update category'];
+			}
+		}
+
+		public function getCateById($id){
+			$arr =[
+				'tbl_name'=>'product_category',
+				'data'=>['cate_id','cate_name','cate_img'],
+				'action'=>'select',
+				'condition'=>["cate_id='".$id."'"],
+				'query-exc'=>true
+			  ];
+			  $flag=$this->generateQuery($arr);
+				if($flag['status']){
+				  return ['status'=>true,'data'=>$flag['data'],'message'=>"Category fetched"];
+			  }else{
+				return ['status'=>false,'data'=>[],'message'=>"Err in fetch category detail"];
+			  }
+		}
+
+		public function getOrderList(){
+		if($this->cid == null){
+			return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+		}else{
+			$arr =[
+				'tbl_name'=>'myorder',
+				'data'=>['manual'=>['order_id as id,cart_date as date,to_base64(cart_status) as status']],
+				'action'=>'select',
+				'condition'=>["cid='".$this->cid."'"],
+				'query-exc'=>true
+			  ];
+			  $flag=$this->generateQuery($arr);
+				if($flag['status']){
+				  return ['status'=>true,'data'=>$flag['data'],'message'=>"order list fetched"];
+			  }else{
+				return ['status'=>false,'data'=>[],'message'=>"Err in fetch order list"];
+			  }
+		}
+
 		}
 
 }//CLASS END
