@@ -64,7 +64,7 @@ class productController extends commonController
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
       }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
         $from = $_GET['from'] + $_GET['to'];
-        $to = 5;//get five new product
+        $to = 2;//get five new product
         echo json_encode($this->productMdl->get_all(['from-range'=>$from,'to-range'=>$to]));
       }else if(hash_equals(hash_hmac($algo,'moreCategory',$skey),$req['key'])){
         $this->view("category/moreCate", array(
@@ -90,6 +90,11 @@ class productController extends commonController
         $this->view("track_order/index", array(
             "title" => "Track Orders",
             "data"=>$this->productMdl->getOrderList()
+        ));
+      }else if(hash_equals(hash_hmac($algo,'openSearch',$skey),$req['key'])){
+        $this->view("search/index", array(
+            "title" => "Product Search",
+            "data"=>$this->productMdl->search($_GET['search_txt'])
         ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
         echo json_encode($this->productMdl->addSlider());

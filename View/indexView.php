@@ -20,37 +20,7 @@
     require_once __DIR__.'/../sections/mainSlider.php';
     ?>
 
-    <br><br>
-    <div class="head-info">
-        <h1>Best Products</h1>
-        <p> kas oa saks alks alks als alms alms </p>
-    </div>
-    <br><br>
-    <div class="item-container">
-        <?php
-      if(count($data['data'])!==0){
-        echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
-      }else{
-        echo "ZERO";
-      }
-      $rng = '&from='.$data['data']['range'][0].'&to='.$data['data']['range'][1];
-      ?>
-    </div>
-    <br><br><br><br>
-    <center>
-        <!-- 5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4 -->
-        <!-- index.php?key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product -->
-        <button id="loadMoreProduct"
-            onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
-            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">View
-            More <span class="fa fa-angle-double-down"></span> </button>
-        <!-- <a href="#" id="loadMoreProduct" class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none"
-            name="button">View More <span class="fa fa-angle-double-right"></span> </a> -->
-    </center>
-
-
-
-    <br><br><br><br><br><br>
+    <br><br><br>
     <div class="head-info">
         <h1>Categories</h1>
         <p>See all product based on category</p>
@@ -74,10 +44,37 @@
 
     <br><br><br><br><br><br>
 
+    <div class="head-info">
+        <h1>Latest Products</h1>
+        <p>Our store lastest update !</p>
+    </div>
+    <br><br>
+    <div class="item-container">
+        <?php
+      if(count($data['data'])!==0){
+        echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
+      }else{
+        echo "ZERO";
+      }
+      $rng = '&from='.$data['data']['range'][0].'&to='.$data['data']['range'][1];
+      ?>
+    </div>
+    <br><br><br><br>
+    <center>
+        <button id="loadMoreProduct"
+            onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
+            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">View
+            More <span class="fa fa-angle-double-down"></span> </button>
+    </center>
+
+    <br><br><br><br><br><br>
+
+
+
     <!-- customers review -->
     <div class="head-info">
         <h1>Customer's Review</h1>
-        <p> kas oa saks alks alks als alms alms </p>
+        <p>Our customer's product review</p>
     </div>
     <br><br>
     <!-- <script type="text/javascript">
@@ -104,7 +101,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    echo hash_hmac('sha256','trackMyOrder',9050);
+    echo hash_hmac('sha256','openSearch',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

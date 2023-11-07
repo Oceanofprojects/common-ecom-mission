@@ -36,7 +36,7 @@ class products extends commonModel{
 					['product_category','left_join','cate_id','cate_id']
 				],
 				'limit'=>$fromRange.','.$toRange,
-				'order'=>['p_id','asc'],
+				'order'=>['s_no','desc'],
        	'query-exc'=>true
 			];
     }else{
@@ -49,7 +49,7 @@ class products extends commonModel{
 					['product_category','left_join','cate_id','cate_id']
 				],
 				'limit'=>$fromRange.','.$toRange,
-				'order'=>['p_id','asc'],
+				'order'=>['s_no','desc'],
        'query-exc'=>true
 			];
     }
@@ -69,7 +69,7 @@ class products extends commonModel{
 
 	public function addToFav(){
 		if($this->cid == null){
-			echo json_encode(['status'=>0,'flag'=>0,'data'=>'err in fav','message'=>'Please login to make action !']);
+			echo json_encode(['status'=>0,'flag'=>0,'data'=>'err in Wishlist','message'=>'Please login to make action !']);
 			exit;
 		}
 		$c_id = $this->cid;
@@ -80,16 +80,16 @@ class products extends commonModel{
 		if(count($this->generateQuery($arr)['data'])){//Delete FAV
 			$arr = ['tbl_name'=>'myfav','action'=>'delete','data'=>[],'condition'=>["p_id='".$p_id."'","cid='".$c_id."'"],'query-exc'=>true];
 			if($this->generateQuery($arr)['status']){
-				return ['status'=>1,'flag'=>1,'data'=>[],'message'=>'fav updated.','favStatus'=>'removed'];
+				return ['status'=>1,'flag'=>1,'data'=>[],'message'=>'Wishlist updated.','favStatus'=>'removed'];
 			}else{
-				return ['status'=>0,'flag'=>0,'data'=>[],'message'=>'Err in fav remove'];
+				return ['status'=>0,'flag'=>0,'data'=>[],'message'=>'Err in Wishlist remove'];
 			}
 		}else{//Insert Fav
 				$arr = ['tbl_name'=>'myfav','action'=>'insert','data'=>['p_id="'.$p_id.'"','cid="'.$c_id.'"','created_at=current_timestamp','updated_at=now()'],'condition'=>["p_id='".$p_id."'","cid='".$c_id."'"],'query-exc'=>true];
 			if($this->generateQuery($arr)['status']){
-        return ['status'=>1,'flag'=>1,'data'=>[],'message'=>'fav updated','favStatus'=>'added'];
+        return ['status'=>1,'flag'=>1,'data'=>[],'message'=>'Wishlist updated','favStatus'=>'added'];
 			}else{
-				return ['status'=>0,'flag'=>0,'data'=>[],'message'=>'err in insert'];
+				return ['status'=>0,'flag'=>0,'data'=>[],'message'=>'err in Wishlist insert'];
 			}
 		}
 
@@ -179,9 +179,9 @@ class products extends commonModel{
       ];
       $flag=$this->generateQuery($arr);
         if($flag['status']){
-          return ['status'=>true,'data'=>$flag['data'],'message'=>"My Fav fetched"];
+          return ['status'=>true,'data'=>$flag['data'],'message'=>"Wishlist fetched"];
       }else{
-        return ['status'=>false,'data'=>[],'message'=>"Err in fetch my fav"];
+        return ['status'=>false,'data'=>[],'message'=>"Err in fetch Wishlist"];
       }
     }
 
@@ -201,12 +201,12 @@ class products extends commonModel{
 			$flag=$this->generateQuery($arr);
 			if($flag['status']){
 				if(count($flag['data'])!==0){
-					return ['status'=>true,'data'=>'favExist','message'=>"My Fav fetched"];
+					return ['status'=>true,'data'=>'favExist','message'=>"Wishlist fetched"];
 				}else{
-					return ['status'=>false,'data'=>'favNotExist','message'=>"My Fav fetched"];
+					return ['status'=>false,'data'=>'favNotExist','message'=>"Wishlist fetched"];
 				}
 			}else{
-			  return ['status'=>false,'data'=>'favNotExist','message'=>"Err in fetch my fav"];
+			  return ['status'=>false,'data'=>'favNotExist','message'=>"Err in fetch Wishlist"];
 			}
 		  }
 	}
@@ -452,9 +452,9 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 	}
 
 	public function addProduct(){
-		$cate = explode(',',base64_decode($_POST['cate']));
-		$_POST['cate'] = $cate[0];
-		$_POST['cate_img'] = $cate[1];
+		// $cate = explode(',',base64_decode($_POST['cate']));
+		// $_POST['cate'] = $cate[0];
+		// $_POST['cate_img'] = $cate[1];
 		$_POST['p_id']=$this->genRnd('alpha_numeric',6);
 		$fileFlag = $this->uploadFile('assets/product_images/','file1');
 		if($fileFlag['status']){
@@ -500,9 +500,6 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 	}
 
 	public function editProduct(){
-		$cate = explode(',',base64_decode($_POST['cate']));
-		$_POST['cate'] = $cate[0];
-		$_POST['cate_img'] = $cate[1];
 		$p_id=$_POST['p_id'];
 		$old_img_name = $_POST['p_img'];
 		unset($_POST['p_img']);
@@ -517,6 +514,8 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 				}else{
 					return ['status'=>false,'data'=>[],'message'=>$fileFlag['status']];
 				}
+			}else{
+					return ['status'=>false,'data'=>[],'message'=>'Err in delete prv P img'];
 			}
 		}
 		$arr = [
@@ -740,7 +739,7 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			$arr = [
 			  'tbl_name'=>$tmptbl,
 			  'action'=>'join',
-			  'data'=>['manual'=>["p_id,p_name,price"]],
+			  'data'=>['manual'=>["p_id,p_img,p_name,price,offer,unit,stock"]],
 				'join_param'=>[
 			 		['product_category','left_join','cate_id','cate_id']
 			 ],
@@ -749,12 +748,11 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR product_category.cate_name LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
 			 'query-exc'=>true
 			];
-
 		  }else{
 				$arr = [
 					'tbl_name'=>$tmptbl,
 					'action'=>'join',
-					'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.price"]],
+					'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock"]],
 					'join_param'=>[
 					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
 					['product_category','left_join','cate_id','cate_id']

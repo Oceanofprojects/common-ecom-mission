@@ -118,12 +118,12 @@ width:90%;
                     <tr>
                         <td>Category<sup>*</sup></td>
                         <td>
-                            <select id="cate_name" name="cate">
+                            <select id="cate_name" name="cate_id">
                                 <?php
           if(count($data['data']['data']) !== 0){
             echo "<option value=''>Select cate list</option>";
             for($i=0;$i<count($data['data']['data']);$i++){
-              echo "<option value='".base64_encode($data['data']['data'][$i]['cate'].",".$data['data']['data'][$i]['cate_img'])."'>".$data['data']['data'][$i]['cate']."</option>";
+              echo "<option value='".$data['data']['data'][$i]['cate_id']."'>".$data['data']['data'][$i]['cate']."</option>";
             }
           }else{
             echo "<option value=''>Select cate list</option><option value=''>Empty</option>";

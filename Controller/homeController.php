@@ -30,7 +30,7 @@ class homeController extends commonController
       }
         $algo = 'sha256';
       $skey = 9050;
-      if(isset($_GET) && count($_GET)){
+      if(isset($_GET['key'])){
         $req['key'] = $_GET['key'];
       }else{
         $req['key'] = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6';
@@ -64,7 +64,7 @@ class homeController extends commonController
     {
         $this->view("index", array(
             "title" => "Home",
-            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>10]),
+            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>2]),
             "cate_list"=>$this->productMdl->get_cate_list(),
         ));
     }

@@ -109,6 +109,9 @@ function sendReview(){
   }
 }
 
+
+
+
 function calc_offer(price, offer) {
     offer_price = price * offer / 100;
     return price - offer_price;
@@ -183,12 +186,12 @@ function check_price_digit(x) {
 }
 
 function dis_msg_box(color,bgcolor,content){
-  $('#common_dis_msg_box').fadeIn(500);
+  $('#common_dis_msg_box').slideDown(100);
   $('#common_dis_msg_box').css('background-color',bgcolor);
   $('#common_dis_msg_box').css('color',color);
   $('#msg_content_to_display').text(content);
   setTimeout(function(){
-  $('#common_dis_msg_box').fadeOut(500);
+  $('#common_dis_msg_box').slideUp(500);
   },2000);
 }
 
@@ -330,6 +333,7 @@ function add_item(){
     performAjxForFiles('index.php','#frm','?controller=product&key=5265dbb8b63da8f3da8c145702deae1954a7224a585014f0bbc3086a6e499ef6', (res) => {
       d = JSON.parse(res)
       if(d.status){
+        $('#frm')[0].reset();
         dis_msg_box('#000','lightgreen',d.message);
       }else{
         dis_msg_box('#000','tomato',d.message);
@@ -363,6 +367,7 @@ function edit_item(){
 
 var menutmp=0;
 function op_search(){
+  
   if(menutmp%2==0){
   coursep_menu();
   $('#search_product').focus();
@@ -410,6 +415,8 @@ function searchProduct(flow,eleId) {
     if(flow == 'detailProduct'){
       //pre init
       op_search();
+      window.open('index.php?controller=product&key=736e0d2b6f380a950a9456b6a33c6cc56d246e025599ac354a12245ad2f28da4&search_txt='+$('#'+eleId).val().trim(),'_SELF');
+      return;
     }
       $('#result_res_msg,#result_res_indi').text('');
       $('#result_list').empty();
@@ -419,16 +426,16 @@ function searchProduct(flow,eleId) {
         performAjx('index.php', 'get','controller=product&key=8fac78974f959202bd400f5a04f1df06c8bdafc2282ce53ee5b08ee953c07619&search_txt='+txt, (res) => {
         d = JSON.parse(res);
         if(d.status){
-        $('#result_res_indi').text('Search results ('+d.data.length+')');
+        $('#result_res_indi').html('Search results ('+d.data.length+')');
         $('#result_res_msg').text('');
             for(i=0;i<d.data.length;i++){
               if(flow == 'editProduct'){
-                $('#result_list').append('<li onclick="search_purpose(\'editProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].price+')')+'</li>');
-              }else if(flow == 'detailProduct'){
-                $('#result_list').append('<li onclick="search_purpose(\'detailProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].price+')')+'</li>');
-
-//                $('#result_list').append('<li onclick="search_purpose(\'detailProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+'</li>');
+                $('#result_list').append('<li onclick="search_purpose(\'editProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].stock+')')+'</li>');
               }
+              // else if(flow == 'detailProduct'){
+              //   $('#search_product').val('');
+              //   $('#result_list').append('<li onclick="search_purpose(\'detailProduct\',\''+d.data[i].p_id+'\')">'+d.data[i].p_name+', '+((d.data[i].price == 0)?'Out of stock':'In stock('+d.data[i].stock+')')+'</li>');
+              // }
           }
         }else{
         $('#result_res_msg').text(d.message);

@@ -256,6 +256,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     text-decoration: none;
     color: #fff;
     background: rgba(0, 0, 0, .8);
+    border: .2px solid #ddd;
+    border-radius: 3px;
     font-size: 1em;
 }
 
@@ -394,6 +396,11 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 		</ul>
 			</div>
 		</div> -->
+<!-- Common message box  -->
+<div id="common_dis_msg_box">
+    <div id="msg_content_to_display"></div>
+</div>
+<!-- Common message box  -->
 <header class="header_con">
     <div class="logo_layer">
         <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">
@@ -407,12 +414,12 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
                     href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"><span
                         class="fa fa-home"></span>home</a></li>
             <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li>
-            <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>my fav</a></li>
+            <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>Wishlist</a></li>
             <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>
             <li onclick=""><a href="#"><span class="fa fa-gift"></span>Combo off</a></li>
             <li><a href="#"><span class="fa fa-percent"></span>offer</a></li>
             <li><a href="#"><span class="fa fa-question-circle"></span>FAQ</a></li>
-            <li><a href="#"><span class="fa fa-comments"></span>contact</a></li>
+            <!-- <li><a href="#"><span class="fa fa-comments"></span>contact</a></li> -->
             <?php echo $extraLinks;?>
         </ul>
     </nav>
@@ -445,15 +452,11 @@ function menu() {
     temp_menu++;
 }
 </script>
-<!-- Common message box  -->
-<div id="common_dis_msg_box">
-    <div id="msg_content_to_display"></div>
-</div>
-<!-- Common message box  -->
+
 <div class="myfav">
     <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
         onclick="cls_my_fav()"></h4>
-    <h1 align="center">MY FAV</h1>
+    <h1 align="center">My Wishlist</h1>
     <br>
 
     <br>
