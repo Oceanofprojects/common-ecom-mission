@@ -98,6 +98,14 @@ class productController extends commonController
         ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
         echo json_encode($this->productMdl->addSlider());
+      }else if(hash_equals(hash_hmac($algo,'getOrderDetailById',$skey),$req['key'])){
+        if(isset($_GET['order_id'])){
+        echo json_encode($this->productMdl->getOrderDetailById($_GET['order_id']));
+        }
+      }else if(hash_equals(hash_hmac($algo,'productDelivered',$skey),$req['key'])){
+        if(isset($_GET['t_id'])){
+        echo json_encode($this->productMdl->productDelivered($_GET['t_id']));
+        }
       }else{
         $this->index();
       }

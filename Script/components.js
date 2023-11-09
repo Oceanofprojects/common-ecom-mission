@@ -1,10 +1,13 @@
 function loadComponent(type, data,arr=[]) {
     if (type == 'nor-card-view') {
       // $('.item-container').empty();
+//      auto_id = rand(100000,999999);
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
+          favRnd = Math.floor(Math.random() * 99999);
+          boxIdtyRnd = Math.floor(Math.random() * 9999999);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
-                  .data[i].favExistCid) + '\" id=\"myfav'+i+'\" onclick=\"add_fav(\'myfav'+i+'\',\'' + data.data[i].p_id +
+                  .data[i].favExistCid) + '\" id=\"myfav'+favRnd+'\" onclick=\"add_fav(\'myfav'+favRnd+'\',\'' + data.data[i].p_id +
               '\')\"></h6><div class=\"img-src\" style=\"image-rendering: pixelated;background:url(assets/product_images/' +
               data.data[i].p_img +
               ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
@@ -13,7 +16,7 @@ function loadComponent(type, data,arr=[]) {
               data.data[i].price + 'rs</span><sup>' + data.data[i].offer +
               '%</sup>&nbsp;&nbsp;<span>' + off_price +
               'rs&nbsp;<small  style=\"color:lime;font-size: 8pt;\" class=\"fa fa-check-circle-o\"></small></span></p>' +
-              check_stock(i, data.data[i].stock, off_price, data.data[i].unit, data.data[
+              check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
                   i].p_name, data.data[i].p_id) + '</div>');
       }
       
@@ -66,12 +69,11 @@ function mycartComponent(data){
     if (data.status) {
         $('#mycarttbl').empty();
         $('#mycarttbl').append(
-            "<tr><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr>"
+            "<tr><th>Item</th><th>Price</th><th>offer</th><th>Off Price</th><th>Qnty</th><th>total</th><th>Option</tr>"
         );
         if(data.data.length == 0){
           $('#mycarttbl').append("<tr><td colspan='7' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
         }else{
-          console.log('C-SIZE:'+data.data.length)
             for (ci = 0; ci < data.data.length; ci++) {
               off_price = calc_offer(data.data[ci].price,data.data[ci].offer);
               if(data.old_r == true && data.data[ci].cart_edit_flag == '1' || data.old_r == true && data.data[ci].cart_edit_flag == '0' || data.old_r == false && data.data[ci].cart_edit_flag == '0'){

@@ -896,7 +896,7 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 		}else{
 			$arr =[
 				'tbl_name'=>'myorder',
-				'data'=>['manual'=>['order_id as id,cart_date as date,to_base64(cart_status) as status']],
+				'data'=>['manual'=>['order_id as id,cart_date as date']],
 				'action'=>'select',
 				'condition'=>["cid='".$this->cid."'"],
 				'query-exc'=>true
@@ -910,6 +910,48 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 		}
 
 		}
+
+		public function getOrderDetailById($order_id){
+			if($this->cid == null){
+				return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+			}else{
+				$arr =[
+					'tbl_name'=>'myorder',
+//					'data'=>['manual'=>['order_id as id,cart_date as date,to_base64(cart_status) as status']],
+					'data'=>['manual'=>['cart_date as date ,cart_status as status,order_id as id,product_list as list']],
+					'action'=>'select',
+					'condition'=>["cid='".$this->cid."'","order_id='".$order_id."'"],
+					'query-exc'=>true
+				  ];
+				  $flag=$this->generateQuery($arr);
+					if($flag['status']){
+					  return ['status'=>true,'data'=>$flag['data'],'message'=>"order list fetched"];
+				  }else{
+					return ['status'=>false,'data'=>[],'message'=>"Err in fetch order list"];
+				  }
+			}
+	
+			}
+
+			public function productDelivered($id){
+				if($this->cid == null){
+					return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+				}else{
+				$arr =[
+					'tbl_name'=>'myorder',
+					'data'=>["cart_status='Completed'"],
+					'action'=>'update',
+					'condition'=>["manual"=>["cid='".$this->cid."' AND order_id='".$id."' AND cart_status LIKE '%Arriving%'"]],
+					'query-exc'=>true
+				  ];
+				  $flag=$this->generateQuery($arr);
+					if($flag['status']){
+					  return ['status'=>true,'data'=>$flag['data'],'message'=>"Thankyou for your response !",'t_status'=>'Completed'];
+				  }else{
+					return ['status'=>false,'data'=>[],'message'=>"Err in status order complt status"];
+				  }
+				}
+			}
 
 }//CLASS END
 
