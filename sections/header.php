@@ -27,13 +27,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
-						<li><a href="#"><span class="fa fa-arrow-right"></span>Slider</a>
-						<ul class="li3">
-			            <li><a href="index.php?key=4a0d2d49af2139fd0788700037b4bf3491dfadc131dbf8ebd4c3c2014cded59f&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="#"><span class="fa fa-edit"></span>Edit</a></li>
-						</ul></li>
 						<li><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span class="fa fa-truck"></span>Track</a></li>
-						<li><a href="#"><span class="fa fa-check"></span>Status</a></li>
+                        <li><a href="index.php?key=30441df57b8441cbb29f4ac6e48a90168d59e859cb8607bc4c3019dea2dbff26&controller=product"><span class="fa fa-check"></span>P-Status</a></li>
 						<li><a href="#"><span class="fa fa-gift"></span>Combo</a></li>
 						<li><a href="#"><span class="fa fa-refresh"></span>Admin</a></li>
 						<li><a href="#"><span class="fa fa-comment"></span>Reviews</a></li>
@@ -168,7 +163,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     //			width:150px;
     position: absolute;
     top: 33px;
-    left: 0px;
+    left: -10px;
     display: none;
     border-radius: 5px;
     background: #fff;

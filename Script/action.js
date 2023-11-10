@@ -400,6 +400,7 @@ function checkout(){
 
     if(d.status){
       cls_my_cart();
+      window.open('index.php?key=a773cdf359b5e5059a18b9c4d994502d457261015c98d6c22575997dfc8fc544&controller=product','_self');
       dis_msg_box('#000','lightgreen',d.message);
     }else{
       dis_msg_box('#000','tomato',d.message);

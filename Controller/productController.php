@@ -62,6 +62,8 @@ class productController extends commonController
        echo json_encode($this->productMdl->editCategory());
       }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
+      }else if(hash_equals(hash_hmac($algo,'completedClientOrder',$skey),$req['key'])){
+        echo json_encode($this->productMdl->completedClientOrder());
       }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
         $from = $_GET['from'] + $_GET['to'];
         $to = 2;//get five new product
@@ -70,6 +72,11 @@ class productController extends commonController
         $this->view("category/moreCate", array(
           "title" => "All category",
           "data"=>$this->productMdl->get_cate_list()
+      ));
+      }else if(hash_equals(hash_hmac($algo,'productStatusCpanel',$skey),$req['key'])){
+        $this->view("main/productStatusCpanel", array(
+          "title" => "Client product contol",
+          "data"=>[]
       ));
       }else if(hash_equals(hash_hmac($algo,'moveToAddCate',$skey),$req['key'])){
         $this->view("category/addCate", array(
@@ -95,6 +102,12 @@ class productController extends commonController
         $this->view("search/index", array(
             "title" => "Product Search",
             "data"=>$this->productMdl->search($_GET['search_txt'])
+        ));
+      }else if(hash_equals(hash_hmac($algo,'checkoutfinal',$skey),$req['key'])){
+        $this->view("main/checkout", array(
+            "title" => "Checkout Product",
+            "data"=>$this->productMdl->getCartByIdNDate(date('Y-m-d'))
+           //$this->productMdl->checkoutFinal()
         ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
         echo json_encode($this->productMdl->addSlider());

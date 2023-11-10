@@ -577,47 +577,56 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 		}
 
 	}
-
-	public function checkout(){
-										/*
-								CALC TWO ARRAY DATA INTO ONE DATA DONE
-								UPDATE PRODUCT TBL QNTY
-								INSERT NEW ORDER
-								UPDATE CART DATA EDIT -> DISABLE
-								VIEW DATA INTO AMOUT PAY
-								*/
-		if($this->cid == null){
+public function getCartByIdNDate($date){
+	if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
 		}else{
-			$cart_date = date('Y-m-d');
 			$arr = [
-				'tbl_name' => 'mycart',
-				'action' => 'select',
-				'data' => [],
-				'condition'=>['cid='.$this->cid,"_date='".$cart_date."'","cart_edit_flag=1"],
-				'query-exc'=>true
-			];
-			$flag=$this->generateQuery($arr);
-			if($flag['status'] == 'success'){
-				if(count($flag['data'])!==0){
-					for($i=0;$i<count($flag['data']);$i++){//get customer ordered  product ID and qunty sep
-						$cus_or_pr_id_list[] = '"'.$flag['data'][$i]['p_id'].'"';
-						$cur_or_data_list[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'qnty'=>$flag['data'][$i]['quantity']];
-						$product_detail[$i] = ['p_id'=>$flag['data'][$i]['p_id'],'p_name'=>$this->getProductById($flag['data'][$i]['p_id'])[1],'qnty'=>$flag['data'][$i]['quantity']];
-					}
-					$arr = [
-						'tbl_name' => 'products',
+						'tbl_name' => 'mycart',
 						'action' => 'select',
-						'data' => ['p_id','stock'],
-						'condition'=>['manual'=>['p_id IN('.implode(',',$cus_or_pr_id_list).')']],
+						'data' => ['p_id','quantity'],
+						'condition'=>['cid='.$this->cid,"_date='".$date."'","cart_edit_flag=1"],
 						'query-exc'=>true
 					];
 					$flag=$this->generateQuery($arr);
 					if($flag['status'] == 'success'){
-						if(count($flag['data'])!==0){
-							$pro_data_list = $flag['data'];
+						return $flag['data'];
+					}else{
+						return $flag;
+					}
+		}
+}
+	public function checkout(){
+		if($this->cid == null){
+			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
+		}else{
+			$cart_date = date('Y-m-d');
+			$mycart_data = $this->getCartByIdNDate($cart_date);
+				if(count($mycart_data)!==0){
+					for($i=0;$i<count($mycart_data);$i++){//get customer ordered  product ID and qunty sep
+						$cus_or_pr_id_list[] = '"'.$mycart_data[$i]['p_id'].'"';
+						$cur_or_data_list[$i] = ['p_id'=>$mycart_data[$i]['p_id'],'qnty'=>$mycart_data[$i]['quantity']];
+						$product_detail[$i] = ['p_id'=>$mycart_data[$i]['p_id'],'p_name'=>$this->getProductById($mycart_data[$i]['p_id'])[1],'qnty'=>$mycart_data[$i]['quantity']];
+					}
+
+							$pro_data_list_flag = $this->getProductOriginalQntyForCheckout($cus_or_pr_id_list);
+							if($pro_data_list_flag['status']){
+								$pro_data_list = $pro_data_list_flag['data'];
+							}else{
+								return $pro_data_list_flag;
+							}
 							//IMP SEC CALC PRODUCT QUANTITY AND UPDATE DB
-							sort($cur_or_data_list);
+							
+							return $this->cQtyWToQty($cur_or_data_list,$pro_data_list,$product_detail,$cus_or_pr_id_list);//product_detail & cus_or_pr_id_list is var used for checkoutfinal()
+							
+				}else{
+				return ['status'=>false,'data'=>[],'message'=>'cart list zero'];
+				}
+		}
+	  }
+
+	  public function cQtyWToQty($cur_or_data_list,$pro_data_list,$product_detail,$cus_or_pr_id_list){
+	  				sort($cur_or_data_list);
 							sort($pro_data_list);
 							for($i=0;$i<count($pro_data_list);$i++){
 								$qnty = ($pro_data_list[$i]['stock']-$cur_or_data_list[$i]['qnty']);
@@ -631,7 +640,46 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 								}
 							}//CALC ORDE END
 
-							//UPDATE QUNT in DB
+		return ['status'=>true,'data'=>[],'message'=>"All products available.","upt_qnty"=>$orderRes,"product_detail"=>$product_detail,'ids'=>$cus_or_pr_id_list];
+
+			}
+
+
+
+
+public function checkoutFinal(){
+	$cart_date = date('Y-m-d');
+	$checkout_flag = $this->checkout();
+	if($checkout_flag['status']){//if all product aval
+		$upPrds_flag = $this->updateCusPrdWTOrPrd($checkout_flag['upt_qnty']);
+		if($upPrds_flag['status']){
+			//CREATE NEW ORDER
+					$createOrder = $this->createNewOrder($cart_date,$checkout_flag['product_detail']);
+					if($createOrder['status']){
+						//DISABLE CART EDIT OPTION
+						if($this->disableCartEdit(implode(',',$checkout_flag['ids']),$cart_date)){
+							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in MENU>ACCOUNT>TRACK."];
+						//END OF CART PROCCESS
+						}else{
+							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
+						}//END OF CART PROCCESS
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, Please contact your admin (Err in Create order)'];
+					}
+//					CREATE ORDER END
+		}else{
+			return $upPrds_flag;//IF FAILED. update QNT with original product
+		}
+
+	}else{
+		return $checkout_flag;
+	}
+		
+}
+
+public function updateCusPrdWTOrPrd($orderRes){
+	//UPDATE CUS LIST QTY WT ORIGINAL QUANTITY
+	//UPDATE QUNT in DB
 							$qntyUpdt = 0;
 							for($i=0;$i<count($orderRes);$i++){
 								$q = "UPDATE products SET stock=".$orderRes[$i]['quantity']." WHERE p_id='".$orderRes[$i]['p_id']."'";
@@ -642,38 +690,30 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 							}
 							if($qntyUpdt !== count($orderRes)){
 								return ['status'=>false,'data'=>[],'message'=>"Oops somthing went wrong, Please contact your admin (Err in upQnty)"];
+							}else{
+								return ['status'=>true,'data'=>[],'message'=>"Products updated successfully."];
 							}
 							//UPDATE QUNT in DB END
-
-							//CREATE NEW ORDER
-					$createOrder = $this->createNewOrder($cart_date,$product_detail);
-					if($createOrder['status']){
-						//DISABLE CART EDIT OPTION
-						if($this->disableCartEdit(implode(',',$cus_or_pr_id_list),$cart_date)){
-							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in MENU>ACCOUNT>TRACK."];
-						//END OF CART PROCCESS
-						}else{
-							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
-						}//END OF CART PROCCESS
-					}else{
-						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, Please contact your admin (Err in Create order)'];
-					}
-					//CREATE ORDER END
+}
+			public function getProductOriginalQntyForCheckout($cus_or_pr_id_list){
+				$arr = [
+						'tbl_name' => 'products',
+						'action' => 'select',
+						'data' => ['p_id','stock'],
+						'condition'=>['manual'=>['p_id IN('.implode(',',$cus_or_pr_id_list).')']],
+						'query-exc'=>true
+					];
+					$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						if(count($flag['data'])!==0){
+							return ['status'=>true,'data'=>$flag['data']];
 						}else{
 							return ['status'=>false,'data'=>[],'message'=>'Something went wrong contact your admin(Err in customer ordered item not found in prList)'];
 						}
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>'Something went wrong contact your admin(Err in fetch product list)'];
 					}
-
-				}else{
-				return ['status'=>false,'data'=>[],'message'=>'cart list zero'];
-				}
-			}else{
-				return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
 			}
-		}
-	  }
 
 	  public function disableCartEdit($ids,$cart_date){
 		$arr = [
@@ -692,16 +732,18 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 	  }
 
 	  public function createNewOrder($cart_date,$product_list){
-		// $orderExist=$this->orderExist($cart_date);//IF exist it carry status and Order ID
-		// if($orderExist['status']){
-		// 	return ['status'=>true,'data'=>$orderExist['data'],'message'=>'Already order ID in Pending stage'];
-		// }else{
+			$fileFlag = $this->uploadFile('assets/payment_proof_images/','file1');
+			if($fileFlag['status']){
+				$fname = $fileFlag['data'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>"Err in store payment proof image"];
+			}
 			$order_id = $this->genRnd('alpha_numeric',10);
 			$order_status = 'Pending';
 			$arr = [
 				'tbl_name' => 'myorder',
 				'action' => 'insert',
-				'data' => ["order_id='".$order_id."'","cid='$this->cid'","product_list='".json_encode($product_list)."'","cart_date='$cart_date'","cart_status='$order_status'"],
+				'data' => ["order_id='".$order_id."'","payment_proof='".$fname."'","cid='$this->cid'","product_list='".json_encode($product_list)."'","cart_date='$cart_date'","cart_status='$order_status'"],
 				'query-exc'=>true
 			];
 			$flag=$this->generateQuery($arr);
@@ -710,7 +752,6 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			}else{
 				return ['status'=>false,'data'=>[],'message'=>$flag['msg']];
 			}
-//		}
 	  }
 
 	  public function orderExist($cart_date){
@@ -952,6 +993,20 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 				  }
 				}
 			}
+
+			public function completedClientOrder(){
+				if($this->cid == null){
+					return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+				}else{
+				if(isset($_FILES['file1'])){
+					if($_FILES['file1']['size'] !==0){
+						return $this->checkoutFinal();//Client final checkout	
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>"Please select payment proof image"];
+					}
+				}
+			}
+		}
 
 }//CLASS END
 
