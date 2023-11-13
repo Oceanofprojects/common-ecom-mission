@@ -1,56 +1,48 @@
-<?php
-
-
-require_once __DIR__.'/../Model/productModel.php';
-$productMdl = new products();
-
-?>
-
 <!-- CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@latest/dist/css/glide.core.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@latest/dist/css/glide.theme.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@latest/dist/glide.min.js"></script>
-
-<div class="glide">
+<?php
+            $dir = opendir('assets/slide_images');
+            $exts = ['jpeg','jpg','png','gif'];
+            while (($file = readdir($dir)) !== false) {
+              $ifImg = explode('.',$file);
+              if(count($ifImg)==2){
+                if(in_array($ifImg[1],$exts)){
+                  $sImgs[] = $file;
+                }
+              }
+          }
+          ?>
+<div class="glide" style="<?php echo (count($sImgs)==0)?'display:none':'';?>">
     <!-- Slides here -->
     <div class="glide__track" data-glide-el="track">
 
         <ul class="glide__slides">
             <?php
-        $slideRes = $productMdl->getSlides();
-        if($slideRes['status']){
-          if(count($slideRes['data'])!==0){
-            for($i=1;$i<=count($slideRes['data']);$i++){
-              if(!empty($slideRes['data']['main_slide_'.$i])){
-                echo '<li class="glide__slide" style="background:url(\'assets/testimg/'.$slideRes['data']['main_slide_'.$i].'\');background-size:cover;background-position:center;height:70vh;width:100%;"><div class=\'mainSlide-inner-layer\'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>';
-              }
-            }
+           
 
+        if(count($sImgs)!==0){
+          for($i=0;$i<count($sImgs);$i++){
+            echo '<li class="glide__slide" style="background:url(\'assets/slide_images/'.$sImgs[$i].'\');background-size:cover;background-position:center;height:70vh;width:100%;"></li>';
           }
         }
 ?>
-
-            <!-- <li class="glide__slide" style="background:url('assets/slide_images/img1.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
-      <li class="glide__slide" style="background:url('assets/slide_images/img2.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
-      <li class="glide__slide" style="background:url('assets/slide_images/img3.png');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li>
-			<li class="glide__slide" style="background:url('assets/slide_images/img4.jpg');background-size:cover;background-position:center;height:50vh;width:100%;"><div class='mainSlide-inner-layer'><a href="#">Shop Now&nbsp;<span class="fa fa-angle-double-right"></span></a></div></li> -->
         </ul>
     </div>
     <!-- <a href="https://www.jqueryscript.net/tags.php?/Navigation/">Navigation</a> -->
     <div class="glide__arrows" data-glide-el="controls">
-        <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--left fa fa-chevron-left"
+        <button style="background:rgba(0,0,0,.5)" class="glide__arrow glide__arrow--left fa fa-angle-double-left"
             data-glide-dir="<"></button>
-        <button style="background:rgba(0,0,0,.2)" class="glide__arrow glide__arrow--right fa fa-chevron-right"
+        <button style="background:rgba(0,0,0,.5)" class="glide__arrow glide__arrow--right fa fa-angle-double-right"
             data-glide-dir=">"></button>
     </div>
     <!-- Pagination -->
     <div class="glide__bullets" data-glide-el="controls[nav]">
         <?php
 
-    for($i=1;$i<=count($slideRes['data']);$i++){
-      if(!empty($slideRes['data']['main_slide_'.$i])){
-        echo '<button class="glide__bullet" data-glide-dir="='.($i-1).'"></button>';
-      }
+    for($i=1;$i<=count($sImgs);$i++){
+        echo '<button class="glide__bullet" data-glide-dir="='.($i).'"></button>';
     }
 
     ?>

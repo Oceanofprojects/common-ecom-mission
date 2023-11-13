@@ -17,7 +17,11 @@
 
 <body>
     <?php
+    require_once 'Model/productModel.php';
+$productMdl = new products();
     require_once 'sections/header.php';
+    // print_r($data['data']['product_detail']);
+    // exit;
     ?>
     <br><br><br>
     <center>
@@ -32,8 +36,8 @@
         }
         </style>
         <?php
-        
-        if(count($data['data']) ==0){
+        $cartPrdList = $data['data']['product_detail'];
+        if(count($cartPrdList) ==0){
           echo "Please some products to cart !.";exit;
         }
         ?>
@@ -47,13 +51,21 @@
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 1</label>
                         <small>&nbsp;Please check selected item.</small><br><br>
-                        <label>Selected items : <b><?php echo count($data['data']);?></label></b><br><br>
+                        <label><b>Selected items (<?php echo count($cartPrdList);?>) : </b></label><br><br>
+                        <?php
+                        for($i=0;$i<count($cartPrdList);$i++){
+                         echo "<p style='padding:5px 0px;'>".$cartPrdList[$i]['p_name']."&nbsp;&nbsp;<span class='fa fa-angle-double-right'></span>&nbsp;&nbsp;".$cartPrdList[$i]['qnty']."</p>";
+                        }
+                        ?><br>
+                        <h3>Total Price :<?php echo $data['data']['total_cost'];?></h3><br><br>
+
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 2</label>
-                        <small>&nbsp;Scan G-pay QR to pay money (<b>#notes:TBD condition</b>)</small><br><br>
+                        <small>&nbsp;Scan G-pay QR to pay money (<b>#Please check UPI ID/Name before make
+                                payment</b>)</small><br><br>
                         <a href="assets/common-images/gpay_qr.jpeg" target="blank"><img
                                 src="assets/common-images/gpay_qr.jpeg" alt="" style="width:230px;"></a><br><br>
                     </td>
@@ -61,11 +73,13 @@
                 <tr>
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 3</label>
-                        <small>&nbsp;After success payment take a screenshot upload the image proof and track your order
+                        <small>&nbsp;After success payment take a screenshot upload the image proof
+                            <!-- and track your order
                             status <a
                                 href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"
                                 class="fa fa-truck">&nbsp;Track
-                                order</a> </small><br><br>
+                                order</a> -->
+                        </small><br><br>
                         <label>Payment proof : </label><input class="file" type="file" id="file1" name="file1">
                     </td>
                 </tr>
@@ -73,8 +87,11 @@
                 <tr>
                     <td align="center">
                         <br><br>
-                        <input type="button" class="btn" value="Complete order" style="background:cornflowerblue;"
-                            onclick="completeOrder()" id="completeOrder">
+                        <div id="completeOrderCon">
+                            <input type="button" class="btn" value="Complete order" style="background:cornflowerblue;"
+                                onclick="completeOrder()">
+                        </div>
+
                     </td>
                 </tr>
 
@@ -91,8 +108,12 @@
                     res) => {
                     d = JSON.parse(res)
                     if (d.status) {
-                        $('#frm')[0].reset();
-                        $('#completeOrder').hide();
+                        //                        $('#frm')[0].reset();
+                        $('#frm').empty();
+                        $('#frm').append('<br><h1>Success !</h1><br><br><label>Order ID : <b>' + d.data + '</b>, ' +
+                            d.message +
+                            '<a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product" class="fa fa-truck">&nbsp;Track order</a></label><br><br>'
+                        );
                         dis_msg_box('#000', 'lightgreen', d.message);
                     } else {
                         dis_msg_box('#000', 'tomato', d.message);

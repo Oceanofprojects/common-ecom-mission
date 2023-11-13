@@ -66,7 +66,7 @@ class productController extends commonController
         echo json_encode($this->productMdl->completedClientOrder());
       }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
         $from = $_GET['from'] + $_GET['to'];
-        $to = 2;//get five new product
+        $to = 5;//get five new product
         echo json_encode($this->productMdl->get_all(['from-range'=>$from,'to-range'=>$to]));
       }else if(hash_equals(hash_hmac($algo,'moreCategory',$skey),$req['key'])){
         $this->view("category/moreCate", array(
@@ -106,7 +106,7 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'checkoutfinal',$skey),$req['key'])){
         $this->view("main/checkout", array(
             "title" => "Checkout Product",
-            "data"=>$this->productMdl->getCartByIdNDate(date('Y-m-d'))
+            "data"=>$this->productMdl->checkout()//$this->productMdl->getCartByIdNDate(date('Y-m-d'))
            //$this->productMdl->checkoutFinal()
         ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){

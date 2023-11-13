@@ -64,18 +64,10 @@ class homeController extends commonController
     {
         $this->view("index", array(
             "title" => "Home",
-            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>2]),
+            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>10]),
             "cate_list"=>$this->productMdl->get_cate_list(),
         ));
     }
-
-    // public function productDetail(){
-    //
-    //   $this->view("productDetails/index", array(
-    //       "title" => "Product detail",
-    //       "data"=>$this->productMdl->get_product()
-    //   ));
-    // }
 
 
 }

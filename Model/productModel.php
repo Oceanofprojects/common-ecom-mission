@@ -602,6 +602,7 @@ public function getCartByIdNDate($date){
 		}else{
 			$cart_date = date('Y-m-d');
 			$mycart_data = $this->getCartByIdNDate($cart_date);
+
 				if(count($mycart_data)!==0){
 					for($i=0;$i<count($mycart_data);$i++){//get customer ordered  product ID and qunty sep
 						$cus_or_pr_id_list[] = '"'.$mycart_data[$i]['p_id'].'"';
@@ -610,6 +611,7 @@ public function getCartByIdNDate($date){
 					}
 
 							$pro_data_list_flag = $this->getProductOriginalQntyForCheckout($cus_or_pr_id_list);
+
 							if($pro_data_list_flag['status']){
 								$pro_data_list = $pro_data_list_flag['data'];
 							}else{
@@ -626,6 +628,7 @@ public function getCartByIdNDate($date){
 	  }
 
 	  public function cQtyWToQty($cur_or_data_list,$pro_data_list,$product_detail,$cus_or_pr_id_list){
+		$total = 0;
 	  				sort($cur_or_data_list);
 							sort($pro_data_list);
 							for($i=0;$i<count($pro_data_list);$i++){
@@ -636,15 +639,21 @@ public function getCartByIdNDate($date){
 									//outof stock return
 									return ['status'=>false,'data'=>[],'message'=>"Sorry, (".implode(',',$outOfStockItems).") product is OUT OF STOCK, Please remove from cart !."];
 								}else{
+									$total+= $this->calcOffer($pro_data_list[$i]['price'],$pro_data_list[$i]['offer'],$cur_or_data_list[$i]['qnty']);
 									$orderRes[$i] = ['p_id'=>$pro_data_list[$i]['p_id'],'quantity'=>$qnty];
 								}
 							}//CALC ORDE END
 
-		return ['status'=>true,'data'=>[],'message'=>"All products available.","upt_qnty"=>$orderRes,"product_detail"=>$product_detail,'ids'=>$cus_or_pr_id_list];
+		return ['status'=>true,'data'=>[],'message'=>"All products available.","upt_qnty"=>$orderRes,"product_detail"=>$product_detail,'ids'=>$cus_or_pr_id_list,'total_cost'=>$total];
 
 			}
 
-
+public function calcOffer($price,$off,$qnty){
+	$offer = ($price * $off)/100;
+	//$offerP = $offer*$qnty; 
+	$or_price = $price-$offer;
+	return $or_price*$qnty; 
+}
 
 
 public function checkoutFinal(){
@@ -658,7 +667,7 @@ public function checkoutFinal(){
 					if($createOrder['status']){
 						//DISABLE CART EDIT OPTION
 						if($this->disableCartEdit(implode(',',$checkout_flag['ids']),$cart_date)){
-							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in MENU>ACCOUNT>TRACK."];
+							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in "];
 						//END OF CART PROCCESS
 						}else{
 							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
@@ -699,7 +708,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 				$arr = [
 						'tbl_name' => 'products',
 						'action' => 'select',
-						'data' => ['p_id','stock'],
+						'data' => ['p_id','stock','price','offer'],
 						'condition'=>['manual'=>['p_id IN('.implode(',',$cus_or_pr_id_list).')']],
 						'query-exc'=>true
 					];
@@ -844,25 +853,6 @@ public function updateCusPrdWTOrPrd($orderRes){
 				}
 		}
 
-		public function getSlides(){
-			$arr = [
-				'tbl_name' => 'business_details',
-				'action' => 'select',
-				'data' => ['main_slide_1','main_slide_2','main_slide_3','main_slide_4','main_slide_5'],
-				'condition'=>['sno=1'],
-				'query-exc'=>true
-			];
-			$flag=$this->generateQuery($arr);
-			if($flag['status'] == 'success'){
-				if(count($flag['data']) !==0){
-					return ['status'=>true,'data'=>$flag['data'][0],'message'=>''];
-				}else{
-					return ['status'=>false,'data'=>'','message'=>'Empty slides'];
-				}
-			}else{
-				return ['status'=>false,'data'=>'','message'=>'Err in get slides'];
-			}
-		}
 
 		public function addCategory(){
 			if(isset($_FILES) && $_FILES['file1']['size'] !==0){
