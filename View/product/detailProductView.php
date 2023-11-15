@@ -109,12 +109,16 @@
     <?php
 
     require_once __DIR__.'/../../sections/header.php';
+    if(isset($data['data']['data'])){
     if($data['data']['data'] == 0){
       echo "Err in viewing product";
       exit;
     }else{
       $resData = $data['data']['data'][0];
     }
+  }else{
+    echo "<br><br><br><h3 align='center'>Product ID not available</h3>";exit;
+  }
 
     ?>
 

@@ -85,11 +85,11 @@ class commonController{
                           return [['status'=>false,'msg'=>'Password not match with confirm password','validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
                         }
                     }else if($validateArgs[$j][1] == 'check' && $validateArgs[$j][2] == 'isPwd'){//IS PASSWORD
-                        $upperCase = preg_match('@[A-Z]@', $data[$validateArgs[$j][0]]);
-                        $lowerCase = preg_match('@[a-z]@', $data[$validateArgs[$j][0]]);
-                        $numbers = preg_match('@[0-9]@', $data[$validateArgs[$j][0]]);
+                        //$upperCase = preg_match('@[A-Z]@', $data[$validateArgs[$j][0]]);
+                        //$lowerCase = preg_match('@[a-z]@', $data[$validateArgs[$j][0]]);
+                        //$numbers = preg_match('@[0-9]@', $data[$validateArgs[$j][0]]);
                         $specialChars = preg_match('@[^\w]@', $data[$validateArgs[$j][0]]);
-                        if(strlen($data[$validateArgs[$j][0]]) > 8 && $upperCase && $lowerCase && $numbers && $specialChars){
+                        if(strlen($data[$validateArgs[$j][0]]) > 8 && $specialChars){
                             array_push($this->validateResults,['status'=>true,'msg'=>'Condition Passed for :'.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>true]);
                         }else{
                           return [['status'=>false,'msg'=>'Please Enter Password Must 8-16 characters [A-Z][a-z][0-9] and Special characters)','validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];

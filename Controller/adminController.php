@@ -34,6 +34,8 @@ class adminController extends commonController
 
       if(hash_equals(hash_hmac($algo,'get_all',$skey),$req['key'])){
         $this->index();
+      }else if(hash_equals(hash_hmac($algo,'changeOrderStatus',$skey),$req['key'])){
+            echo json_encode($this->adminMdl->changeOrderStatus());
       }else if(hash_equals(hash_hmac($algo,'getCusOrderList',$skey),$req['key'])){
         $this->view("main/productStatusCpanel", array(
             "title" => "Client product contol",

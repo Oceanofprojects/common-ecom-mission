@@ -118,6 +118,8 @@ width:90%;
   <datalist id="product_names">
   </datalist> -->
         <section>
+            <input type="button" onclick="deleteProduct()" style="width:100px;background:red;border-radius:5px;"
+                id="delProduct" value="Delete Product">
             <form id="frm" action="" enctype="multipart/form-data">
                 <table id="tbl_data_1">
                     <tr>
@@ -193,7 +195,10 @@ width:90%;
                             <input type="text" id="p_img" name="p_img" hidden>
                         </td>
                         <td><input type="button" id="add_item_btn" value="Update Product"
-                                style="background:lightgreen;width:100px" onclick="edit_item()"></td>
+                                style="background:lightgreen;width:100px" onclick="edit_item()">
+
+
+                        </td>
                     </tr>
                 </table>
             </form>
@@ -203,14 +208,31 @@ width:90%;
     <script src="Script/action.js"></script>
 
     <script type="text/javascript">
-    // function chFileBg(id) {
-    //     val = document.getElementById('file' + id);
-    //     if (val.value.trim().length !== 0) {
-    //         $('#fileInd' + id).attr('class', 'fa fa-check');
-    //     } else {
-    //         $('#fileInd' + id).removeClass();
-    //     }
-    // }
+    function deleteProduct() {
+        pid = $('#p_id').val();
+        if (pid.trim().length !== 0) {
+            if (confirm(
+                    'Do you want to delete this product ?, \n\nNotes : If product deleted never recover again !.') ==
+                true) {
+                //a2b8443bbee09de17d84128a8e9d4e0bd8c241b79d82f96fefa384af8a77d7c9
+                performAjx('index.php', 'get',
+                    'controller=product&key=a2b8443bbee09de17d84128a8e9d4e0bd8c241b79d82f96fefa384af8a77d7c9&pid=' +
+                    pid.trim(), (
+                        res) => {
+                        d = JSON.parse(res);
+                        if (d.status) {
+                            $('#frm')[0].reset();
+                            dis_msg_box('#000', 'lightgreen', d.message);
+                        } else {
+                            dis_msg_box('#000', 'tomato', d.message);
+                        }
+                    });
+            }
+        } else {
+            alert('Please search and select product to delete');
+        }
+
+    }
     </script>
     <br><br><br>
     <?php

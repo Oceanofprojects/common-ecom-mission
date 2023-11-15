@@ -113,6 +113,9 @@ width:90%;
   <datalist id="product_names">
   </datalist> -->
         <section>
+            <input type="button" onclick="deleteCategory()" style="width:150px;background:red;border-radius:5px;"
+                value="Delete Category">
+            <br><br>
             <form id="frm" enctype="multipart/form-data">
                 <table id="tbl_data_1">
                     <tr>
@@ -140,6 +143,31 @@ width:90%;
         </section>
     </center>
     <script type="text/javascript">
+    function deleteCategory() {
+        cate_id = $('#cate_name').val();
+        if (cate_id.trim().length !== 0) {
+            if (confirm(
+                    'Do you want to delete this category ?, \n\nNotes : If category deleted never recover again !.') ==
+                true) {
+                performAjx('index.php', 'get',
+                    'controller=product&key=e1e5d6c30cf2d2453ace05ef49048c2790d25dcf111efc212647aba5121ba94b&cate_id=' +
+                    cate_id.trim(), (
+                        res) => {
+                        d = JSON.parse(res);
+                        if (d.status) {
+                            $('#frm')[0].reset();
+                            dis_msg_box('#000', 'lightgreen', d.message);
+                        } else {
+                            dis_msg_box('#000', 'tomato', d.message);
+                        }
+                    });
+            }
+        } else {
+            alert('Please select category');
+        }
+
+    }
+
     function chFileBg(id) {
         val = document.getElementById('file' + id);
         if (val.value.trim().length !== 0) {
@@ -152,7 +180,8 @@ width:90%;
     function getCateById(x) {
         if (x.length !== 0) {
             performAjx('index.php', 'get',
-                'controller=product&key=56013b2d598a413bc3dc7eec84b3e8880fe4f4136f4feff01e078254a520b37d&cid=' + x,
+                'controller=product&key=56013b2d598a413bc3dc7eec84b3e8880fe4f4136f4feff01e078254a520b37d&cid=' +
+                x,
                 (
                     res) => {
                     d = JSON.parse(res)
@@ -160,7 +189,8 @@ width:90%;
                         dis_msg_box('#000', 'lightgreen', d.message);
                         $('#tbl_data_2').empty();
                         $('#tbl_data_2').append(
-                            '<tr><td>Category image<sup>*</sup></td><td><a href="assets/category_images/' + d
+                            '<tr><td>Category image<sup>*</sup></td><td><a href="assets/category_images/' +
+                            d
                             .data[0].cate_img +
                             '">View Old image</a><br>or<br><input type="file" id="file1" name="file1" onchange="chFileBg(1)">&nbsp;<span style="color:green" id="fileInd1"></span></td></tr><tr><td>Category Name<sup>*</sup></td><td><input type="text" id="cate_name" placeholder="Category name" value="' +
                             d
@@ -196,6 +226,7 @@ width:90%;
                 });
         }
     }
+    // e1e5d6c30cf2d2453ace05ef49048c2790d25dcf111efc212647aba5121ba94b
     </script>
     <br><br><br>
     <?php

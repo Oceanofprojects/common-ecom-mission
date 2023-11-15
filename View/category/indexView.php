@@ -36,7 +36,7 @@ for cate box want precentage num  -->
         id="img" alt="Product category">
         <div class="head-info" style="padding:10px 20px;">
             <h1
-                style="max-width:200px;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color:#fff;text-align:center;margin:0px 10px;background:rgba(0,0,0,.2);padding:10px">
+                style="width:25%;min-width:200px;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color:#fff;text-align:center;margin:0px 10px;background:rgba(0,0,0,.2);padding:10px">
                 <?php echo $_GET['cate'];?></h1>
             <br>
             <div style="display:flex;justify-content:center;align-items:center;">
@@ -52,15 +52,20 @@ for cate box want precentage num  -->
 
     <div class="head-info">
         <h1>Products</h1>
-        <p> kas oa saks alks alks als alms alms </p>
+        <p> Our store product seprated by category.</p>
+        <?php
+//        print_r($data);
+              if(count($data['data']['data'])==0){
+                echo "<br><br><span class='fa fa-chain-broken'>&nbsp;&nbsp;Zero Products</span>";
+              }
+        
+        ?>
     </div>
     <br><br>
     <div class="item-container">
         <?php
       if(count($data['data'])!==0){
         echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
-      }else{
-        echo "ZERO";
       }
       ?>
     </div>
@@ -71,7 +76,7 @@ for cate box want precentage num  -->
     <!-- customers review -->
     <div class="head-info">
         <h1>Customer's Review</h1>
-        <p> kas oa saks alks alks als alms alms </p>
+        <p>Our customer's product review</p>
     </div>
     <br><br>
     <?php

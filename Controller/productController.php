@@ -64,6 +64,10 @@ class productController extends commonController
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
       }else if(hash_equals(hash_hmac($algo,'completedClientOrder',$skey),$req['key'])){
         echo json_encode($this->productMdl->completedClientOrder());
+      }else if(hash_equals(hash_hmac($algo,'deleteProduct',$skey),$req['key'])){
+        echo json_encode($this->productMdl->deleteProduct());
+      }else if(hash_equals(hash_hmac($algo,'deleteCategory',$skey),$req['key'])){
+        echo json_encode($this->productMdl->deleteCategory());
       }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
         $from = $_GET['from'] + $_GET['to'];
         $to = 5;//get five new product

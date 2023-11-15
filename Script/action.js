@@ -1,10 +1,4 @@
-// function get_all(x = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6') {
-//     performAjx('model/EP.php', 'get', 'key=' + x, (res) => {
-//         if (typeof(res) !== 'undefined') {
-//             loadComponent('nor-card-view', JSON.parse(res));
-//         }
-//     });
-// }
+
 
 function add_fav(ele,p_id) {
   performAjx('index.php', 'get','key=f0fbe9802db9070478c7bf0a10abf99e0ea9088ea9d9334bd7d4d778f20de42e&controller=home&action=index&p_id=' + p_id, (res) => {
@@ -36,10 +30,10 @@ function remove_fav(ele,p_id){
 function signup(){
   performAjx('../../index.php', 'get','key=a2abe3fa78380c0d025613301912c523df07b99824536a8e087736d1ff6f7ab6&controller=customer&'+$('#frm').serialize(), (res) => {
     d = JSON.parse(res);
-    if(d.status && d.validateFlag){
+    if(d.status){
       $('#dis_err').text('');
       $('#frm')[0].reset();
-      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6');
+      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
     }else{
       $('#dis_err').text(d.msg).css('color','tomato');
     }
@@ -56,7 +50,7 @@ function login(){
       if(d.status){
         $('#dis_err').text('');
         $('#frm')[0].reset();
-      window.open('../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6');
+      window.open('../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
       }else{
         $('#dis_err').text(d.msg).css('color','tomato');
       }
@@ -191,7 +185,7 @@ function dis_msg_box(color,bgcolor,content){
   $('#common_dis_msg_box').css('color',color);
   $('#msg_content_to_display').text(content);
   setTimeout(function(){
-  $('#common_dis_msg_box').slideUp(500);
+  $('#common_dis_msg_box').slideUp(3000);
   },2000);
 }
 

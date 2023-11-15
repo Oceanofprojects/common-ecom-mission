@@ -31,7 +31,7 @@
   if(count($data['cate_list']['data'])!==0){
     echo "<script>loadComponent('category-card-view',".json_encode($data['cate_list']['data']).",[6])</script>";
   }else{
-    echo "cate illa ZERO";
+    echo "Zero lists";
   }
   ?>
     </div>
@@ -53,8 +53,6 @@
         <?php
       if(count($data['data'])!==0){
         echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
-      }else{
-        echo "ZERO";
       }
       $rng = '&from='.$data['data']['range'][0].'&to='.$data['data']['range'][1];
       ?>
@@ -101,7 +99,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-//    echo hash_hmac('sha256','getCusInfoById',9050);
+    // echo hash_hmac('sha256','deleteCategory',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

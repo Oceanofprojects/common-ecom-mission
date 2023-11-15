@@ -110,6 +110,31 @@ trait userData{
 			}
 		}
 	}
+
+	public function getUserInfoById(){
+		if(isset($_COOKIE['uid'])){
+			$cflag = $this->getUserId($_COOKIE['uid']);
+			if($cflag[0]){
+				$arr = [
+					'tbl_name'=>'customers',
+					'action'=>'select',
+					'data'=>['c_name','address_1','address_2','country','state','city','pin_code','ph_num'],
+				'condition'=>['manual'=>['cid="'.$cflag[1].'"']],
+					'query-exc'=>true
+				];
+				$data = $this->generateQuery($arr);
+				if($data['status'] == 'success'){
+					return ['status'=>true,'data'=>$data['data'],'message'=>[]];
+				}else{
+					return $data;
+				}
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Please login'];
+			}
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Please login'];
+		}
+	}
 }
 
 ?>

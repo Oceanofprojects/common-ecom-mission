@@ -61,6 +61,10 @@
         background-color: #ddd
     }
 
+    #invoice {
+        display: none
+    }
+
     #product_list,
     #cancel_product_list {
         width: 95%;
@@ -95,6 +99,7 @@
 
     ?>
     <center>
+
         <section class="status-con">
             <br><br>
             <div class="status-box b1" style="border-left-color:#b8efb8;">
@@ -102,6 +107,7 @@
                 <br>
                 <h1>Track orders.</h1>
                 <form id="frm">
+
                     <br>
                     <select id="myOrderId" onchange="getOrderStatusDetail(this.value)"
                         style="padding:10px;border:.2px solid #ddd;border-radius: 5px;">
@@ -145,6 +151,9 @@
                     <h3>Product Shipped</h3>
                     <br>
                     <p>Your order shipped from hub/shop.</p>
+                    <a href="#" id="invoice" class="btn"
+                        style="width:80%;background:darkred;text-decoration:none;color:#fff;">Invoice
+                        Bill</a>
                     <br>
                 </div>
             </div>
@@ -289,12 +298,18 @@
                     });
                     s_data = d.data[0].status.split(',');
                     status = s_data[0];
-                    if (status == 'Arriving') {
+                    if (status == 'Confirmed') {
+                        $('#invoice').css('display', 'block');
+                        $('#invoice').attr('href', 'Invoice?invoice_id=' + d.data[0].id);
+
+                    } else if (status == 'Arriving') {
+                        $('#invoice').css('display', 'block');
                         $('#arriveDetail').html(
                             '<p>Your order shipped from hub/shop. Order arrived on <b>' + s_data[1] +
                             '</b></p><button class="btn" onclick="completeOrder(\'' +
                             d.data[0].id + '\')">Product delivered</button>');
                     } else if (status == 'Completed') {
+                        $('#invoice').css('display', 'none');
                         $('#arriveDetail').html(
                             '<p>Your order shipped from hub/shop. Order delivered.</p>');
                     }

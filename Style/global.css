@@ -337,6 +337,7 @@ transition:.2s;
   left: 0px;
   z-index:10;
   display: none;
+  backdrop-filter: blur(5px);
 }
 
 .dis_search_result .result {

@@ -151,7 +151,7 @@ class products extends commonModel{
     $arr = ['tbl_name'=>'mycart',
     'action'=>'select',
     'data'=>[],
-    'condition'=>["manual"=>["cid='$this->cid' and _date=date(now())"]],
+    'condition'=>["manual"=>["cid='$uid' and _date=date(now()) AND cart_edit_flag = 1"]],
     'query-exc'=>true
     ];
   $flag = $this->generateQuery($arr);
@@ -451,10 +451,77 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 
 	}
 
+	public function getProductAvailability($pid){
+		$id  = $pid;
+		$q = "SELECT CONCAT((SELECT count(*) FROM myorder WHERE product_list like  '%$pid%' and  cart_status <> \"Completed\" and cart_status <> \"Cancel\"),'-myorder_count,',(SELECT count(*) FROM products WHERE p_id = '$pid'),'-myproduct_count, ',(SELECT count(*) FROM mycart  WHERE p_id = '$pid' and cart_edit_flag=1),'-mycart_count, ',(SELECT count(*) FROM myfav  WHERE p_id = '$pid'),'-myfav_count') AS product_availability_list";
+		$sql = $this->db->prepare($q);
+		if($sql->execute()){
+			return ['status'=>true,'data'=>$sql->fetchAll(PDO::FETCH_ASSOC)[0]['product_availability_list'],'message'=>'list fetched'];
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Err in get product availability list'];
+		}
+	}
+
+	public function productAvailabilityStrToArr($str){
+		$list = explode(',',$str);
+		for($i=0;$i<count($list);$i++){
+			$resList = explode('-',$list[$i]);
+			$availability_list[$resList[1]] = $resList[0];
+		}
+		return $availability_list;
+	}
+
+	public function deleteProduct(){
+		$pid = $_GET['pid'];
+		// $q = "SELECT CONCAT((SELECT count(*) FROM myorder WHERE product_list like  '%$pid%' and  cart_status <> \"Completed\" and cart_status <> \"Cancel\"),'-myorder_count,',(SELECT count(*) FROM products WHERE p_id = '$pid'),'-myproduct_count, ',(SELECT count(*) FROM mycart  WHERE p_id = '$pid' and cart_edit_flag=1),'-mycart_count, ',(SELECT count(*) FROM myfav  WHERE p_id = '$pid'),'-myfav_count') AS product_availability_list";
+		// $sql = $this->db->prepare($q);
+		// if($sql->execute()){
+			$getProductAvailabilityFlag = $this->getProductAvailability($pid);
+			if($getProductAvailabilityFlag['status']){
+				$availability_list = $this->productAvailabilityStrToArr($getProductAvailabilityFlag['data']);//Availability res str to arr
+				if($availability_list['myorder_count'] == 0){
+					return $this->changeProductAvailability($pid);
+				}else{
+					return ['status'=>false,'data'=>$availability_list,'message'=>'Delete access denied, Because '.$availability_list['myorder_count'].' product available in order table(Its maybe Pending, Comfirmed,Arriving status). Please check that product!'];
+				}
+			}else{
+				return $getProductAvailabilityFlag;
+			}
+
+		// }else{
+		// 	return ['status'=>false,'data'=>[],'message'=>'Err in get product availability list'];
+		// }	 
+	}
+
+	public function changeProductAvailability($pid){
+		$q = "DELETE FROM mycart WHERE p_id='$pid' and cart_edit_flag<>0";
+				$sql = $this->db->prepare($q);
+				if($sql->execute()){//stage1
+					$q = "DELETE FROM myfav WHERE p_id='$pid'";
+					$sql = $this->db->prepare($q);
+					if($sql->execute()){//stage2
+						$q = "DELETE FROM products WHERE p_id='$pid'";
+						$sql = $this->db->prepare($q);
+						if($sql->execute()){//stage3
+							$q = "DELETE FROM review WHERE p_id='$pid'";
+							$sql = $this->db->prepare($q);
+							if($sql->execute()){//stage4
+								return ['status'=>true,'data'=>[],'message'=>'Product deleted successfully.'];
+							}else{
+								return ['status'=>false,'data'=>[],'message'=>'Err in delete product stage 4'];
+							}
+						}else{
+							return ['status'=>false,'data'=>[],'message'=>'Err in delete product stage 3'];
+						}
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Err in delete product stage 2'];
+					}
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'Err in delete product stage 1'];
+				}
+	}
+
 	public function addProduct(){
-		// $cate = explode(',',base64_decode($_POST['cate']));
-		// $_POST['cate'] = $cate[0];
-		// $_POST['cate_img'] = $cate[1];
 		$_POST['p_id']=$this->genRnd('alpha_numeric',6);
 		$fileFlag = $this->uploadFile('assets/product_images/','file1');
 		if($fileFlag['status']){
@@ -853,6 +920,56 @@ public function updateCusPrdWTOrPrd($orderRes){
 				}
 		}
 
+		public function deleteCategory(){
+			$cate_id = $_GET['cate_id'];
+		$q = "SELECT p_id FROM products  WHERE cate_id = '$cate_id'";
+		$sql = $this->db->prepare($q);
+		if($sql->execute()){
+			$res = $sql->fetchAll(PDO::FETCH_ASSOC);
+			if(count($res)!==0){
+				for($i=0;$i<count($res);$i++){
+					$getProductAvailabilityFlag = $this->getProductAvailability($res[$i]['p_id']);
+					if($getProductAvailabilityFlag['status']){
+							$availability_list = $this->productAvailabilityStrToArr($getProductAvailabilityFlag['data']);//Availability res str to arr
+							$ids[] = $res[$i]['p_id'];
+							$p_name=$this->getProductById($res[$i]['p_id']);
+							if($availability_list['myorder_count'] > 0){
+								return ['status'=>false,'data'=>$availability_list,'message'=>'Delete access denied, Because '.$availability_list['myorder_count'].' '.$p_name[1].' product available in order table(Its maybe Pending, Comfirmed,Arriving status). Please check that product!'];
+							}
+					}else{
+						return $getProductAvailabilityFlag;
+					}
+				}
+				//DELETE/CHANGE PRODUCT AVAILABILITY
+				for($i=0;$i<count($ids);$i++){
+					$deletAllProductUnderCategory =$this->changeProductAvailability($ids[$i]);
+					if(!$deletAllProductUnderCategory['status']){
+						return $deletAllProductUnderCategory;
+					}
+				}
+				$q = "DELETE FROM product_category WHERE cate_id='$cate_id'";
+				$sql = $this->db->prepare($q);
+				if($sql->execute()){//last stage Deleting catagory
+					return $deletAllProductUnderCategory;//Exit
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'Err in delete product last stage'];
+				}
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Zero cate list to delete'];
+			}
+
+//			$list = explode(',',$res);
+
+			// if($availability_list['myorder_count'] == 0){
+			// 	return $this->changeProductAvailability($pid);
+			// }else{
+			// 	return ['status'=>false,'data'=>$availability_list,'message'=>'Delete access denied, Because '.$availability_list['myorder_count'].' product available in order table(Its maybe Pending, Comfirmed,Arriving status). Please check that product!'];
+			// }
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Err in get product availability list'];
+		}
+
+		}
 
 		public function addCategory(){
 			if(isset($_FILES) && $_FILES['file1']['size'] !==0){

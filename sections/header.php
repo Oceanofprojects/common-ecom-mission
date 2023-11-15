@@ -27,11 +27,14 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
+                        <li><a href="#"><span class="fa fa-gift"></span>Combo</a>
+						<ul class="li3">
+			            <li><a href="index.php?key=&controller=product"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="index.php?key=&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+						</ul></li>
+
 						<li><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span class="fa fa-truck"></span>Track</a></li>
                         <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
-						<li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-gift"></span>Combo</a></li>
-						<li><a href="#"><span class="fa fa-refresh"></span>Admin</a></li>
-						<li><a href="#"><span class="fa fa-comment"></span>Reviews</a></li>
 						<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
 					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>logout</a></li>
 
@@ -412,7 +415,6 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
             <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>Wishlist</a></li>
             <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>
             <li onclick=""><a href="#"><span class="fa fa-gift"></span>Combo off</a></li>
-            <li><a href="#"><span class="fa fa-percent"></span>offer</a></li>
             <li><a href="#"><span class="fa fa-question-circle"></span>FAQ</a></li>
             <!-- <li><a href="#"><span class="fa fa-comments"></span>contact</a></li> -->
             <?php echo $extraLinks;?>
