@@ -1,9 +1,10 @@
-
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:wght@200&display=swap');
 
 * {
     padding: 0px;
     margin: 0px;
-    font-family: sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 body{
   background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.8)),url('../assets/common-images/leave_bg.jpg');
@@ -201,9 +202,10 @@ border-radius:5px;
   padding:0px 10px;
 }
 #testi_message{
-  min-height:100px;
+/* //  min-height:100px; */
   max-height:100px;
  overflow:scroll;
+ padding:10px 0px;
  overflow-x:hidden
 }
 .slide-profile{
@@ -359,8 +361,34 @@ transition:.2s;
   cursor: pointer;
 }
 
+.features_layer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
+.features_box {
+  flex: 1;
+  min-width: 150px;
+  background: #fff;
+  margin: 10px;
+  text-align: center;
+  border-radius: 10px;
+  padding:40px 0px;
+  box-shadow:0px 0px 10px 0px rgba(0,0,0,.3);
+}
 
+.features_box h1 {
+  font-size: 2.5em;
+  margin:20px 0px;
+}
+
+.features_box:hover{
+  background-color: lightseagreen;
+  color:#fff;
+  cursor:pointer
+}
 @media only screen and (max-width:800px){
   .slider-box{
     width:90%;

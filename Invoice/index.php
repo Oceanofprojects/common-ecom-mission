@@ -19,19 +19,40 @@ $date = $products['date'];
 $order_id = $products['id'];
 $order_status = $products['status'];
 $list = json_decode($products['list'],true);
+//print_r($list);
 $total_item = count($list);
 $tags = '';
+$total = 0;
+$o_price = 0;
+$o_off = 0;
 for($i=0;$i<count($list);$i++){
-    $tags .= "<tr>
-    <td>".($i+1)."</td>
-    <td><a href='http://localhost/common-ecom-mission/index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=".$list[$i]['p_id']."' target='blank'>".$list[$i]['p_id']."</a></td>
-    <td>".$list[$i]['p_name']."</td>
-    <td>".$list[$i]['qnty']."</td>
-    </tr><br>";
+    $productInfo = $prdObj->getProductDetailById($list[$i]['p_id']);
+  
+   if(count($productInfo['data']) !==0){
+    $o_price = $o_price + $productInfo['data'][$i]['price'];
+    $o_off = $o_off + (($productInfo['data'][$i]['price'] * $productInfo['data'][$i]['offer'])/100);
+    $pp = $prdObj->calcOffer($productInfo['data'][$i]['price'],$productInfo['data'][$i]['offer'],$list[$i]['qnty']);
+    $total= $total+$pp;
+        $tags .= "<tr>
+        <td>".($i+1)."</td>
+        <td><a href='http://localhost/common-ecom-mission/index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=".$productInfo['data'][$i]['p_id']."' target='blank'>".$productInfo['data'][$i]['p_id']."</a></td>
+        <td>".$productInfo['data'][$i]['p_name']."</td>
+        <td>".$productInfo['data'][$i]['offer']."%</td>
+        <td>".$productInfo['data'][$i]['price']."</td>
+        <td>".$list[$i]['qnty']."</td>
+        <td>".($productInfo['data'][$i]['price'] * $list[$i]['qnty'])."</td>
+        </tr><hr style=\"height:.5px\">";
+        
+
+        
+   }
+
 }
+
 
 $cusObj = new customer();
 $cus = $cusObj->getUserInfoById();
+//print_r($list);exit;
 if(count($cus['data'])!==0){
 $cusInfo = $cus['data'][0];
 }else{
@@ -56,11 +77,11 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('TCPDF Example 001');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetTitle('Invoice Bill');
+$pdf->SetSubject('Invoice Bill');
+$pdf->SetKeywords('INVOICE, PDF, Bill');
 // set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, 30,$shop_name,$shop_address.', Phone number :'. $shop_contact, array(0,64,255), array(0,64,128));
+$pdf->SetHeaderData(PDF_HEADER_LOGO, 0,$shop_name,$shop_address.', Phone number :'. $shop_contact, array(0,64,255), array(0,64,128));
 $pdf->setFooterData(array(0,64,0), array(0,64,128));
 
 // set header and footer fonts
@@ -93,12 +114,14 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
 // Set some content to print
 $html = <<<EOD
+
+    
 <h1>ORDER ID : {$order_id}</h1>
-<h4>Total Item : {$total_item}</h4>
+<h1></h1>
 <h>Ordered Date : {$date}</h4>
 <h4>Order Status : {$order_status}</h4>
 
-<div style="background-color:#ddd;">
+<div style="background-color:#ddd;border-radius:10px">
     <div>
     <table cellpadding="5px">
         <tr><th colspan="2"><b>Order From</b></th></tr> 
@@ -115,10 +138,6 @@ $html = <<<EOD
 <tr>
     <th>Contact</th>
     <td>{$shop_contact}</td>
-</tr>
-<tr>
-    <th>Follow us</th>
-    <td>{$shop_social_media}</td>
 </tr>
 </table>
 </div>
@@ -148,9 +167,44 @@ $html = <<<EOD
         <th>Sno</th>
         <th>P-ID</th>
         <th>P-Name</th>
-        <th>Quantity</th>
-    </tr><br><br>
+        <th>Off</th>
+        <th>Price</th>
+        <th>Qnty</th> 
+        <th>Total</th>
+    </tr><br>
    $tags
+   <br><br>
+
+   <tr>
+   <td colspan="7" ></td>
+   </tr>
+
+   <tr>
+   <td colspan="5"></td>
+   <td colspan="2" style="text-align:right">Items - {$total_item}</td>
+    </tr>
+
+   <tr>
+   <td colspan="7" ></td>
+   </tr>
+
+    <tr>
+   <td colspan="5" ></td>
+         <td colspan="2" style="text-align:right">Price +{$o_price}rs</td>
+    </tr>
+    <tr>
+    <td colspan="7" ></td>
+    </tr>
+    
+    <tr>
+   <td colspan="5" ></td>
+    <td colspan="2" style="text-align:right;">Saving(%) - {$o_off}rs</td>
+</tr>
+    <tr>
+        <td colspan="7" align="center">
+            <h1>Total : {$total}rs</h1>
+        </td>
+    </tr>
 </table>
 
 EOD;

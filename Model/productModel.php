@@ -629,6 +629,11 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			$p_id = $data['p_id'];
 			$rating = $data['rating'];
 			$review = $data['reviewmsg'];
+      if(preg_match('/[^a-zA-Z0-9\s]/', $review)){
+		return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found!, Please remove it.'];
+	  }else{
+		$review = htmlspecialchars($review);
+	  }
 			$arr = [
 				'tbl_name' => 'review',
 				'action' => 'insert',
@@ -646,7 +651,7 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 	}
 public function getCartByIdNDate($date){
 	if($this->cid == null){
-			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
+			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
 			$arr = [
 						'tbl_name' => 'mycart',
@@ -665,7 +670,7 @@ public function getCartByIdNDate($date){
 }
 	public function checkout(){
 		if($this->cid == null){
-			return ['status'=>false,'data'=>[],'message'=>'Please login to add review !'];
+			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
 			$cart_date = date('Y-m-d');
 			$mycart_data = $this->getCartByIdNDate($cart_date);

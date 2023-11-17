@@ -65,10 +65,14 @@
             More <span class="fa fa-angle-double-down"></span> </button>
     </center>
 
-    <br><br><br><br><br><br>
+    <br><br><br><br>
 
+    <?php 
 
+require_once __DIR__.'/../sections/features.php';
 
+?>
+    <br><br><br><br>
     <!-- customers review -->
     <div class="head-info">
         <h1>Customer's Review</h1>
@@ -105,6 +109,7 @@ if($review['status']){
 
 
     ?>
+
 
     <script src="Script/reviewSlide.js"></script>
     <!-- <br><br><br> -->

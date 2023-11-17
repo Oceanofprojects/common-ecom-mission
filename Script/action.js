@@ -1,4 +1,9 @@
-
+$(document).ready(function(){
+  setInterval(loadDis,2000);
+});
+function loadDis(){
+$('.loader').hide();
+}
 
 function add_fav(ele,p_id) {
   performAjx('index.php', 'get','key=f0fbe9802db9070478c7bf0a10abf99e0ea9088ea9d9334bd7d4d778f20de42e&controller=home&action=index&p_id=' + p_id, (res) => {
@@ -95,6 +100,12 @@ function sendReview(){
     performAjx('index.php', 'get','key=da77e8367e2b26bc9b2f928ca3b0b9f2db7cdb3bd28c565fe3741065238bb331&controller=product&'+$('#reviewFrm').serialize(), (res) => {
       d = JSON.parse(res);
       if(d.status){
+        for(i=1;i<=5;i++){
+          $('#star'+i).removeClass();
+          $('#star'+i).attr('class','fa fa-star-o');
+          $('#star'+i).css('color','#555a');
+      }
+        $('#reviewFrm')[0].reset();
         dis_msg_box('#000','lightgreen',d.message);
       }else{
         dis_msg_box('#000','tomato',d.message);

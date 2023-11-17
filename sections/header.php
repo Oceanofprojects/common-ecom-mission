@@ -73,7 +73,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 #logo {
     height: 50px;
-    width: 50px
+    width: 50px;
+    border-radius: 50px;
 }
 
 .menu {
@@ -303,6 +304,20 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     border-radius: 25px;
 }
 
+.loader {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column
+}
+
 @media only screen and (max-width: 1150px) {
     .header_con {
         flex-direction: column;
@@ -394,6 +409,14 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 		</ul>
 			</div>
 		</div> -->
+
+<script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
+<div class="loader">
+    <lord-icon src="https://cdn.lordicon.com/odavpkmb.json" trigger="loop" delay="500"
+        colors="primary:#121331,secondary:#913710" style="width:100px;height:100px">
+    </lord-icon>
+    <p><b>Loading</b></p>
+</div>
 <!-- Common message box  -->
 <div id="common_dis_msg_box">
     <div id="msg_content_to_display"></div>
