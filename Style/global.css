@@ -1,5 +1,4 @@
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:wght@200&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins:wght@200&display=swap');
 * {
     padding: 0px;
     margin: 0px;
@@ -7,7 +6,7 @@
     font-family: 'Poppins', sans-serif;
 }
 body{
-  background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.8)),url('../assets/common-images/leave_bg.jpg');
+  background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.9)),url('../assets/common-images/leave_bg.jpg');
   background-position: center;
   background-attachment:fixed;
   background-size: cover;

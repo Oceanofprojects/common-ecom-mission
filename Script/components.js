@@ -99,7 +99,7 @@ function mycartComponent(data){
           }
 
         if(data.old_r == false && cart_edit_flag == '1'){
-          $('#mycarttbl').append("<tr><td colspan='7'><h3 align='center'>Total Price " + total_price +"rs</h3></td></tr><tr><td colspan='7'><h3 align='center'>( - ) Saving "+(total_price-off_total_price)+"rs</h3></td></tr><tr><td colspan='7'><h1 align='center'>Total Cost "+off_total_price+"rs</h1></td></tr><tr><td colspan='7' style='text-align:center'><button style='background:cornflowerblue;' id='checkout' class='btn fa fa-check-circle' onclick='checkout()'>&nbsp;Check out</button></td></tr>");
+          $('#mycarttbl').append("<tr><td colspan='7'><h3 align='center'>Total Price " + total_price +"rs</h3></td></tr><tr><td colspan='7'><h3 align='center'>( % ) Saving "+(total_price-off_total_price)+"rs</h3></td></tr><tr><td colspan='7'><h1 align='center'>Total Cost <b>"+off_total_price+"rs</b></h1></td></tr><tr><td colspan='7' style='text-align:center'><button style='background:cornflowerblue;' id='checkout' class='btn fa fa-check-circle' onclick='checkout()'>&nbsp;Check out</button></td></tr>");
         }
           // <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
 

@@ -17,9 +17,8 @@ if(count($productList)!==0){
 }
 $date = $products['date'];
 $order_id = $products['id'];
-$order_status = $products['status'];
+$order_status = ($products['status'] =='null')?'TBD':$products['status'];
 $list = json_decode($products['list'],true);
-//print_r($list);
 $total_item = count($list);
 $tags = '';
 $total = 0;
@@ -27,20 +26,19 @@ $o_price = 0;
 $o_off = 0;
 for($i=0;$i<count($list);$i++){
     $productInfo = $prdObj->getProductDetailById($list[$i]['p_id']);
-  
-   if(count($productInfo['data']) !==0){
-    $o_price = $o_price + $productInfo['data'][$i]['price'];
-    $o_off = $o_off + (($productInfo['data'][$i]['price'] * $productInfo['data'][$i]['offer'])/100);
-    $pp = $prdObj->calcOffer($productInfo['data'][$i]['price'],$productInfo['data'][$i]['offer'],$list[$i]['qnty']);
-    $total= $total+$pp;
+   if($productInfo['status']){
+    $o_price = $o_price + ($productInfo['data'][0]['price'] * $list[$i]['qnty']);
+    $o_off = $o_off + (($productInfo['data'][0]['price'] * ($productInfo['data'][0]['offer'] * $list[$i]['qnty']))/100);
+    $pp = $prdObj->calcOffer($productInfo['data'][0]['price'],($productInfo['data'][0]['offer']),$list[0]['qnty']);
+    $total+=$pp;
         $tags .= "<tr>
-        <td>".($i+1)."</td>
-        <td><a href='http://localhost/common-ecom-mission/index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=".$productInfo['data'][$i]['p_id']."' target='blank'>".$productInfo['data'][$i]['p_id']."</a></td>
-        <td>".$productInfo['data'][$i]['p_name']."</td>
-        <td>".$productInfo['data'][$i]['offer']."%</td>
-        <td>".$productInfo['data'][$i]['price']."</td>
-        <td>".$list[$i]['qnty']."</td>
-        <td>".($productInfo['data'][$i]['price'] * $list[$i]['qnty'])."</td>
+        <td><br><br>".($i+1)."<br></td>
+        <td><br><br><a href='http://localhost/common-ecom-mission/index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=".$productInfo['data'][0]['p_id']."' target='blank'>".$productInfo['data'][0]['p_id']."</a><br></td>
+        <td><br><br>".$productInfo['data'][0]['p_name']."<br></td>
+        <td><br><br>".$productInfo['data'][0]['offer']."%<br></td>
+        <td><br><br>".$productInfo['data'][0]['price']."<br></td>
+        <td><br><br>".$list[$i]['qnty']."<br></td>
+        <td><br><br>".($productInfo['data'][0]['price'] * $list[$i]['qnty'])."<br></td>
         </tr><hr style=\"height:.5px\">";
         
 
@@ -161,27 +159,25 @@ $html = <<<EOD
         </tr>
     </table>
 </div>
-</div><br><br>
+</div>
 <table>
     <tr style="background-color:cornflowerblue;">
-        <th>Sno</th>
-        <th>P-ID</th>
-        <th>P-Name</th>
-        <th>Off</th>
-        <th>Price</th>
-        <th>Qnty</th> 
-        <th>Total</th>
-    </tr><br>
+        <th><br><br>Sno<br></th>
+        <th><br><br>P-ID<br></th>
+        <th><br><br>P-Name<br></th>
+        <th><br><br>Off<br></th>
+        <th><br><br>Price<br></th>
+        <th><br><br>Qnty<br></th> 
+        <th><br><br>Total<br></th>
+    </tr>
    $tags
-   <br><br>
 
    <tr>
    <td colspan="7" ></td>
    </tr>
 
    <tr>
-   <td colspan="5"></td>
-   <td colspan="2" style="text-align:right">Items - {$total_item}</td>
+   <td colspan="7" style="text-align:left">Items - {$total_item}</td>
     </tr>
 
    <tr>

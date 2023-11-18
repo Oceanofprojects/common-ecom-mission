@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>Customers Registration Form</title>
-    <script src="../../Script/action.js"></script>
-    <script src="../../Script/commonScript.js"></script>
-    <script src="../../Script/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../Style/global.css">
+    <title><?php echo $data['title'];?></title>
+    <script src="Script/action.js"></script>
+    <script src="Script/components.js"></script>
+    <script src="Script/commonScript.js"></script>
+    <script src="Script/jquery.min.js"></script>
+    <link rel="stylesheet" href="Style/global.css">
 
 
     <style>
@@ -29,7 +30,7 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background: url('../../assets/common-images/loginSignupBG.png');
+        background: url('assets/common-images/loginSignupBG.png');
         background-position: center;
         background-attachment: fixed;
     }
@@ -190,107 +191,125 @@
 </head>
 
 <body>
+    <?php
+    if(count($data['data']['data']) !==0){
+      $cusData = $data['data']['data'][0];
+    }else{
+      die('Oops, Invaild user !.');
+    }
+    
+    
+    ?>
     <section class="container">
         <div style="text-align:right;">
-            <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;"
-                href="../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"
+            <a style="background:cornflowerblue;padding:10px;font-size:12pt;text-decoration:none;color:#123;border-radius:5px;"
+                href="#" onclick="history.back()" class="fa fa-arrow-left"></a>&nbsp;|&nbsp;<a
+                style="background:lightgreen;padding:10px;font-size:12pt;text-decoration:none;color:#123;border-radius:5px;"
+                href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"
                 class="fa fa-home"></a>
-            |
-            <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;"
-                href="../../index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home"
-                class="fa fa-sign-in"></a>
         </div>
-        <header>Registration Form</header>
+        <header>Account Edit</header>
         <form action="../../index.php" class="form" id="frm">
             <center>
-                <img src="../../assets/common-images/profiles/default.jpg" alt="" id="dis_profile">
+                <img src="assets/common-images/profiles/<?php echo $cusData['profile'].'.jpg';?>" alt=""
+                    id="dis_profile">
                 <p style="padding:5px 0px;">Select Profile</p>
                 <div class="profile_layer">
-                    <img src="../../assets/common-images/profiles/pro1.jpg" alt="" onclick="changeProfile('pro1')">
-                    <img src="../../assets/common-images/profiles/pro2.jpg" alt="" onclick="changeProfile('pro2')">
-                    <img src="../../assets/common-images/profiles/pro3.jpg" alt="" onclick="changeProfile('pro3')">
-                    <img src="../../assets/common-images/profiles/pro4.jpg" alt="" onclick="changeProfile('pro4')">
-                    <img src="../../assets/common-images/profiles/pro5.jpg" alt="" onclick="changeProfile('pro5')">
-                    <img src="../../assets/common-images/profiles/pro6.jpg" alt="" onclick="changeProfile('pro6')">
+                    <img src="assets/common-images/profiles/pro1.jpg" alt="" onclick="changeProfile('pro1')">
+                    <img src="assets/common-images/profiles/pro2.jpg" alt="" onclick="changeProfile('pro2')">
+                    <img src="assets/common-images/profiles/pro3.jpg" alt="" onclick="changeProfile('pro3')">
+                    <img src="assets/common-images/profiles/pro4.jpg" alt="" onclick="changeProfile('pro4')">
+                    <img src="assets/common-images/profiles/pro5.jpg" alt="" onclick="changeProfile('pro5')">
+                    <img src="assets/common-images/profiles/pro6.jpg" alt="" onclick="changeProfile('pro6')">
                 </div>
 
             </center>
             <div class="input-box">
                 <label>Full Name<sup class="imp">*</sup></label>
-                <input type="text" placeholder="Enter full name" name="c_name" required />
+                <input type="text" placeholder="Enter full name" name="c_name" value="<?php echo $cusData['c_name'];?>"
+                    required />
             </div>
 
             <div class="column">
                 <div class="input-box">
                     <label>Contact Number<sup class="imp">*</sup></label>
-                    <input type="number" placeholder="Enter phone number" name="ph_num" min="1" required />
+                    <input type="number" placeholder="Enter phone number" name="ph_num" min="1"
+                        value="<?php echo $cusData['ph_num'];?>" required />
                 </div>
                 <div class="input-box">
                     <label>Whatspp Number<sup class="imp">*</sup></label>
-                    <input type="number" placeholder="Enter whatspp number" name="whatsapp_num" min="1" />
+                    <input type="number" placeholder="Enter whatspp number"
+                        value="<?php echo $cusData['whatsapp_num'];?>" name="whatsapp_num" min="1" />
                 </div>
             </div>
 
             <div class="column">
                 <div class="input-box">
                     <label>Email Address<sup class="imp">*</sup></label>
-                    <input type="email" name="email" placeholder="Enter email ID" />
+                    <input type="email" name="email" value="<?php echo $cusData['email'];?>"
+                        placeholder="Enter email ID" />
                 </div>
             </div>
 
             <div class="gender-box">
                 <h3>Gender</h3>
+                <?php 
+                $mchecked = '';
+                $fchecked = '';
+                $tbdchecked = '';
+                if($cusData['c_gender'] == 'male'){
+                  $mchecked = 'checked';
+                }else if($cusData['c_gender'] == 'female'){
+                  $fchecked = 'checked';
+                }else{
+                  $tbdchecked = 'checked';
+                }
+                ?>
                 <div class="gender-option">
                     <div class="gender">
-                        <input type="radio" id="check-male" value="male" name="c_gender" checked />
+                        <input type="radio" id="check-male" value="male" name="c_gender" <?php echo $mchecked;?> />
                         <label for="check-male">male</label>
                     </div>
                     <div class="gender">
-                        <input type="radio" id="check-female" value="female" name="c_gender" />
+                        <input type="radio" id="check-female" value="female" name="c_gender" <?php echo $fchecked;?> />
                         <label for="check-female">Female</label>
                     </div>
                     <div class="gender">
-                        <input type="radio" id="check-other" value="TBD" name="c_gender" />
+                        <input type="radio" id="check-other" value="TBD" name="c_gender" <?php echo $tbdchecked;?> />
                         <label for="check-other">prefer not to say</label>
                     </div>
                 </div>
             </div>
             <div class="input-box address">
                 <label>Address<sup class="imp">*</sup></label>
-                <input type="text" name="address_1" placeholder="Enter street address" required />
-                <input type="text" name="address_2" placeholder="Enter street address line 2" required />
+                <input type="text" name="address_1" value="<?php echo $cusData['address_1'];?>"
+                    placeholder="Enter street address" required />
+                <input type="text" name="address_2" value="<?php echo $cusData['address_2'];?>"
+                    placeholder="Enter street address line 2" required />
                 <div class="column">
-                    <input type="text" placeholder="Enter your Country" name="country" />
-                    <input type="text" placeholder="Enter your State" name="state" />
+                    <input type="text" value="<?php echo $cusData['country'];?>" placeholder="Enter your Country"
+                        name="country" />
+                    <input type="text" value="<?php echo $cusData['state'];?>" placeholder="Enter your State"
+                        name="state" />
                 </div>
                 <div class="column">
-                    <input type="text" placeholder="Enter your city" name="city" required />
-                    <input type="number" placeholder="Enter postal code" min="1" name="pin_code" required />
+                    <input type="text" value="<?php echo $cusData['city'];?>" placeholder="Enter your city" name="city"
+                        required />
+                    <input type="number" value="<?php echo $cusData['pin_code'];?>" placeholder="Enter postal code"
+                        min="1" name="pin_code" required />
                 </div>
             </div>
 
-            <div class="column">
-                <div class="input-box">
-                    <label>Password<sup class="imp">*</sup></label>
-                    <input type="password" name="pwd" placeholder="Enter new password for account" required />
-                </div>
-                <div class="input-box">
-                    <label>Confirm password<sup class="imp">*</sup></label>
-                    <input type="password" name="con_pwd" placeholder="Enter confirm password for account" required />
-                </div>
-            </div><br>
+            <br>
             <span style="padding:10px 0px" id="dis_err"></span>
-            <input type="button" value="Signup" id="btn" onclick="signup()">
+            <input type="button" value="Save changes" id="btn" onclick="alert()">
             <br><br>
-            <p align="center">Already resgistered?, Please <a
-                    href="../../index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home">login</a>
-            </p>
             <input type="text" id="profile" name="profile" value="default" hidden>
         </form>
     </section>
     <script>
     function changeProfile(img_name) {
-        $('#dis_profile').attr('src', '../../assets/common-images/profiles/' + img_name + '.jpg');
+        $('#dis_profile').attr('src', 'assets/common-images/profiles/' + img_name + '.jpg');
         $('#profile').val(img_name);
     }
     </script>

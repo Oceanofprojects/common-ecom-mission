@@ -529,6 +529,14 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 		}else{
 			return ['status'=>false,'data'=>[],'message'=>$fileFlag['status']];
 		}
+		if(preg_match('/[\"\']/', $_POST['p_desc'])){
+			return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in product name !, Please remove it.'];
+		}else if(preg_match('/[\"\']/', $_POST['tags'])){
+			return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in tags!, Please remove it.'];
+		}else{
+			$_POST['p_desc'] = htmlspecialchars($_POST['p_desc']);
+			$_POST['tags'] = htmlspecialchars($_POST['tags']);
+		}
 		$arr = [
 			'tbl_name'=>'products',
 			'action'=>'insert',
@@ -722,7 +730,6 @@ public function getCartByIdNDate($date){
 
 public function calcOffer($price,$off,$qnty){
 	$offer = ($price * $off)/100;
-	//$offerP = $offer*$qnty; 
 	$or_price = $price-$offer;
 	return $or_price*$qnty; 
 }

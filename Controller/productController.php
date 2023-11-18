@@ -92,11 +92,6 @@ class productController extends commonController
             "title" => "Edit category",
             "data"=>$this->productMdl->get_cate_list()
         ));
-      }else if(hash_equals(hash_hmac($algo,'moveToAddSlider',$skey),$req['key'])){
-        $this->view("main/addSlider", array(
-            "title" => "Add slider",
-            "data"=>[]//$this->productMdl->get_all()
-        ));
       }else if(hash_equals(hash_hmac($algo,'trackMyOrder',$skey),$req['key'])){
         $this->view("track_order/index", array(
             "title" => "Track Orders",

@@ -35,7 +35,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 						<li><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span class="fa fa-truck"></span>Track</a></li>
                         <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
-						<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
+						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>logout</a></li>
 
 			</ul>
@@ -415,7 +415,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     <lord-icon src="https://cdn.lordicon.com/odavpkmb.json" trigger="loop" delay="500"
         colors="primary:#121331,secondary:#913710" style="width:100px;height:100px">
     </lord-icon>
-    <p><b>Loading</b></p>
+    <p><b>Please wait</b></p>
 </div>
 <!-- Common message box  -->
 <div id="common_dis_msg_box">

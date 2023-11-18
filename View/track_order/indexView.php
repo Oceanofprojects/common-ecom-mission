@@ -304,8 +304,12 @@
 
                     } else if (status == 'Arriving') {
                         $('#invoice').css('display', 'block');
+                        $('#invoice').attr('href', 'Invoice?invoice_id=' + d.data[0].id);
+
                         $('#arriveDetail').html(
-                            '<p>Your order shipped from hub/shop. Order arrived on <b>' + s_data[1] +
+                            '<p>Your order shipped from hub/shop. Order arrived on <b>' + ((s_data[1] ==
+                                'null') ?
+                                'TBD' : s_data[1]) +
                             '</b></p><button class="btn" onclick="completeOrder(\'' +
                             d.data[0].id + '\')">Product delivered</button>');
                     } else if (status == 'Completed') {

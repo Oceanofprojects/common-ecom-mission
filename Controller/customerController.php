@@ -36,6 +36,11 @@ class customerController extends commonController
         $this->signup();
       }else if(hash_equals(hash_hmac($algo,'userlogin',$skey),$req['key'])){
         $this->login($_GET['cus_idnty'],$_GET['pwd']);
+      }else if(hash_equals(hash_hmac($algo,'openSetting',$skey),$req['key'])){
+        $this->view("main/setting", array(
+          "title" => "Customers Registration Form",
+          "data"=>$this->cusMdl->getUserInfoById()
+      ));
       }else if(hash_equals(hash_hmac($algo,'logout',$skey),$req['key'])){
         if(setcookie('uid','',time() - 3600,"/")){
           echo json_encode(['status'=>true,'data'=>[],'message'=> 'Logged out successfully']);

@@ -118,7 +118,7 @@ trait userData{
 				$arr = [
 					'tbl_name'=>'customers',
 					'action'=>'select',
-					'data'=>['c_name','address_1','address_2','country','state','city','pin_code','ph_num'],
+					'data'=>['c_name','profile','address_1','email','c_gender','address_2','country','state','city','pin_code','ph_num','whatsapp_num'],
 				'condition'=>['manual'=>['cid="'.$cflag[1].'"']],
 					'query-exc'=>true
 				];
