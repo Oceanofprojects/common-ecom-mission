@@ -44,6 +44,19 @@ function signup(){
     }
   });
 }
+
+function updtSetting(){
+ performAjx('index.php', 'get','key=f7fb420f385803c64b9356fa8776522ab8d882855a31927a7a6465c68499b58f&controller=customer&'+$('#frm').serialize(), (res) => {
+    d = JSON.parse(res);
+    if(d.status){
+      $('#dis_err').text('');
+      alert(d.msg);
+      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
+    }else{
+      $('#dis_err').text(d.msg).css('color','tomato');
+    }
+  });
+}
 function login(){
   if($('#cus_idnty').val().trim().length == 0){
     $('#dis_err').text('Please enter Name or Mobile or Email or CID').css('color','tomato');

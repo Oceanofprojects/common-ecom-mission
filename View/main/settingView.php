@@ -209,7 +209,7 @@
                 class="fa fa-home"></a>
         </div>
         <header>Account Edit</header>
-        <form action="../../index.php" class="form" id="frm">
+        <form class="form" id="frm">
             <center>
                 <img src="assets/common-images/profiles/<?php echo $cusData['profile'].'.jpg';?>" alt=""
                     id="dis_profile">
@@ -302,7 +302,7 @@
 
             <br>
             <span style="padding:10px 0px" id="dis_err"></span>
-            <input type="button" value="Save changes" id="btn" onclick="alert()">
+            <input type="button" value="Save changes" id="btn" onclick="updtSetting()">
             <br><br>
             <input type="text" id="profile" name="profile" value="default" hidden>
         </form>

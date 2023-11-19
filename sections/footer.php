@@ -134,7 +134,7 @@
 
 <footer class="ft-layer">
         <div class="ft-l-info ft-sub-div"><br>
-            <img src="assets/common-images/logo.png" alt="Logo" height="100px" width="100px"><br><br>
+            <img src="assets/common-images/logo.png" style="border-radius:100px;" alt="Logo" height="100px" width="100px"><br><br>
             <h2>LOGO</h2><br>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatibus debitis a voluptate quod ipsum, reprehenderit ea sint totam optio dolorem?</p>
             <br><br><br>

@@ -1,7 +1,5 @@
 function loadComponent(type, data,arr=[]) {
     if (type == 'nor-card-view') {
-      // $('.item-container').empty();
-//      auto_id = rand(100000,999999);
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           favRnd = Math.floor(Math.random() * 99999);
@@ -12,10 +10,7 @@ function loadComponent(type, data,arr=[]) {
               data.data[i].p_img +
               ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
               data.data[i].p_name +
-              '</h3><p><span style=\"color:#555;text-decoration:line-through;text-decoration-color:red;\">' +
-              data.data[i].price + 'rs</span><sup>' + data.data[i].offer +
-              '%</sup>&nbsp;&nbsp;<span>' + off_price +
-              'rs&nbsp;<small  style=\"color:lime;font-size: 8pt;\" class=\"fa fa-check-circle-o\"></small></span></p>' +
+              '</h3>'+ isOff(data.data[i].price,data.data[i].offer,off_price) +''+
               check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
                   i].p_name, data.data[i].p_id) + '</div>');
       }
@@ -42,7 +37,18 @@ function loadComponent(type, data,arr=[]) {
     }
 }//load components END
 
-
+function isOff(price,offer,off_price){
+  if(offer == 0){
+return '<p><span>' + off_price +
+              'rs&nbsp;<small  style=\"color:lime;font-size: 8pt;\" class=\"fa fa-check-circle-o\"></small></span></p>';    
+            }else{
+              return '<p><span style=\"color:#555;text-decoration:line-through;text-decoration-color:red;\">' +
+              price + 'rs</span><sup>' + offer +
+              '%</sup>&nbsp;&nbsp;<span>' + off_price +
+              'rs&nbsp;<small  style=\"color:lime;font-size: 8pt;\" class=\"fa fa-check-circle-o\"></small></span></p>';
+            }
+ 
+}
 
 function myfavComponent(data){
 //  $('.myfav').fadeIn(100);

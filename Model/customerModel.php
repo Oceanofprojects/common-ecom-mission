@@ -35,6 +35,55 @@ class customer extends commonModel{
 		return $res;
 	}
 
+	public function editAccount($data){
+		unset($data['key']);
+		unset($data['controller']);
+
+
+		$arr = [
+            'tbl_name' => 'customers',
+            'action' => 'select',
+            'data' => ['manual'=>['count(cid) as resC']],
+			'condition'=>["email='$data[email]'","ph_num='$data[ph_num]'","whatsapp_num='$data[whatsapp_num]'"],
+			'conditionCombineOpt'=>'OR',
+			'query-exc'=>true
+        ];
+		$dupFlag = $this->generateQuery($arr);
+		if($dupFlag['status'] == 'success'){
+			if($dupFlag['data'][0]['resC'] > 1){
+				return ['status'=>false,"data"=>[],"msg"=>"Oops!, Duplicate record founded !, Please change Email Or Phone number/Whatsapp_num"];
+			}else{
+				if(isset($_COOKIE['uid'])){
+					$cflag = $this->getUserId($_COOKIE['uid']);
+					$updatas = $this->genArAssocToColSep($data);
+					if($cflag[0]){
+						$arr = [
+			            'tbl_name' => 'customers',
+			            'action' => 'update',
+			            'data' => $this->genArAssocToColSep($data),
+						'condition'=>["cid='".$cflag[1]."'"],
+						'query-exc'=>true
+					    ];
+						$uptSetting = $this->generateQuery($arr);
+						//echo $uptSetting;exit;
+						if($uptSetting['status'] == 'success'){
+							return ['status'=>true,"data"=>[],"msg"=>"Account updated successfully."];
+						}else{
+							return $uptSetting;	
+						}
+					}else{
+					return ['status'=>false,"data"=>[],"msg"=>"Please login!"];						
+					}
+				}else{
+					return ['status'=>false,"data"=>[],"msg"=>"Please login!"];						
+				}
+			}
+		}else{
+			return $dupFlag;
+		}
+//		return $this->genArAssocToColSep($data);
+	}
+
 	public function getCusListByIdnty($idnty){
 		$arr = [
             'tbl_name' => 'customers',

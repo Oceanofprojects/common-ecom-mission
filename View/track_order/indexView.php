@@ -345,6 +345,10 @@
         }
     }
     </script>
+     <?php
+    require_once __DIR__.'/../../sections/footer.php';
+
+    ?>
 </body>
 
 </html>

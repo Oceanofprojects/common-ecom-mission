@@ -18,6 +18,7 @@
     <?php
     require_once __DIR__.'/../sections/header.php';
     require_once __DIR__.'/../sections/mainSlider.php';
+//    print_r($data['mani']);
     ?>
 
     <br><br><br>
@@ -103,7 +104,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    echo hash_hmac('sha256','openSetting',9050);
+    // echo hash_hmac('sha256','updateSetting',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 
@@ -115,7 +116,7 @@ if($review['status']){
     <!-- <br><br><br> -->
 </body>
 <?php
-//    require_once 'sections/suggestionProducts.php';
+   // require_once 'sections/foote.php';
 
 //38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9---MOVETOPRODUCT
 ?>

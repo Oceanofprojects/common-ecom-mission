@@ -29,7 +29,8 @@ class productController extends commonController
     //here no no use for action var
         $algo = 'sha256';
       $skey = 9050;
-      if(isset($_GET) && count($_GET)){
+      if(isset($_GET['key'])){
+
         $req['key'] = $_GET['key'];
       }else{
         $req['key'] = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6';//default
@@ -182,16 +183,9 @@ class productController extends commonController
           "title" => "Product detail",
           "data"=>$selected_product,
           "suggestion"=>$suggest_product
-// SELECT *
-// FROM products
-// WHERE s_no <> 0 and cate = 'Non-veg'
-// ORDER BY RAND()
-// LIMIT 10;
       ));
     }
 
-    // ,
-    // "suggest_data"=>$this->productMdl->get_suggestion()
 
 }
 

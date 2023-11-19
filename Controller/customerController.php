@@ -26,7 +26,7 @@ class customerController extends commonController
     {
     $algo = 'sha256';
       $skey = 9050;
-      if(isset($_GET) && count($_GET)){
+      if(isset($_GET['key'])){
         $req['key'] = $_GET['key'];
       }else{
         die('Invalid token');
@@ -34,6 +34,8 @@ class customerController extends commonController
 
       if(hash_equals(hash_hmac($algo,'signup',$skey),$req['key'])){
         $this->signup();
+      }else if(hash_equals(hash_hmac($algo,'updateSetting',$skey),$req['key'])){
+        echo json_encode($this->editAccount());
       }else if(hash_equals(hash_hmac($algo,'userlogin',$skey),$req['key'])){
         $this->login($_GET['cus_idnty'],$_GET['pwd']);
       }else if(hash_equals(hash_hmac($algo,'openSetting',$skey),$req['key'])){
@@ -82,6 +84,28 @@ class customerController extends commonController
         }else{
             echo json_encode($flag);
         }
+    }
+
+    public function editAccount(){
+        $validateArgs = [
+              ['c_name', 'check', 'isStr'],
+              ['c_name', 'check', 'isNotEmpty'],
+              ['ph_num', 'check', 'isNotEmpty'],
+              ['ph_num', 'checkLengthMust', 10],
+              ['whatsapp_num', 'check', 'isNotEmpty'],
+              ['whatsapp_num', 'checkLengthMust', 10],
+              ['email', 'check', 'isEmail'],
+              ['address_1', 'check', 'isNotEmpty'],
+              ['address_2', 'check', 'isNotEmpty'],
+              ['city', 'check', 'isNotEmpty']
+          ]; //VALIDATE CONDITIONS ARGS
+
+          $flag = $this->autoValidate($_GET, $validateArgs)[0];
+          if($flag['status']){
+            return $this->cusMdl->editAccount($_GET);
+          }else{
+            return $flag;
+          }
     }
 
     public function login($idnty,$pwd){

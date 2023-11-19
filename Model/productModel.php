@@ -43,7 +43,7 @@ class products extends commonModel{
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid ,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.sno AS favExistCid ,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param'=>[
 					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
 					['product_category','left_join','cate_id','cate_id']
@@ -151,7 +151,7 @@ class products extends commonModel{
     $arr = ['tbl_name'=>'mycart',
     'action'=>'select',
     'data'=>[],
-    'condition'=>["manual"=>["cid='$uid' and _date=date(now()) AND cart_edit_flag = 1"]],
+    'condition'=>["manual"=>["cid='$uid' AND cart_edit_flag = 1"]],
     'query-exc'=>true
     ];
   $flag = $this->generateQuery($arr);
@@ -214,7 +214,6 @@ class products extends commonModel{
 	public function get_product(){
 		if(isset($_GET['pid'])){
 				$p_id = $_GET['pid'];
-//				$q = "SELECT res.* FROM products AS res WHERE res.cate=(SELECT cate FROM products WHERE p_id='".$p_id."') ORDER BY RAND() LIMIT 10";
 $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '".$p_id."' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '".$p_id."') ORDER BY RAND() LIMIT 10";
 				$sql = $this->db->prepare($q);
 				if($sql->execute()){
@@ -277,12 +276,47 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
-		if($flag['status']){
+		if($flag['status'] =='succes'){
 			if(count($flag['data'])!==0){
 				return true;
 			}else{
 				return false;
 			}
+		}
+	}
+	public function getProductUnderCategory(){
+		$tmptbl = 'products';
+if($this->cid == null){
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'join_param'=>[
+					['product_category','left_join','cate_id','cate_id']
+				],
+				'limit'=>10,
+				'condition'=>['raw-manual'=>['GROUP BY products.cate_id']],
+				'order'=>['s_no','desc'],
+      	'query-exc'=>true
+			];
+    }else{
+			$arr = [
+				'tbl_name'=>$tmptbl,
+				'action'=>'join',
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.sno AS favExistCid ,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'join_param'=>[
+					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
+					['product_category','left_join','cate_id','cate_id']
+				],
+				'condition'=>['raw-manual'=>['GROUP BY products.cate_id']],
+				'limit'=>10,
+				'order'=>['s_no','desc'],
+       'query-exc'=>true
+			];
+    }
+		$flag = $this->generateQuery($arr);
+		if($flag['status'] == 'success'){
+				return ['status'=>true,'data'=>$flag['data'],'message'=>'fetched successfully'];
 		}
 	}
 
@@ -295,7 +329,7 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
-		if($flag['status']){
+		if($flag['status'] == 'success'){
 			if(count($flag['data'])!==0){
 				return [true,$flag['data'][0]['p_name']];
 			}else{
@@ -385,10 +419,10 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 					$oldCart = true;
 				}
 				$arr['condition'] = ["_date='{$d}'","cid='{$uid}'"];
-//				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date='{$d}' and cid='{$uid}' order by P.s_no asc";
 			}else{
-				$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}' AND cart_edit_flag=1"];
-//				$q="SELECT * from products as P right join mycart as F on P.p_id= F.p_id where _date=date(now()) and cid='{$uid}' order by P.s_no asc";
+				//$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}' AND cart_edit_flag=1"];
+
+				$arr['condition']['manual'] = ["cid='{$uid}' AND cart_edit_flag=1"];
 			}
 
 			// if(isset($_GET['type'])){
@@ -661,6 +695,7 @@ public function getCartByIdNDate($date){
 	if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
+			echo "AMNI";
 			$arr = [
 						'tbl_name' => 'mycart',
 						'action' => 'select',
