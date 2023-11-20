@@ -18,10 +18,31 @@
     <?php
     require_once __DIR__.'/../sections/header.php';
     require_once __DIR__.'/../sections/mainSlider.php';
-//    print_r($data['mani']);
+
+   // if(count($cateNdata) !==0){
+   //  for($cateLoop=0;$cateLoop<count($cateNdata);$cateLoop++){
+   //      $d = $data['categoryProductSets']['data'][0]['catesets'];
+   //      $cateNdata = explode('{CATE_SEP}',$d);
+   //      $category_name = $cateNdata[0];
+   //      $tmpRow = $cateNdata[1];
+   //      $rows = explode('{ROW_SEP}',$tmpRow);
+   //      $dataObj = new stdClass();
+   //       for($i = 0;$i<count($rows);$i++){
+   //         $pdata =  explode('{DATA_SEP}',$rows[$i]);
+   //         foreach($pdata as $singleData){
+   //          $pDataUnit = explode('=',$singleData);
+   //          $myArr['data'][$i][$pDataUnit[0]] = $pDataUnit[1]; 
+   //         }
+   //      echo "<script>loadComponent('layer-wt-nor-card-view',".json_encode($myArr).")</script>";
+   //      }
+   //  }
+   // }
+
     ?>
 
+
     <br><br><br>
+
     <div class="head-info">
         <h1>Categories</h1>
         <p>See all product based on category</p>
@@ -62,11 +83,48 @@
     <center>
         <button id="loadMoreProduct"
             onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
-            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">View
-            More <span class="fa fa-angle-double-down"></span> </button>
+            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">            More Products&nbsp;<span class="fa fa-angle-double-down"></span> </button>
     </center>
 
-    <br><br><br><br>
+    <br><br>
+
+    <section class="cateSetProductsLoaderLayer">
+        <!-- LOAD CATEGORY WITH PRODUCTS -->
+        <?php 
+
+   $cateNProLen = $data['categoryProductSets']['data'];
+   print_r($cateNProLen);
+    if(count($cateNProLen) !==0){
+        for($cateLoop=0;$cateLoop<count($cateNProLen);$cateLoop++){
+            $d = $cateNProLen[$cateLoop]['catesets'];
+            $cateNdata = explode('{CATE_SEP}',$d);
+            if(count($cateNdata) == 2 && !empty($cateNdata[1])){
+                $category_name = $cateNdata[0];
+                $tmpRow = $cateNdata[1];
+                $rows = explode('{ROW_SEP}',$tmpRow);
+                for($i = 0;$i<count($rows);$i++){
+                    $pdata =  explode('{DATA_SEP}',$rows[$i]);
+                   foreach($pdata as $singleData){
+                    $pDataUnit = explode('=',$singleData);
+                    $myArr['data'][$i][$pDataUnit[0]] = $pDataUnit[1]; 
+                   }
+                }   
+                echo "<script>
+                loadComponent('layer-wt-nor-card-view',".json_encode($myArr).",['".$category_name."'])
+                </script>";
+                unset($myArr['data']);
+            }
+        }
+    }
+
+
+         ?>
+    </section>
+<br>
+<br>
+<br>
+<br>
+<br>
 
     <?php 
 

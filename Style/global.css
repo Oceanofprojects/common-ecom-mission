@@ -15,7 +15,7 @@ body{
   width: 1px;
 }
 
-.item-container {
+.item-container,.cateSetProductsLoaderLayer .cateSetProductsLoaderLayerBox {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -23,7 +23,7 @@ body{
     z-index: 1;
 }
 
-.item-container .box {
+.item-container .box,.cateSetProductsLoaderLayer .box{
     flex: 1;
     min-width: 240px;
     max-width: 240px;
@@ -35,24 +35,24 @@ body{
     border-radius: 5px;
 }
 
-.item-container .box:hover {
+.item-container .box:hover,.cateSetProductsLoaderLayer .box:hover{
     box-shadow: 0px 10px 10px 2px rgba(0, 0, 0, .1);
     transform: translateY(-5px);
     cursor: pointer;
 }
 
-.item-container .box .img-src {
+.item-container .box .img-src,.cateSetProductsLoaderLayer .box .img-src {
     background: red;
     height: 250px;
     width: 100%;
 }
 
-.item-container .box p {
+.item-container .box p,.cateSetProductsLoaderLayer .box p {
     text-align: center;
     padding: 10px;
 }
 
-.item-container .box h6 {
+.item-container .box h6,.cateSetProductsLoaderLayer .box h6 {
     font-size: 1em;
     padding: 5px;
     margin: 3px 0px;
@@ -60,7 +60,7 @@ body{
     color: red;
 }
 
-.item-container .box h6:hover {
+.item-container .box h6:hover,.cateSetProductsLoaderLayer .box h6:hover {
     text-shadow: 0px 0px 10px rgba(0, 0, 0, .4)
 }
 

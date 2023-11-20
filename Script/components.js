@@ -15,8 +15,29 @@ function loadComponent(type, data,arr=[]) {
                   i].p_name, data.data[i].p_id) + '</div>');
       }
       
-    }
-    if(type == 'category-card-view'){
+    }else if (type == 'layer-wt-nor-card-view') {
+      heading = arr[0];//heading
+        cateSetsRnd = Math.floor(Math.random() * 9999999);
+        $('.cateSetProductsLoaderLayer').append('<br><br><div class="head-info"><h1>'+heading+'</h1><p>Best Quality</p></div><br>');
+        $('.cateSetProductsLoaderLayer').append('<div class="cateSetProductsLoaderLayerBox cateSetProductsLoader'+cateSetsRnd+'"></div>');
+      for (i = 0; i < data.data.length; i++) {
+//        $('.cateSetProductsLoaderLayer').append('<div classs="cateSetProductsLoader"></div>');
+          off_price = calc_offer(data.data[i].price, data.data[i].offer);
+          favRnd = Math.floor(Math.random() * 99999);
+          boxIdtyRnd = Math.floor(Math.random() * 9999999);
+
+          $(".cateSetProductsLoader"+cateSetsRnd).append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
+                  .data[i].favExistCid) + '\" id=\"myfav'+favRnd+'\" onclick=\"add_fav(\'myfav'+favRnd+'\',\'' + data.data[i].p_id +
+              '\')\"></h6><div class=\"img-src\" style=\"image-rendering: pixelated;background:url(assets/product_images/' +
+              data.data[i].p_img +
+              ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
+              data.data[i].p_name +
+              '</h3>'+ isOff(data.data[i].price,data.data[i].offer,off_price) +''+
+              check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
+                  i].p_name, data.data[i].p_id) + '</div>');
+      }
+      
+    }else if(type == 'category-card-view'){
       if(arr[0] == 'all'){
         itr = data.length;
       }else{
@@ -26,8 +47,7 @@ function loadComponent(type, data,arr=[]) {
       for(i=0;i<itr;i++){
         $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&cate='+data[i].cate+'&cate_img='+data[i].cate_img+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>Starts @'+data[i].starting_price+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
       }
-    }
-    if(type == 'suggestion-card-view'){
+    }else if(type == 'suggestion-card-view'){
 
       $('#mini-slider').empty();
       for (i = 0; i < data.data.length; i++) {

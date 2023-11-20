@@ -290,33 +290,35 @@ if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'limit'=>10,
-				'condition'=>['raw-manual'=>['GROUP BY products.cate_id']],
-				'order'=>['s_no','desc'],
-      	'query-exc'=>true
+				'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
+				'limit'=>4,
+    	'query-exc'=>true
 			];
     }else{
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.sno AS favExistCid ,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}favExistCid=',myfav.sno SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
 				'join_param'=>[
-					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid],
-					['product_category','left_join','cate_id','cate_id']
+					['product_category','left_join','cate_id','cate_id'],
+					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
+
 				],
-				'condition'=>['raw-manual'=>['GROUP BY products.cate_id']],
-				'limit'=>10,
-				'order'=>['s_no','desc'],
-       'query-exc'=>true
+				'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
+				'limit'=>4,
+   	'query-exc'=>true
 			];
     }
 		$flag = $this->generateQuery($arr);
+		// echo $flag;exit;
 		if($flag['status'] == 'success'){
 				return ['status'=>true,'data'=>$flag['data'],'message'=>'fetched successfully'];
+		}else{
+				return ['status'=>false,'data'=>[],'message'=>'Err getting category & products sets'];
 		}
 	}
 

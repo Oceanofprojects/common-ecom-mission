@@ -66,7 +66,7 @@ class homeController extends commonController
             "title" => "Home",
             "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>10]),
             "cate_list"=>$this->productMdl->get_cate_list(),
-            "mani"=>$this->productMdl->getProductUnderCategory()
+            "categoryProductSets"=>$this->productMdl->getProductUnderCategory()
         ));
     }
 
