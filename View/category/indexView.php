@@ -26,18 +26,22 @@ for cate box want precentage num  -->
 
 
   require_once __DIR__.'/../../sections/header.php';
+  if(isset($data['data']['data'][0]['cate'])){
+      $cate_name = $data['data']['data'][0]['cate'];
+      $cate_img = $data['data']['data'][0]['img'];    
+  }
   ?>
     <!-- <div id="common_dis_msg_box">
     		<div id="msg_content_to_display"></div>
     	</div> -->
 
 
-    <div style="display:flex;justify-content:flex-start;align-items:center;background:linear-gradient(45deg,#ec4a33 50%,transparent 50%),url('<?php echo 'assets/category_images/'.$_GET['cate_img'];?>');background-position: center;background-size: cover;height:200px;width:100%"
+    <div style="display:flex;justify-content:flex-start;align-items:center;background:linear-gradient(45deg,#ec4a33 50%,transparent 50%),url('<?php echo 'assets/category_images/'.$cate_img;?>');background-position: center;background-size: cover;height:200px;width:100%"
         id="img" alt="Product category">
         <div class="head-info" style="padding:10px 20px;">
             <h1
                 style="width:25%;min-width:200px;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color:#fff;text-align:center;margin:0px 10px;background:rgba(0,0,0,.2);padding:10px">
-                <?php echo $_GET['cate'];?></h1>
+                <?php echo $cate_name;?></h1>
             <br>
             <div style="display:flex;justify-content:center;align-items:center;">
                 <h6 style="color:#fff"><a

@@ -93,7 +93,6 @@
         <?php 
 
    $cateNProLen = $data['categoryProductSets']['data'];
-   print_r($cateNProLen);
     if(count($cateNProLen) !==0){
         for($cateLoop=0;$cateLoop<count($cateNProLen);$cateLoop++){
             $d = $cateNProLen[$cateLoop]['catesets'];

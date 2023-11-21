@@ -150,7 +150,7 @@ class productController extends commonController
     public function category(){
       $this->view("category/index", array(
           "title" => "Category",
-          "data"=>$this->productMdl->getProductByCate($_GET['cate'])
+          "data"=>$this->productMdl->getProductByCateId($_GET['cate_id'])
       ));
     }
 //    addProduct

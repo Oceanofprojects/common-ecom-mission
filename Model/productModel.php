@@ -290,7 +290,7 @@ if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
+				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
@@ -302,11 +302,9 @@ if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}favExistCid=',myfav.sno SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
+				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id,'{DATA_SEP}favExistCid=',(select if(count(myfav.p_id)=0,'',myfav.p_id) from myfav where myfav.p_id = products.p_id AND myfav.cid = '".$this->cid."') SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
 				'join_param'=>[
-					['product_category','left_join','cate_id','cate_id'],
-					['myfav','left_join','p_id','p_id','AND myfav.cid = '.$this->cid]
-
+					['product_category','left_join','cate_id','cate_id']
 				],
 				'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
 				'limit'=>4,
@@ -314,7 +312,6 @@ if($this->cid == null){
 			];
     }
 		$flag = $this->generateQuery($arr);
-		// echo $flag;exit;
 		if($flag['status'] == 'success'){
 				return ['status'=>true,'data'=>$flag['data'],'message'=>'fetched successfully'];
 		}else{
@@ -422,17 +419,11 @@ if($this->cid == null){
 				}
 				$arr['condition'] = ["_date='{$d}'","cid='{$uid}'"];
 			}else{
-				//$arr['condition']['manual'] = ["_date=date(now()) AND cid='{$uid}' AND cart_edit_flag=1"];
-
 				$arr['condition']['manual'] = ["cid='{$uid}' AND cart_edit_flag=1"];
 			}
 
-			// if(isset($_GET['type'])){
-			// 	unset($arr['condition']);
-			// }
 
 			$flag = $this->generateQuery($arr);
-//			echo $flag;exit;
 				if($flag['status']){
 					if(count($flag['data'])!==0){
 						echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
@@ -447,17 +438,17 @@ if($this->cid == null){
 
 	}
 
-	public function getProductByCate($cate){
+	public function getProductByCateId($id){
 		$tmptbl = 'products';
 		if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'condition'=>['manual'=>['cate_name="'.$cate.'"']],
+				'condition'=>['manual'=>['product_category.cate_id="'.$id.'"']],
 				'limit'=>10,
 				'order'=>['p_id','asc'],
        	'query-exc'=>true
@@ -466,12 +457,12 @@ if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data'=>['manual'=>["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param'=>[
 					['myfav','left_join','p_id','p_id',' AND myfav.cid = '.$this->cid],
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'condition'=>['manual'=>['cate_name="'.$cate.'"']],
+				'condition'=>['manual'=>['product_category.cate_id="'.$id.'"']],
 				'limit'=>10,
 				'order'=>['p_id','asc'],
 				'query-exc'=>true
@@ -509,9 +500,6 @@ if($this->cid == null){
 
 	public function deleteProduct(){
 		$pid = $_GET['pid'];
-		// $q = "SELECT CONCAT((SELECT count(*) FROM myorder WHERE product_list like  '%$pid%' and  cart_status <> \"Completed\" and cart_status <> \"Cancel\"),'-myorder_count,',(SELECT count(*) FROM products WHERE p_id = '$pid'),'-myproduct_count, ',(SELECT count(*) FROM mycart  WHERE p_id = '$pid' and cart_edit_flag=1),'-mycart_count, ',(SELECT count(*) FROM myfav  WHERE p_id = '$pid'),'-myfav_count') AS product_availability_list";
-		// $sql = $this->db->prepare($q);
-		// if($sql->execute()){
 			$getProductAvailabilityFlag = $this->getProductAvailability($pid);
 			if($getProductAvailabilityFlag['status']){
 				$availability_list = $this->productAvailabilityStrToArr($getProductAvailabilityFlag['data']);//Availability res str to arr
@@ -524,9 +512,6 @@ if($this->cid == null){
 				return $getProductAvailabilityFlag;
 			}
 
-		// }else{
-		// 	return ['status'=>false,'data'=>[],'message'=>'Err in get product availability list'];
-		// }	 
 	}
 
 	public function changeProductAvailability($pid){
