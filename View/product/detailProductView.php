@@ -105,6 +105,51 @@
         box-shadow: 0px 0px 10px 2px #ddda;
         cursor: pointer;
     }
+
+        .share_link_layer {
+        position:fixed;
+        top:0px;
+        left:0px;
+        background:rgba(0,0,0,.8);
+        display: flex;
+        justify-content:center;
+        align-items: center;
+        flex-wrap: wrap;
+        height:100vh;
+        width:100%;
+        display: none;
+        z-index:15;
+    }
+
+    .share_link_box {
+        height:20px;
+        width:20px;
+        display: flex;
+        justify-content:center;
+        align-items: center;
+        background: #fff;
+        margin:10px 10px;
+        padding:8px;
+        text-align: center;
+        border-radius:100px;
+        border:.2px solid rgba(0,0,0,.1);
+    }
+    .share_link_box a{
+        text-decoration: none;
+        color:#123;
+    }
+    .share_link_box span{
+        margin:10px;
+
+        font-size: 10pt;
+    }
+    .share_link_box:hover {
+        background: #123;
+        box-shadow:0px 0px 10px 0px rgba(256,256,256,1);
+    }
+    .share_link_box:hover > a{
+        color:#fff;
+    }
     </style>
     <?php
 
@@ -122,12 +167,40 @@
 
     ?>
 
+
+
+    <section class="share_link_layer">
+        <div class="share_link_box" style="background:red;" onclick="$('.share_link_layer').css('display','none')">
+            <a class="fa fa-close" style="color:#fff;">
+            </a>
+        </div>
+        <div class="share_link_box">
+            <a href="#" class="fa fa-whatsapp">
+            </a>
+        </div>
+        <div class="share_link_box">
+            <a href="#" class="fa fa-facebook-official">
+            </a>
+        </div>
+        <div class="share_link_box">
+            <a href="#" class="fa fa-instagram"></a>
+        </div>
+        <div class="share_link_box">
+            <a href="#" class="fa fa-envelope">
+            </a>
+        </div>
+        <div class="share_link_box">
+            <a href="#" class="fa fa-pinterest">
+            </a>
+        </div>
+
+    </section>
     <br><br><br>
     <center>
         <section class="details" style="background:#fff">
             <div class="details-box-layer">
-                <div class="details-box-head">
-                    <a href="#" class="fa fa-share-alt"></a>
+                <div class="details-box-head" >
+                    <a href="#" class="fa fa-share-alt" onclick="$('.share_link_layer').css('display','flex')"></a>
                     <?php
                 if($data['data']['myFavExit']['status']){
                   $favIndi = "fa fa-heart";
