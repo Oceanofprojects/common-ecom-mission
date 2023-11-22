@@ -17,7 +17,6 @@ function loadComponent(type, data,arr=[]) {
       
     }else if (type == 'layer-wt-nor-card-view') {
       heading = arr[0];//heading
-      console.log(data)
         cateSetsRnd = Math.floor(Math.random() * 9999999);
         $('.cateSetProductsLoaderLayer').append('<br><br><div class="head-info"><h1>'+heading+'</h1><p>Best Quality</p></div><br>');
         $('.cateSetProductsLoaderLayer').append('<div class="cateSetProductsLoaderLayerBox cateSetProductsLoader'+cateSetsRnd+'"></div>');

@@ -682,7 +682,6 @@ public function getCartByIdNDate($date){
 	if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
-			echo "AMNI";
 			$arr = [
 						'tbl_name' => 'mycart',
 						'action' => 'select',
