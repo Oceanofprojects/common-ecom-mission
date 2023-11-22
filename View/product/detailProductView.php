@@ -122,8 +122,8 @@
     }
 
     .share_link_box {
-        height:20px;
-        width:20px;
+        height:30px;
+        width:30px;
         display: flex;
         justify-content:center;
         align-items: center;
@@ -175,24 +175,30 @@
             </a>
         </div>
         <div class="share_link_box">
-            <a href="#" class="fa fa-whatsapp">
+            <a href="https://wa.me/?text=YOUR_TEXT%20YOUR_URL" class="fa fa-whatsapp">
             </a>
         </div>
         <div class="share_link_box">
-            <a href="#" class="fa fa-facebook-official">
+            <a href="#" class="fa fa-copy" onclick="copyToClip()">
+            </a>
+        </div>
+<!--         <div class="share_link_box">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL" class="fa fa-facebook-official">
             </a>
         </div>
         <div class="share_link_box">
             <a href="#" class="fa fa-instagram"></a>
         </div>
         <div class="share_link_box">
-            <a href="#" class="fa fa-envelope">
-            </a>
-        </div>
+            <a href="mailto:?subject=[SUBJECT]&body=[BODY]" class="fa fa-envelope">
+            </a> -->
+<!--             https://twitter.com/intent/tweet?text=YOUR_TEXT&url=YOUR_URL
+            https://www.reddit.com/submit?url=YOUR_URL&title=YOUR_TITLE -->
+<!--         </div>
         <div class="share_link_box">
-            <a href="#" class="fa fa-pinterest">
+            <a href="https://pinterest.com/pin/create/button/?url=[URL]&media=[IMAGE_URL]&description=[DESCRIPTION]" class="fa fa-pinterest">
             </a>
-        </div>
+        </div> -->
 
     </section>
     <br><br><br>
@@ -275,6 +281,21 @@
         </section>
     </center>
     <br><br><br>
+<?php
+
+$url = '';
+
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+    $url .= 'https://';
+}else{
+    $url .= 'http://';
+}
+$url .= $_SERVER['HTTP_HOST'];
+$url .= $_SERVER['REQUEST_URI'];
+
+?>    
+<input type="text" value="<?php echo $url;?>" id="productURL" hidden>
+    
     <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
     <h2 align="center">Suggestion Product</h2><br><br><br>
 
@@ -294,7 +315,6 @@ if(count($data['suggestion']['data'])!==0){
     loadComponent('suggestion-card-view',{});
   </script> -->
     <br><br>
-
     <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
     <h2 align="center">Customers Reviews</h2><br>
     <?php
@@ -320,6 +340,15 @@ $p_id=$resData['p_id'];
   require_once 'sections/footer.php';
   ?>
     <script src="Script/reviewSlide.js"></script>
+    <script type="text/javascript">
+
+        function copyToClip(){
+            $('.share_link_layer').css('display','none')
+            $('#productURL').select();
+            document.execCommand("copy");
+              dis_msg_box('#000','lightgreen','URL Copied !!');
+        }
+    </script>
 </body>
 
 </html>

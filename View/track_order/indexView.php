@@ -282,8 +282,6 @@
                 d = JSON.parse(res);
                 if (d.status) {
                     list = JSON.parse(d.data[0].list);
-                    console.log(list)
-                    //                    alert(list[0].p_name)
                     $('#product_list,#cancel_product_list').empty();
                     for (i = 0; i < list.length; i++) {
                         //                        t = t + list[i].p_name
@@ -318,13 +316,10 @@
                             '<p>Your order shipped from hub/shop. Order delivered.</p>');
                     }
                     loadOrderTracks(status)
-                    //                    console.log();
                 } else {
                     alert(d.message)
                 }
             });
-        // alert(track_id)
-        // c46a069acd5f048c0dffce98a5462802e4c49d3bef8c7a7d6e1205e5cf76c540
     }
 
     function completeOrder(t_id) {

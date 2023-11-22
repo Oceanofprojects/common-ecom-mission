@@ -186,8 +186,7 @@
                     <li><a href="#">text</a></li>
                 </ul>
                 <ul>
-                    <li><span>head</span></li>
-                    <li><a href="#">text</a></li>
+                    <li><span>Credits</span></li>
                     <li><a href="#">text</a></li>
                     <li><a href="#">text</a></li>
                 </ul>

@@ -49,7 +49,6 @@ function loadComponent(type, data,arr=[]) {
         $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>Starts @'+data[i].starting_price+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
       }
     }else if(type == 'suggestion-card-view'){
-      console.log(data);
       $('#mini-slider').empty();
       for (i = 0; i < data.data.length; i++) {
       $('#mini-slider').append('<div class="mini-slider-slide-box"><div class="mini-slider-img-dis" style="background: url(\'assets/product_images/'+data.data[i].p_img+'\');background-position: center;background-size: cover;"></div><h1 style="padding:10px 0px;">'+data.data[i].p_name+'</h1><div class="mini-slider-content"><h5 style="color:#555a;text-decoration:line-through;text-decoration-color:red">'+data.data[i].price+'rs</h5><h6>'+data.data[i].offer+'%</h6><h3>'+calc_offer(data.data[i].price,data.data[i].offer)+'rs</h3></div><a href="index.php?pid='+data.data[i].p_id+'&controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4" style="padding:5px 10px;border-radius:3px;background:cornflowerblue;color:#ddd;text-decoration:none;font-size:9pt;">Buy now&nbsp;&nbsp;<span class="fa fa-shopping-cart"></span></a></div>');

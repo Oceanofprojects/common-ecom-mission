@@ -18,26 +18,6 @@
     <?php
     require_once __DIR__.'/../sections/header.php';
     require_once __DIR__.'/../sections/mainSlider.php';
-
-   // if(count($cateNdata) !==0){
-   //  for($cateLoop=0;$cateLoop<count($cateNdata);$cateLoop++){
-   //      $d = $data['categoryProductSets']['data'][0]['catesets'];
-   //      $cateNdata = explode('{CATE_SEP}',$d);
-   //      $category_name = $cateNdata[0];
-   //      $tmpRow = $cateNdata[1];
-   //      $rows = explode('{ROW_SEP}',$tmpRow);
-   //      $dataObj = new stdClass();
-   //       for($i = 0;$i<count($rows);$i++){
-   //         $pdata =  explode('{DATA_SEP}',$rows[$i]);
-   //         foreach($pdata as $singleData){
-   //          $pDataUnit = explode('=',$singleData);
-   //          $myArr['data'][$i][$pDataUnit[0]] = $pDataUnit[1]; 
-   //         }
-   //      echo "<script>loadComponent('layer-wt-nor-card-view',".json_encode($myArr).")</script>";
-   //      }
-   //  }
-   // }
-
     ?>
 
 

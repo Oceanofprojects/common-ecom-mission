@@ -491,7 +491,6 @@ function search_purpose(flow,id){
 }
 
 function fillEditForm(data){
-  console.log(data)
   $('#search_txt').val('');
   cls_search_result();//close search result
   $('#cate_name option[id="'+data.cate+'"]').attr('selected',true);
