@@ -2,7 +2,6 @@
 
 require_once __DIR__.'/../core/connect.php';
 require_once __DIR__.'/../Model/commonModel.php';
-require_once __DIR__.'/../Model/customerModel.php';
 
 class adminCtrl extends commonModel{
 	public $db;
@@ -11,15 +10,7 @@ class adminCtrl extends commonModel{
 		$connect = new Connect();
 		$this->db=$connect->Connection();
 
-        $this->cusMdl = new customer();
-        $accessFlag = $this->cusMdl->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));//get role
-        if(count($accessFlag)!==0){
-            if(!in_array('admin',$accessFlag)){
-                die($accessFlag[1]);
-            }
-        }else{
-            die('OOPS!, Unauthorized access !');
-        }
+        
 	}
 	
     public function getCusOrderList(){
@@ -31,6 +22,7 @@ class adminCtrl extends commonModel{
             'join_param'=>[
                 ['customers','left_join','cid','cid'],
             ],
+            'order'=>["$tmptbl.s_no",'desc'],
             'query-exc'=>true
         ];
         $flag=$this->generateQuery($arr);
@@ -53,9 +45,10 @@ class adminCtrl extends commonModel{
         if($status == 'Arriving'){
             $d = $_GET['Ddate'];
             if(empty($d)){
-                return ['status'=>false,'data'=>[],'message'=>'Please enter delivery date for arriving status.'];
+                $arr['data'] = ["cart_status='$status~After two business days.'"];//
+                //return ['status'=>false,'data'=>[],'message'=>'Please enter delivery date for arriving status.'];
             }else{
-                $arr['data'] = ["cart_status='$status,$d'"];
+                $arr['data'] = ["cart_status='$status~$d'"];
             }
         }else{
             $arr['data'] = ["cart_status='$status'"];

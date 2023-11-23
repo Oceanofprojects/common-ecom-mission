@@ -7,7 +7,7 @@ $userState = $cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));
 if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 	$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
 		<ul class="li2">
-			<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
+			<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 			<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
 		</ul>
 	</li>';
@@ -16,23 +16,20 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 			<ul class="li2">
             <li><a href="#"><span class="fa fa-th"></span>Product</a>
 						<ul class="li3">
-			            <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+			            <li><a href="index.php?controller=admin&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=admin"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
 						<li><a href="#"><span class="fa fa-list"></span>Category</a>
 						<ul class="li3">
-			            <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+			            <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=admin"><span class="fa fa-plus"></span>Add</a></li>
+									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=admin"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
-                        <li><a href="#"><span class="fa fa-gift"></span>Combo</a>
-						<ul class="li3">
-			            <li><a href="index.php?key=&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
-						</ul></li>
 
-                        <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
+                        <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=product"><span class="fa fa-check"></span>P-Status</a></li>
+                        <li><a href="index.php?key=de1f01fe547c6abc548d82d7518dd1f6f222b830ad9ada9f1ea478f0cf831aee&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
+                        
 						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
 
@@ -175,10 +172,9 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 .menu .li3 {
     border: .1px solid #ddda;
-    //    width: 100%;
     position: absolute;
     top: -10px;
-    right: 90px;
+    right: 100px;
     display: none;
     background: #fff;
     border-radius: 5px;

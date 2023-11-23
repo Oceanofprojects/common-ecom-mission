@@ -4,12 +4,13 @@
     margin: 0px;
     font-family: 'Montserrat', sans-serif;
     font-family: 'Poppins', sans-serif;
+    font-weight: bolder;
 }
 body{
-  background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.9)),url('../assets/common-images/leave_bg.jpg');
+        background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.9)),url('../assets/common-images/bg.png');
   background-position: center;
   background-attachment:fixed;
-  background-size: cover;
+  background-size:500px;
 }
 ::-webkit-scrollbar{
   width: 1px;

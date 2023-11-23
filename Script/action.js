@@ -406,6 +406,7 @@ function logout(){
     d = JSON.parse(res)
     if(d.status){
       dis_msg_box('#000','lightgreen',d.message);
+      location.reload();
     }else{
       dis_msg_box('#000','tomato',d.message);
     }

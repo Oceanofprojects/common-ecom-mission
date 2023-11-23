@@ -32,8 +32,9 @@ $productMdl = new products();
             border-radius: 5px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .2);
             width: 50%;
-            min-width: 240px;
         }
+
+
         </style>
         <?php
         $cartPrdList = $data['data']['product_detail'];
@@ -124,8 +125,16 @@ $productMdl = new products();
     </script>
     <br><br><br>
     <?php
-    require_once 'sections/footer.php';
+//    require_once 'sections/footer.php';
     ?>
+    <style type="text/css">
+
+                @media only screen and (max-width:600px){
+            form{
+                width:90%;
+            }
+        } 
+    </style>
 </body>
 
 </html>

@@ -195,5 +195,5 @@
     </footer>
     <div style="display: flex;justify-content:center;align-items: center;flex-direction: column;text-align:center;padding:30px 0px;background:#123">
       <hr width="20%">
-      <p style="color:#fff"><br><br>All rights reserved 2023, <a href="#" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a></p>
+      <p style="color:#fff"><br><br><span class="fa fa-copyright"></span>&nbsp;2023 All rights reserved  by <a href="#" style="text-decoration: none;color:#fff">V2clothings</a><br><br><a href="https://www.instagram.com/_the_mani_maran_/" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a></p>  <br>
     </div>

@@ -18,7 +18,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
 </head>
 
 <body>
@@ -39,12 +38,13 @@
         style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">Back</a>
 
     <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"
-        style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">Home</a>
+        style="margin:10px;background:lightgreen;color:#000;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">Home</a>
+
     <br><br><br>
     <center>
         <h2>Customers Orders</h2>
         <section style="width:100%;overflow:scroll">
-            <table id="jquery-datatable-example-no-configuration" class="display" style="width:100vw">
+            <table id="jquery-datatable-example-no-configuration" class="display" style="width:100vw;background:#123;color:#ddd">
                 <thead>
                     <tr>
                         <th>C-ID</th>
@@ -78,7 +78,8 @@
                             case 'Arriving':
                                 $arriving = 'selected';   
                                 break;
-                            case 'Completed':    
+                            case 'Completed':
+                            return "<span>Closed</span>";    
                                 $completed = 'selected';
                                 break;
                             case 'Cancel':
@@ -91,7 +92,7 @@
                 if($data['data'] !==0){
                     $res = $data['data']; 
                     for($i=0;$i<count($res);$i++){
-                        echo "<tr><td><a href='index.php?key=1037d9ea3af16d70f0ce197f737e4ca6a3d1f436ce0365689334069ea9772565&cid=".$res[$i]['cid']."&controller=admin'>".$res[$i]['cid']."</a></td><td>".$res[$i]['name']."</td><td><a href='Invoice?invoice_id=".$res[$i]['order_id']."'>".$res[$i]['order_id']."</a></td><td><a href=\"assets/payment_proof_images/".$res[$i]['pay_proof']."\">Image link</a></td><td>".$res[$i]['cart_date']."</td><td>".getStatusDP($res[$i]['status'],"'".$res[$i]['order_id']."'")."</td></tr>";
+                        echo "<tr style='color:#000;font-weight:bolder'><td href='index.php?key=1037d9ea3af16d70f0ce197f737e4ca6a3d1f436ce0365689334069ea9772565&cid=".$res[$i]['cid']."&controller=admin' style='color:#000'>".$res[$i]['cid']."</a></td><td>".$res[$i]['name']."</td><td><a  style='color:#000' href='Invoice?invoice_id=".$res[$i]['order_id']."'>".$res[$i]['order_id']."</a></td><td><a style='color:#000' href=\"assets/payment_proof_images/".$res[$i]['pay_proof']."\">Proof</a></td><td>".$res[$i]['cart_date']."</td><td>".getStatusDP($res[$i]['status'],"'".$res[$i]['order_id']."'")."</td></tr>";
                     }
                 }else{
                     echo "<tr><td>Zero fetch !</td></tr>";
@@ -119,6 +120,7 @@
                 }
             });
     }
+
     </script>
     <br><br><br>
     <?php

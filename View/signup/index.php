@@ -29,7 +29,7 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background: url('../../assets/common-images/loginSignupBG.png');
+        background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('../../assets/common-images/bg.png');
         background-position: center;
         background-attachment: fixed;
     }

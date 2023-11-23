@@ -11,7 +11,6 @@ Disallow:/Config/
 Disallow:/Controller/
 Disallow:/Model/
 Disallow:/core/
-Disallow:/db/
 Disallow:/invoice/
 Disallow:/Script/
 Disallow:/sections/
@@ -19,5 +18,5 @@ Disallow:/sql/
 Disallow:/Style/
 Disallow:/View/
 
-Sitemap:https://brandimagetech.com/sitemap.xml
+Sitemap:https://.com/sitemap.xml
 

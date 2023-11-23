@@ -294,7 +294,7 @@
                     $('.b2 .status-indi,.b3 .status-indi,.b4 .status-indi,.b5 .status-indi,.b6 .status-indi').css({
                         'background': '#ddd'
                     });
-                    s_data = d.data[0].status.split(',');
+                    s_data = d.data[0].status.split('~');
                     status = s_data[0];
                     if (status == 'Confirmed') {
                         $('#invoice').css('display', 'block');
@@ -308,7 +308,7 @@
                             '<p>Your order shipped from hub/shop. Order arrived on <b>' + ((s_data[1] ==
                                 'null') ?
                                 'TBD' : s_data[1]) +
-                            '</b></p><button class="btn" onclick="completeOrder(\'' +
+                            '</b></p><button style="background:lightgreen" class="btn" onclick="completeOrder(\'' +
                             d.data[0].id + '\')">Product delivered</button>');
                     } else if (status == 'Completed') {
                         $('#invoice').css('display', 'none');

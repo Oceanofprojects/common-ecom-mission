@@ -678,7 +678,7 @@ if($this->cid == null){
 		}
 
 	}
-public function getCartByIdNDate($date){
+public function getCartById(){
 	if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
@@ -686,7 +686,7 @@ public function getCartByIdNDate($date){
 						'tbl_name' => 'mycart',
 						'action' => 'select',
 						'data' => ['p_id','quantity'],
-						'condition'=>['cid='.$this->cid,"_date='".$date."'","cart_edit_flag=1"],
+						'condition'=>['cid='.$this->cid,"cart_edit_flag=1"],
 						'query-exc'=>true
 					];
 					$flag=$this->generateQuery($arr);
@@ -702,7 +702,7 @@ public function getCartByIdNDate($date){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
 			$cart_date = date('Y-m-d');
-			$mycart_data = $this->getCartByIdNDate($cart_date);
+			$mycart_data = $this->getCartById();
 
 				if(count($mycart_data)!==0){
 					for($i=0;$i<count($mycart_data);$i++){//get customer ordered  product ID and qunty sep
@@ -727,6 +727,7 @@ public function getCartByIdNDate($date){
 				}
 		}
 	  }
+
 
 	  public function cQtyWToQty($cur_or_data_list,$pro_data_list,$product_detail,$cus_or_pr_id_list){
 		$total = 0;

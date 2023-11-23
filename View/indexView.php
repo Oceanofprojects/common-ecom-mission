@@ -117,9 +117,6 @@ require_once __DIR__.'/../sections/features.php';
         <p>Our customer's product review</p>
     </div>
     <br><br>
-    <!-- <script type="text/javascript">
-  t = "THE MSG";
-</script> -->
     <?php
 
 require_once 'Controller/productController.php';
@@ -141,7 +138,6 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    // echo hash_hmac('sha256','updateSetting',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 
@@ -150,12 +146,5 @@ if($review['status']){
 
 
     <script src="Script/reviewSlide.js"></script>
-    <!-- <br><br><br> -->
 </body>
-<?php
-   // require_once 'sections/foote.php';
-
-//38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9---MOVETOPRODUCT
-?>
-
 </html>
