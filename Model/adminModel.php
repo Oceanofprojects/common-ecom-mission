@@ -27,7 +27,7 @@ class adminCtrl extends commonModel{
         $arr = [
             'tbl_name'=>$tmptbl,
             'action'=>'join',
-            'data'=>['manual'=>["$tmptbl.cid,$tmptbl.cart_date,$tmptbl.payment_proof as pay_proof,$tmptbl.cart_status as status,$tmptbl.order_id,customers.c_name as name"]],
+            'data'=>['manual'=>["$tmptbl.cid,$tmptbl.cart_date,customers.role,$tmptbl.payment_proof as pay_proof,$tmptbl.cart_status as status,$tmptbl.order_id,customers.c_name as name"]],
             'join_param'=>[
                 ['customers','left_join','cid','cid'],
             ],

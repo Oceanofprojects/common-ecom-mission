@@ -1,17 +1,23 @@
 <html>
 
 <head>
-    <title><?php echo $data['title'];?></title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <title><?php echo $data['title'];?></title>
+    <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/components.js"></script>
     <script src="Script/action.js"></script>
     <link rel="stylesheet" href="Style/global.css">
-
+    <?php
+    require_once __DIR__.'/../sections/msg_bot.php';
+    ?>
 </head>
 
 <body>
@@ -65,7 +71,6 @@
             onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
             class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">            More Products&nbsp;<span class="fa fa-angle-double-down"></span> </button>
     </center>
-
     <br><br>
 
     <section class="cateSetProductsLoaderLayer">

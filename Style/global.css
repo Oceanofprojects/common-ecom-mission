@@ -6,10 +6,10 @@
     font-family: 'Poppins', sans-serif;
 }
 body{
-  background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.9)),url('../assets/common-images/leave_bg.jpg');
+  background:linear-gradient(rgba(256,256,256,.9),rgba(256,256,256,.9)),url('../assets/common-images/bg.png');
   background-position: center;
   background-attachment:fixed;
-  background-size: cover;
+  background-size: 200px;
 }
 ::-webkit-scrollbar{
   width: 1px;

@@ -19,5 +19,5 @@ Disallow:/sql/
 Disallow:/Style/
 Disallow:/View/
 
-Sitemap:https://brandimagetech.com/sitemap.xml
+Sitemap:https://.com/sitemap.xml
 

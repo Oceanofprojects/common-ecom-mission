@@ -2,10 +2,18 @@
 <!-- Created By CodingLab - www.codinglabweb.com -->
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="UTF-8">
     <title>Customer login page</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/common-images/logo.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <?php
+    require_once '../../sections/msg_bot.php';
+    ?>
 
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <script src="../../Script/action.js"></script>
@@ -24,9 +32,10 @@ html, body{
   height: 100vh;
   width: 100%;
   place-items: center;
-background:url('../../assets/common-images/loginSignupBG.png');
+background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('../../assets/common-images/bg.png');
 background-position: center;
-background-attachment: fixed
+background-attachment: fixed;
+        background-size: 200px;
 }
 ::selection{
   background: #ff80bf;

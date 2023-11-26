@@ -2,13 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $data['title'];?></title>
+    <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title><?php echo $data['title'];?></title>
     <script src="Script/action.js"></script>
     <script src="Script/components.js"></script>
     <script src="Script/commonScript.js"></script>
@@ -30,9 +33,10 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background: url('assets/common-images/loginSignupBG.png');
+        background:linear-gradient(#fffa,#fffa),url('assets/common-images/bg.png');
         background-position: center;
         background-attachment: fixed;
+        background-size:300px;
     }
 
     .container {

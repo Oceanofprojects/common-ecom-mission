@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="../../assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/common-images/logo.png" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>Customers Registration Form</title>
@@ -13,7 +15,9 @@
     <script src="../../Script/commonScript.js"></script>
     <script src="../../Script/jquery.min.js"></script>
     <link rel="stylesheet" href="../../Style/global.css">
-
+    <?php
+    require_once '../../sections/msg_bot.php';
+    ?>
 
     <style>
     * {
@@ -29,9 +33,10 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background: url('../../assets/common-images/loginSignupBG.png');
+background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('../../assets/common-images/bg.png');
         background-position: center;
         background-attachment: fixed;
+        background-size: 200px;
     }
 
     .container {
@@ -194,7 +199,7 @@
         <div style="text-align:right;">
             <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;"
                 href="../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"
-                class="fa fa-home"></a>
+                class="fa fa-home" id="signup-btn"></a>
             |
             <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;"
                 href="../../index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home"

@@ -4,6 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@latest/dist/glide.min.js"></script>
 <?php
             $dir = opendir('assets/slide_images');
+            $sImgs = [];
             $exts = ['jpeg','jpg','png','gif'];//allowed
             while (($file = readdir($dir)) !== false) {
               $ifImg = explode('.',$file);

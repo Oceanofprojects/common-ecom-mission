@@ -38,7 +38,7 @@ function signup(){
     if(d.status){
       $('#dis_err').text('');
       $('#frm')[0].reset();
-      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
+      document.getElementById('signup-btn').click();
     }else{
       $('#dis_err').text(d.msg).css('color','tomato');
     }
@@ -406,6 +406,7 @@ function logout(){
     d = JSON.parse(res)
     if(d.status){
       dis_msg_box('#000','lightgreen',d.message);
+      location.reload();
     }else{
       dis_msg_box('#000','tomato',d.message);
     }

@@ -12,7 +12,9 @@
     <script src="Script/components.js"></script>
     <script src="Script/action.js"></script>
     <link rel="stylesheet" href="Style/global.css">
-
+    <?php
+    require_once 'sections/msg_bot.php';
+    ?>
     <style>
     .status-con {
         width: 40%;

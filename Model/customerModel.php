@@ -55,7 +55,7 @@ class customer extends commonModel{
 			}else{
 				if(isset($_COOKIE['uid'])){
 					$cflag = $this->getUserId($_COOKIE['uid']);
-					$updatas = $this->genArAssocToColSep($data);
+				//	$updatas = $this->genArAssocToColSep($data);
 					if($cflag[0]){
 						$arr = [
 			            'tbl_name' => 'customers',

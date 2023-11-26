@@ -236,12 +236,11 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
 			exit;
 		}
-
 		if($this->cartItemExists($this->cid,$p_id)){
 			$arr = [
 				'tbl_name'=>'mycart',
 				'action'=>'update',
-				'data'=>['cart_edit_flag=1','quantity='.$quant,'updated_at=now()'],
+				'data'=>['quantity='.$quant,'updated_at=now()'],
 				'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'"']],
 				'query-exc'=>true
 			];
@@ -272,18 +271,22 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 			'tbl_name'=>'mycart',
 			'action'=>'select',
 			'data'=>[],
-			'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'" and _date=date(now())']],
+			'condition'=>['manual'=>['cid="'.$uid.'" and p_id="'.$p_id.'" and cart_edit_flag=1']],
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
-		if($flag['status'] =='succes'){
+		if($flag['status'] =='success'){
 			if(count($flag['data'])!==0){
-				return true;
+				return ['status'=>true];
 			}else{
-				return false;
+				return ['status'=>false];
 			}
+		}else{
+				return ['status'=>false];
 		}
 	}
+
+
 	public function getProductUnderCategory(){
 		$tmptbl = 'products';
 if($this->cid == null){
@@ -829,7 +832,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 			'tbl_name' => 'mycart',
 			'action' => 'UPDATE',
 			'data' => ['cart_edit_flag=0'],
-			'condition'=>['manual'=>['p_id IN('.$ids.') AND _date="'.$cart_date.'"']],
+			'condition'=>['manual'=>['p_id IN('.$ids.')']],
 			'query-exc'=>true
 		];
 		$flag=$this->generateQuery($arr);

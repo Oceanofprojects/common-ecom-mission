@@ -7,7 +7,7 @@ $userState = $cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));
 if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 	$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
 		<ul class="li2">
-			<li><a href="#"><span class="fa fa-cog"></span>Settings</a></li>
+			<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 			<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
 		</ul>
 	</li>';
@@ -26,11 +26,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
 						</ul></li>
 
-                        <li><a href="#"><span class="fa fa-gift"></span>Combo</a>
-						<ul class="li3">
-			            <li><a href="index.php?key=&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
-						</ul></li>
+
 
                         <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
 						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
