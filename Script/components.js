@@ -46,7 +46,7 @@ function loadComponent(type, data,arr=[]) {
       }
       $('.cate-container').empty();
       for(i=0;i<itr;i++){
-        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>Starts @'+data[i].starting_price+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
+        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+((data[i].starting_price!=null)?'Starts @ '+data[i].starting_price:'View Products')+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
       }
     }else if(type == 'suggestion-card-view'){
       $('#mini-slider').empty();

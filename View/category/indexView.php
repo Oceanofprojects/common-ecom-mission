@@ -27,6 +27,9 @@
   if(isset($data['data']['data'][0]['cate'])){
       $cate_name = $data['data']['data'][0]['cate'];
       $cate_img = $data['data']['data'][0]['img'];    
+  }else{
+    $cate_name = '0-Products';
+    $cate_img = '';
   }
   ?>
     <!-- <div id="common_dis_msg_box">

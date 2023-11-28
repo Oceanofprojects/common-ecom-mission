@@ -28,6 +28,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 
 
+<li><a href="index.php?key=6c5bce7dca7b1d43b37e1bb86a016ee0307342ea1bb4a75c87111f6ed090ee68&controller=admin"><span class="fa fa-users"></span>Customers</a></li>
                         <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
 						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
@@ -84,6 +85,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     padding: 0px 5px;
     margin: 0px 5px;
     transition: .3s;
+    border:.1px solid transparent;
 }
 
 
@@ -121,20 +123,18 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     float: left;
 }
 
-.menu .li2 {
-    border: .2px solid rgba(0, 0, 0, .1);
-}
 
 .menu .li2 li {
     float: none;
     z-index: 1;
     margin-top: 10px;
-    left: 0px;
 }
 
 .menu li:hover {
     cursor: pointer;
     border-radius: 5px;
+    border-color:#ddd;
+
 }
 
 .menu li:hover>a small {
@@ -159,26 +159,26 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 }
 
 .menu .li2 {
-    //			width:150px;
     position: absolute;
     top: 33px;
-    left: -10px;
+    left: -25px;
     display: none;
     border-radius: 5px;
-    background: #fff;
+    background:#fff;
+    border: .2px solid rgba(0, 0, 0, .1);
 }
 
 
 .menu .li3 {
     border: .1px solid #ddda;
-    //    width: 100%;
     position: absolute;
     top: -10px;
-    right: 90px;
+    right: 120px;
     display: none;
     background: #fff;
     border-radius: 5px;
 }
+
 
 .menu .active {
     border-radius: 5px;
@@ -261,6 +261,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     top: -100%;
     left: 0px;
     width: 100%;
+    height:100vh;
+    background:rgba(0,0,0,.8);
     z-index: 12;
     transition: .3s;
 }
@@ -510,10 +512,10 @@ function menu() {
     <center>
         <div class="search_box"><input type="search" id="search_product" list="" placeholder="Search here"><span
                 class="fa fa-search" onclick="searchProduct('detailProduct','search_product')"
-                style="color:#555a;cursor:pointer"></span></div>
+                style="color:#555a;cursor:pointer;background:cornflowerblue;padding:8px;border-radius:5px;"></span></div>
         <br>
         <span class="fa fa-close"
-            style="padding:20px;background:#fff;border-radius: 100%;color:#000;cursor:pointer;border:1px solid #555a;box-shadow:0px 0px 10px 0px rgba(0, 0, 0, .5);"
+            style="padding:20px;background:tomato;border-radius: 100%;color:#000;cursor:pointer;border:1px solid #555a;box-shadow:0px 0px 10px 0px rgba(0, 0, 0, .5);"
             onclick="op_search()"></span>
     </center>
 </div>

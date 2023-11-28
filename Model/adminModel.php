@@ -40,12 +40,42 @@ class adminCtrl extends commonModel{
             return $flag;
         }
     }
+public function updateCusFAdmin(){
+         $arr = [
+            'tbl_name'=>'customers',
+            'action'=>'update',
+            'data'=>[],
+            'condition'=>["cid='".$_GET['cusid']."'"],
+            'query-exc'=>true
+        ];
+        $stage1 = false;
+        $stage2 = false;
+
+    if(!empty($_GET['role'])){
+        $stage1 = true;
+            $arr['data'][] = "role='".$_GET['role']."'";
+    }
+    if(!empty($_GET['pwd'])){
+            $stage2 = true;
+            $arr['data'][] = "pwd='".password_hash($_GET['pwd'], PASSWORD_DEFAULT)."'";
+    }
+    if($stage1 || $stage2){
+        $flag = $this->generateQuery($arr);
+        if($flag['status'] == 'success'){
+            return ['status'=>true,'data'=>[],'message'=>'Data updated successfully.'];
+        }else{
+            return ['status'=>false,'data'=>[],'message'=>'Err in update customers data'];
+        }
+    }
+    exit;
+}
 
     public function changeOrderStatus(){
         $order_id = $_GET['oid'];
         $status = $_GET['status'];
         $arr = [
             'tbl_name'=>'myorder',
+            'data'=>[],
             'action'=>'update',
             'condition'=>['manual'=>['order_id = "'.$_GET['oid'].'"']],
             'query-exc'=>true

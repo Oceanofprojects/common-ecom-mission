@@ -11,12 +11,16 @@ class adminController extends commonController
     {
         //init
         require_once __DIR__ . "/../Model/adminModel.php";
+        require_once __DIR__ . "/../Model/customerModel.php";
+
 
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 
         //Admin Model
 
         $this->adminMdl = new adminCtrl();
+        $this->cusMdl = new customer();
+
     }
     /**
      * Execute the corresponding action.
@@ -36,15 +40,22 @@ class adminController extends commonController
         $this->index();
       }else if(hash_equals(hash_hmac($algo,'changeOrderStatus',$skey),$req['key'])){
             echo json_encode($this->adminMdl->changeOrderStatus());
+      }else if(hash_equals(hash_hmac($algo,'updateCusFAdmin',$skey),$req['key'])){
+            echo json_encode($this->adminMdl->updateCusFAdmin());
       }else if(hash_equals(hash_hmac($algo,'getCusOrderList',$skey),$req['key'])){
         $this->view("main/productStatusCpanel", array(
             "title" => "Client product contol",
             "data"=>$this->adminMdl->getCusOrderList()
         ));
+      }else if(hash_equals(hash_hmac($algo,'myCustomers',$skey),$req['key'])){
+        $this->view("main/myCustomers", array(
+            "title" => "My Customers",
+            "data"=>$this->cusMdl->getCustomersList()//$this->adminMdl->getCusOrderList()
+        ));
       }else if(hash_equals(hash_hmac($algo,'getCusById',$skey),$req['key'])){
         $this->view("main/cusInfo", array(
             "title" => "Customer Info",
-            "data"=>[1,2,3,4]
+            "data"=>$this->cusMdl->getUserInfoById(base64_decode($_GET['cid']))
         ));
       }else{
         $this->index();
@@ -55,8 +66,9 @@ class adminController extends commonController
     {
         $this->view("index", array(
             "title" => "Home",
-            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>2]),
+            "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>10]),
             "cate_list"=>$this->productMdl->get_cate_list(),
+            "categoryProductSets"=>$this->productMdl->getProductUnderCategory()
         ));
     }
 

@@ -160,30 +160,55 @@ trait userData{
 		}
 	}
 
-	public function getUserInfoById(){
-		if(isset($_COOKIE['uid'])){
-			$cflag = $this->getUserId($_COOKIE['uid']);
-			if($cflag[0]){
-				$arr = [
-					'tbl_name'=>'customers',
-					'action'=>'select',
-					'data'=>['c_name','profile','address_1','email','c_gender','address_2','country','state','city','pin_code','ph_num','whatsapp_num'],
-				'condition'=>['manual'=>['cid="'.$cflag[1].'"']],
-					'query-exc'=>true
-				];
-				$data = $this->generateQuery($arr);
-				if($data['status'] == 'success'){
-					return ['status'=>true,'data'=>$data['data'],'message'=>[]];
+	public function getUserInfoById($defid = ''){
+		//default ID for admin changes
+		if(empty($defid)){
+			if(isset($_COOKIE['uid'])){
+				$cflag = $this->getUserId($_COOKIE['uid']);
+				if($cflag[0]){
+					$cid = $cflag[1];					
 				}else{
-					return $data;
+					return ['status'=>false,'data'=>[],'message'=>'Please login'];
 				}
 			}else{
 				return ['status'=>false,'data'=>[],'message'=>'Please login'];
 			}
 		}else{
-			return ['status'=>false,'data'=>[],'message'=>'Please login'];
+			$cid = $defid;//admin defined CID
+		}
+
+		$arr = [
+						'tbl_name'=>'customers',
+						'action'=>'select',
+						'data'=>['role','c_name','profile','address_1','email','c_gender','address_2','country','state','city','pin_code','ph_num','whatsapp_num'],
+					'condition'=>['manual'=>['cid="'.$cid.'"']],
+						'query-exc'=>true
+		];
+		$data = $this->generateQuery($arr);
+		if($data['status'] == 'success'){
+			return ['status'=>true,'data'=>$data['data'],'message'=>[]];
+		}else{
+			return $data;
 		}
 	}
-}
+
+	public function getCustomersList(){
+		$arr = [
+						'tbl_name'=>'customers',
+						'action'=>'select',
+						'data'=>['cid','role','c_name','profile','address_1','email','c_gender','address_2','country','state','city','pin_code','ph_num','whatsapp_num'],
+						'query-exc'=>true
+		];
+		$data = $this->generateQuery($arr);
+		if($data['status'] == 'success'){
+			return ['status'=>true,'data'=>$data['data'],'message'=>[]];
+		}else{
+			return $data;
+		}
+	}
+
+
+
+}//class END
 
 ?>

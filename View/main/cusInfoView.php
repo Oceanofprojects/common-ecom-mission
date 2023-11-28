@@ -5,10 +5,10 @@
         <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="widtd=device-widtd, initial-scale=1.0">
     <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
     <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
-    
+    <title><?php echo $data['title'];?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
@@ -21,75 +21,119 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
+<style type="text/css">
+    table{
+        width:90%;
+        min-width:200px;
+    }
+    td{
+        border-bottom:1px solid #000a;
+        padding:10px 0px;
+        font-weight:  bolder;
+    }
+</style>
 </head>
 
 <body>
     <?php
-//    echo "MANI";
     // print_r($data);
-    // exit;
+    if(count($data['data']['data'])!==0){
+        $cusdata = $data['data']['data'][0];
+    }else{
+        die("Invaild customer");
+    }
     ?>
-    <br><br><br>
+    <br>
+        <a href="#" onclick="history.back()"
+        style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">Back</a>
+    <br><br>
+
     <center>
-        <h2>Customers Orders</h2>
-        <section>
+        <h2>User Details</h2>
+        <br><br>
+        <form id="frm">
             <table>
                 <tr>
-                    <th>CID</th>
-                    <td>1212</td>
+                    <td>Type</td>
+                    <td><?php echo $cusdata['role'];?></td>
                 </tr>
                 <tr>
-                    <th>Customer Name</th>
-                    <td>Mani</td>
+                    <td>Name</td>
+                    <td><?php echo $cusdata['c_name'];?></td>
                 </tr>
                 <tr>
-                    <th>Email</th>
-                    <td>cus</td>
+                    <td>Email</td>
+                    <td><?php echo $cusdata['email'];?></td>
                 </tr>
                 <tr>
-                    <th>Address</th>
-                    <td>cus</td>
+                    <td>Address</td>
+                    <td><?php echo $cusdata['address_1'].' '.$cusdata['address_2'];?></td>
                 </tr>
                 <tr>
-                    <th>Phone</th>
-                    <td>cus</td>
+                    <td>Phone</td>
+                    <td><?php echo $cusdata['ph_num'];?></td>
                 </tr>
                 <tr>
-                    <th>Whatsapp</th>
-                    <td>cus</td>
+                    <td>Whatsapp</td>
+                    <td><?php echo $cusdata['whatsapp_num'];?></td>
                 </tr>
                 <tr>
-                    <th>Profile</th>
-                    <td>cus</td>
+                    <td>Country</td>
+                    <td><?php echo $cusdata['country'];?></td>
                 </tr>
                 <tr>
-                    <th>Country</th>
-                    <td>cus</td>
+                    <td>State</td>
+                    <td><?php echo $cusdata['state'];?></td>
                 </tr>
                 <tr>
-                    <th>State</th>
-                    <td>cus</td>
+                    <td>City</td>
+                    <td><?php echo $cusdata['city'];?></td>
                 </tr>
                 <tr>
-                    <th>City</th>
-                    <td>cus</td>
+                    <td>Pin code</td>
+                    <td><?php echo $cusdata['pin_code'];?>
+                    <input type="hidden" value="<?php echo base64_decode($_GET['cid']);?>" name="cusid">     
+                </td>
                 </tr>
                 <tr>
-                    <th>Pin code</th>
-                    <td>cus</td>
+                    <td>Account IN</td>
+                    <td>
+                        <select name="role">
+                        <?php
+                         if($cusdata['role'] == 'admin'){
+                            echo "<option value=\"\">Select Role</option><option value=\"".$cusdata['role']."\">Admin</option>
+                            <option value=\"customer\">Customer</option>";
+                         }else{
+                            echo "<option value=\"\">Select Role</option><option value=\"".$cusdata['role']."\">".$cusdata['role']."</option>
+                            <option value=\"admin\">Admin</option>";
+                         }
+                        ?>
+                        </select>        
+                    </td>
                 </tr>
                 <tr>
-                    <th>Account IN</th>
-                    <td>cus</td>
+                    <td>Account Pwd (tmp-c)</td>
+                    <td><input type="text" name="pwd" placeholder="Enter New password"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="button" style="background:lightgreen;color:#000;border:1px solid #000a;padding:5px 10px;border-radius:5px;" value="Update" onclick="updateCusFAdmin()"></td>
                 </tr>
             </table>
-        </section>
+        </form>
     </center>
     <br><br><br>
-    <?php
-//    require_once 'sections/footer.php';
-    ?>
+    <script>
+         function updateCusFAdmin() {
+            performAjx('index.php', 'get','key=dd429394ab115426a0942880d4652f3a4c355038601099f96dad3c63707cf630&controller=admin&'+$('#frm').serialize(), (res) => {
+    d = JSON.parse(res);
+    if(d.status){
+      dis_msg_box('#000','lightgreen',d.message);
+    }else{
+      dis_msg_box('#000','tomato',d.message);
+    }
+  });
+        }
+    </script>   
 </body>
 
 </html>

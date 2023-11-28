@@ -277,12 +277,12 @@ $q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_catego
 		$flag = $this->generateQuery($arr);
 		if($flag['status'] =='success'){
 			if(count($flag['data'])!==0){
-				return ['status'=>true];
+				return true;
 			}else{
-				return ['status'=>false];
+				return false;
 			}
 		}else{
-				return ['status'=>false];
+				return false;
 		}
 	}
 
@@ -367,7 +367,7 @@ if($this->cid == null){
 			'join_param'=>[
 				['products','left_join','cate_id','cate_id']
 			],
-			'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id"]],
+			'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
