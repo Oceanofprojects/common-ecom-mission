@@ -77,7 +77,7 @@
         <h1 style="margin:10px;color:#fff;font-size:2em;">Top Quality & Collective Plants Available</h1>
         <br>
         <button id="loadMoreProduct"
-            onclick=""
+            onclick="window.open('index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product','_self')"
             class="btn" style="background:darkorange;color:#fff;text-decoration:none" name="button">            Explore Nows&nbsp;&nbsp;<span class="fa fa-angle-double-right"></span> </button>
             </div>
     </section>
