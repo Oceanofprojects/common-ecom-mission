@@ -126,8 +126,8 @@
     }
 
     .share_link_box {
-        height:30px;
-        width:30px;
+/*        height:30px;
+        width:30px;*/
         display: flex;
         justify-content:center;
         align-items: center;
@@ -169,7 +169,18 @@
     echo "<br><br><br><h3 align='center'>Product ID not available</h3>";exit;
   }
 
-    ?>
+$url = '';
+
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+    $url .= 'https://';
+}else{
+    $url .= 'http://';
+}
+$url .= $_SERVER['HTTP_HOST'];
+$url .= $_SERVER['REQUEST_URI'];
+
+?>    
+
 
 
 
@@ -183,7 +194,8 @@
             </a>
         </div>
         <div class="share_link_box">
-            <a href="#" class="fa fa-copy" onclick="copyToClip()">
+<input type="text" style="color:#ddda;border:none;background:transparent; outline:none" value="<?php echo $url;?>" id="productURL">
+            <a href="#" class="fa fa-copy" onclick="copyToClip()" style="padding:5px;">
             </a>
         </div>
 <!--         <div class="share_link_box">
@@ -225,6 +237,14 @@
                     style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;">
                 </div>
                 <br>
+           <?php
+                  if($resData['offer'] > 0){
+                    echo "<span style=\"text-decoration:line-through;font-size:15pt;text-decoration-color:red;\">".$resData['price']."rs</span><sup>".$resData['offer']."%</sup>&nbsp;&nbsp;&nbsp;&nbsp;<span>".($resData['price'] - ($resData['price']*$resData['offer']/100))."rs</span><br>";
+                  }else{
+                    echo "<h1>".$resData['price'].'rs'."</h1>";
+                  }
+                  ?>
+                <br>
                 <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
                 <br>
                 <div class="t" style="min-width:200px;width:40%">
@@ -241,7 +261,13 @@
             <div class="details-box-content-layer">
                 <br>
                 <h2>Product Details</h2>
-                <p width="100%"><?php echo $resData['p_desc'];?></p>
+                <p width="100%"><?php 
+//                echo $resData['p_desc'];
+                $lines = explode('NEWLINE',$resData['p_desc']);
+                    for($y=0;$y<count($lines);$y++){
+                        echo "<span class='fa fa-angle-double-right'></span>&nbsp;&nbsp;".$lines[$y].'<br><br>';
+                    }
+                ?></p>
                 <table>
                     <tr style="background:#555a;">
                         <th colspan="2" style="padding:10px;text-align:center">Product Details</th>
@@ -285,20 +311,7 @@
         </section>
     </center>
     <br><br><br>
-<?php
 
-$url = '';
-
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
-    $url .= 'https://';
-}else{
-    $url .= 'http://';
-}
-$url .= $_SERVER['HTTP_HOST'];
-$url .= $_SERVER['REQUEST_URI'];
-
-?>    
-<input type="text" value="<?php echo $url;?>" id="productURL" hidden>
     
     <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
     <h2 align="center">Suggestion Product</h2><br><br><br>
@@ -315,9 +328,6 @@ if(count($data['suggestion']['data'])!==0){
 }
 
   ?>
-    <!--   <script type="text/javascript">
-    loadComponent('suggestion-card-view',{});
-  </script> -->
     <br><br>
     <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
     <h2 align="center">Customers Reviews</h2><br>
@@ -347,10 +357,10 @@ $p_id=$resData['p_id'];
     <script type="text/javascript">
 
         function copyToClip(){
-            $('.share_link_layer').css('display','none')
             $('#productURL').select();
             document.execCommand("copy");
               dis_msg_box('#000','lightgreen','URL Copied !!');
+           $('.share_link_layer').css('display','none');    
         }
     </script>
 </body>

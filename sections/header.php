@@ -262,7 +262,6 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     left: 0px;
     width: 100%;
     height:100vh;
-    background:rgba(0,0,0,.8);
     z-index: 12;
     transition: .3s;
 }

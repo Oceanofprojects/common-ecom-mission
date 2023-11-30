@@ -18,7 +18,7 @@ function loadComponent(type, data,arr=[]) {
     }else if (type == 'layer-wt-nor-card-view') {
       heading = arr[0];//heading
         cateSetsRnd = Math.floor(Math.random() * 9999999);
-        $('.cateSetProductsLoaderLayer').append('<br><br><div class="head-info"><h1>'+heading+'</h1><p>Best Quality</p></div><br>');
+        $('.cateSetProductsLoaderLayer').append('<br><br><div class="head-info"><h1 style="text-transform: capitalize;">'+heading+'</h1><p>Best Quality</p></div><br>');
         $('.cateSetProductsLoaderLayer').append('<div class="cateSetProductsLoaderLayerBox cateSetProductsLoader'+cateSetsRnd+'"></div>');
       for (i = 0; i < data.data.length; i++) {
           nxtVal = i;//get val after for loop
@@ -35,7 +35,7 @@ function loadComponent(type, data,arr=[]) {
               check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
                   i].p_name, data.data[i].p_id) + '</div>');
       }
-      $('.cateSetProductsLoaderLayer').append('<br><br><center><a style="background:navy;color:#ddd;text-decoration:none;padding:5px;border-radius:3px;" href="index.php?cate_id='+data.data[nxtVal].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More '+heading+'</a></center>');
+      $('.cateSetProductsLoaderLayer').append('<br><br><center><a style="background:lightgreen;color:#000;text-decoration:none;padding:5px;border-radius:3px;" href="index.php?cate_id='+data.data[nxtVal].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">Load More</a></center>');
 
       
     }else if(type == 'category-card-view'){

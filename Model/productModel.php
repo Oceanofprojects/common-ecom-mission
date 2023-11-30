@@ -601,6 +601,7 @@ if($this->cid == null){
 	public function editProduct(){
 		$p_id=$_POST['p_id'];
 		$old_img_name = $_POST['p_img'];
+		$_POST['p_desc'] = htmlspecialchars($_POST['p_desc']);
 		unset($_POST['p_img']);
 		unset($_POST['p_id']);
 		if($_FILES['file1']['size'] == 0 && $_FILES['file1']['name'] == ''){
@@ -625,6 +626,7 @@ if($this->cid == null){
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
+		// echo $flag;exit;
 		if($flag['status']){
 			return ['status'=>true,'data'=>[],'message'=>'Product updated Successfully'];
 		}else{
@@ -959,6 +961,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 		public function deleteCategory(){
 			$cate_id = $_GET['cate_id'];
 		$q = "SELECT p_id FROM products  WHERE cate_id = '$cate_id'";
+		echo $q;exit;
 		$sql = $this->db->prepare($q);
 		if($sql->execute()){
 			$res = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -983,16 +986,18 @@ public function updateCusPrdWTOrPrd($orderRes){
 						return $deletAllProductUnderCategory;
 					}
 				}
-				$q = "DELETE FROM product_category WHERE cate_id='$cate_id'";
+				
+			}//END IF
+			$q = "DELETE FROM product_category WHERE cate_id='$cate_id'";
 				$sql = $this->db->prepare($q);
 				if($sql->execute()){//last stage Deleting catagory
 					return $deletAllProductUnderCategory;//Exit
 				}else{
 					return ['status'=>false,'data'=>[],'message'=>'Err in delete product last stage'];
 				}
-			}else{
-				return ['status'=>false,'data'=>[],'message'=>'Zero cate list to delete'];
-			}
+			// else{
+			// 	return ['status'=>false,'data'=>[],'message'=>'Zero cate list to delete'];
+			// }
 
 //			$list = explode(',',$res);
 
