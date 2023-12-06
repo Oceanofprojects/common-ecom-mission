@@ -88,7 +88,7 @@ class customer extends commonModel{
 		$arr = [
             'tbl_name' => 'customers',
             'action' => 'select',
-            'data' => ['cid','pwd'],
+            'data' => ['cid','pwd','role'],
 			'condition'=>["c_name='".$idnty."'","email='".$idnty."'","cid='".$idnty."'","ph_num='".$idnty."'","whatsapp_num='".$idnty."'"],
 			'conditionCombineOpt'=>'OR',
 			'query-exc'=>true

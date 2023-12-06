@@ -62,6 +62,24 @@ class products extends commonModel{
 		}
 	}
 
+
+	public function getallProducts(){
+			$arr = [
+				'tbl_name'=>'products',
+				'action'=>'select',
+				'data'=>[],
+				'order'=>['s_no','desc'],
+       	'query-exc'=>true
+			];    
+    $flag = $this->generateQuery($arr);
+	if($flag['status']){
+			$res=$flag['data'];
+			return ['status'=>true,'data'=>$res,'message'=>'Products fetched successfully'];
+		}else{
+			return ['status'=>false,'data'=>[],'message'=>'Products fetch Failed'];
+		}
+	}
+
 	public function get_suggestion($datas){
 		$cate = $datas[0];//Get cate
 		return "asasasasasasasas";
@@ -106,21 +124,21 @@ class products extends commonModel{
 		if($req['type'] == 'getCateReview'){
 			//cate filter
 			unset($arr['data']);
-			$arr['data']=['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]];
+			$arr['data']=['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate ORDER BY RAND()"]];
 
 			$arr['join_param']=[
 				[$cus,'left_join','cid','cid'],
 				['products','left_join','p_id','p_id']
 			];
-			$arr['condition']=['manual'=>['products.cate_id="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
+			$arr['condition']=['manual'=>['products.cate_id="'.$req['data'].'" ORDER BY RAND() LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}else if($req['type'] == 'getAllReview'){
 			//Normal cate fetch
 			$arr['join_param']=[[$cus,'left_join','cid','cid']];
-			$arr['condition']=['raw-manual'=>['ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
+			$arr['condition']=['raw-manual'=>['ORDER BY RAND() LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}else if($req['type'] == 'getPidReview'){
 			//PID cate fillter
 			$arr['join_param']=[[$cus,'left_join','cid','cid']];
-			$arr['condition']=['manual'=>['review.p_id="'.$req['data'].'" ORDER BY review.sno LIMIT '.$req['r-from'].','.$req['r-to'].'']];
+			$arr['condition']=['manual'=>['review.p_id="'.$req['data'].'" ORDER BY RAND() LIMIT '.$req['r-from'].','.$req['r-to'].'']];
 		}
 		// (SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 		// 'join_param'=>[

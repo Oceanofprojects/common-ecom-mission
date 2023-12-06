@@ -100,13 +100,8 @@
                     <td>
                         <select name="role">
                         <?php
-                         if($cusdata['role'] == 'admin'){
                             echo "<option value=\"\">Select Role</option><option value=\"".$cusdata['role']."\">Admin</option>
-                            <option value=\"customer\">Customer</option>";
-                         }else{
-                            echo "<option value=\"\">Select Role</option><option value=\"".$cusdata['role']."\">".$cusdata['role']."</option>
-                            <option value=\"admin\">Admin</option>";
-                         }
+                            <option value=\"customer\">Customer</option><option value=\"block\">Block</option>";                         
                         ?>
                         </select>        
                     </td>
@@ -127,9 +122,9 @@
             performAjx('index.php', 'get','key=dd429394ab115426a0942880d4652f3a4c355038601099f96dad3c63707cf630&controller=admin&'+$('#frm').serialize(), (res) => {
     d = JSON.parse(res);
     if(d.status){
-      dis_msg_box('#000','lightgreen',d.message);
+      alert(d.message);
     }else{
-      dis_msg_box('#000','tomato',d.message);
+      alert(d.message);
     }
   });
         }

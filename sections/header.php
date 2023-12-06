@@ -29,7 +29,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 
 <li><a href="index.php?key=6c5bce7dca7b1d43b37e1bb86a016ee0307342ea1bb4a75c87111f6ed090ee68&controller=admin"><span class="fa fa-users"></span>Customers</a></li>
-                        <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-check"></span>P-Status</a></li>
+<li><a href="index.php?key=4ed65d87253931bd029d4d57a24ceaece22cd710e095f9f343802cdb0de272b0&controller=admin"><span class="fa fa-cubes"></span>Products</a></li>
+                        <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-bar-chart"></span>P-Status</a></li>
 						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
 					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
 

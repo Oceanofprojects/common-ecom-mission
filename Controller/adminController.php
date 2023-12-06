@@ -12,6 +12,7 @@ class adminController extends commonController
         //init
         require_once __DIR__ . "/../Model/adminModel.php";
         require_once __DIR__ . "/../Model/customerModel.php";
+        require_once __DIR__ . "/../Model/productModel.php";
 
 
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
@@ -19,6 +20,7 @@ class adminController extends commonController
         //Admin Model
 
         $this->adminMdl = new adminCtrl();
+        $this->prdMdl = new products();
         $this->cusMdl = new customer();
 
     }
@@ -51,6 +53,11 @@ class adminController extends commonController
         $this->view("main/myCustomers", array(
             "title" => "My Customers",
             "data"=>$this->cusMdl->getCustomersList()//$this->adminMdl->getCusOrderList()
+        ));
+      }else if(hash_equals(hash_hmac($algo,'myProducts',$skey),$req['key'])){
+        $this->view("main/myProducts", array(
+            "title" => "My Product",
+            "data"=>$this->prdMdl->getallProducts()
         ));
       }else if(hash_equals(hash_hmac($algo,'getCusById',$skey),$req['key'])){
         $this->view("main/cusInfo", array(

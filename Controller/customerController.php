@@ -116,7 +116,12 @@ class customerController extends commonController
           $loop = 0;
           for($i=0;$i<count($pwds);$i++){
             if(password_verify($pwd,$pwds[$i]['pwd'])){
-              $this->checkNmakeLog($pwds[$i]['cid']);
+              if($pwds[$i]['role'] != 'block'){
+                $this->checkNmakeLog($pwds[$i]['cid']);                
+              }else{
+                echo json_encode(['status'=>false,'data'=>[],'msg'=>'Oops!, This account blocked by admin.']);
+                exit;
+              }
             }else{
               $loop++;
             }

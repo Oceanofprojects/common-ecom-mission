@@ -12,6 +12,8 @@
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/components.js"></script>
+    <script src="Script/action.js"></script>
+    
     <link rel="stylesheet" href="Style/global.css">
     <style media="screen">
     #frm {
@@ -105,6 +107,15 @@ width:90%;
 <body>
     <?php
     require_once 'sections/header.php';
+
+/**
+ * 
+ * 
+ * CHECKING AUTO FILL FROM ADMIN EDIT
+ * **/
+    if(isset($_GET['autofill']) && (bool)$_GET['autofill']){
+        echo "<script>search_purpose('editProduct','".$_GET['p_id']."')</script>";//Search & autofill
+    }
 
     ?>
     <div id="common_dis_msg_box">
@@ -208,7 +219,6 @@ width:90%;
         </section>
 
     </center>
-    <script src="Script/action.js"></script>
 
     <script type="text/javascript">
     function deleteProduct() {
