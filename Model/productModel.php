@@ -778,6 +778,26 @@ public function calcOffer($price,$off,$qnty){
 	return $or_price*$qnty; 
 }
 
+public function changeCcReqAccess(){
+	if($this->cid == null){
+						return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+			}else{
+					$arr = [
+						'tbl_name'=>'cc_request',
+						'action'=>'update',
+						'data'=>['req_status=0'],
+						'condition'=>["cid='".$this->cid."'"],
+						'query-exc'=>true];
+						$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						return true;
+					}else{
+						return false;
+					}
+				}
+
+}
+
 
 public function checkoutFinal(){
 	$cart_date = date('Y-m-d');
@@ -789,14 +809,19 @@ public function checkoutFinal(){
 					$createOrder = $this->createNewOrder($cart_date,$checkout_flag['product_detail']);
 					if($createOrder['status']){
 						//DISABLE CART EDIT OPTION
-						if($this->disableCartEdit(implode(',',$checkout_flag['ids']),$cart_date)){
-							return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in "];
-						//END OF CART PROCCESS
+
+						if($this->changeCcReqAccess()){
+							if($this->disableCartEdit(implode(',',$checkout_flag['ids']),$cart_date)){
+								return ['status'=>true,'data'=>$createOrder['data'],'message'=>"Your order successfully Pleaced. You will track your order status in "];
+							//END OF CART PROCCESS
+							}else{
+								return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong,(Err in final)"];
+							}//END OF CART PROCCESS
 						}else{
-							return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Please contact your admin (Err in final)"];
-						}//END OF CART PROCCESS
+								return ['status'=>false,'data'=>[],'message'=>"Oops, Something went wrong, Update CC req"];
+						}
 					}else{
-						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, Please contact your admin (Err in Create order)'];
+						return ['status'=>false,'data'=>[],'message'=>'Oops, Something went wrong, (Err in Create order)'];
 					}
 //					CREATE ORDER END
 		}else{
@@ -1172,6 +1197,48 @@ public function updateCusPrdWTOrPrd($orderRes){
 					}
 				}
 			}
+		}
+
+		// public function isCcReqExist(){
+
+		// }
+		public function raiseCcReq(){
+			if($this->cid == null){
+						return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
+			}else{
+					$arr = [
+						'tbl_name'=>'cc_request',
+						'action'=>'select',
+						'data'=>[],
+						'condition'=>["cid='".$this->cid."'","req_status=1"],
+						'order'=>['cc_req_id','desc'],
+						'limit'=>1,
+						'query-exc'=>true];
+						$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						if(count($flag['data'])>0){
+							$db_cc_items = $flag['data'][0]['total_product'];
+							$cur_cc_items = $this->get_cate_num();
+							if($db_cc_items == $cur_cc_items){
+									return ['status'=>true,'data'=>$flag['data'][0]['cc_price'],'message'=>'CC request already exists'];
+							}
+						}
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'err in fetch cc-req'];
+					}
+
+					//NEW REQ
+				$arr = [
+						'tbl_name'=>'cc_request',
+						'action'=>'insert',
+						'data'=>["cid='".$this->cid."'","cc_price='TBD'","total_product=".$this->get_cate_num(),"req_status=1","req_date=CURRENT_DATE"],
+						'query-exc'=>true];
+					if($this->generateQuery($arr)['status'] == 'success'){
+						return ['status'=>true,'data'=>[],'message'=>'Request sent successfully'];
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'err in raise cc req'];
+					}
+			}	
 		}
 
 }//CLASS END

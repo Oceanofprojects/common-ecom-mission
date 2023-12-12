@@ -388,6 +388,20 @@ transition:.2s;
   color:#fff;
   cursor:pointer
 }
+.rotate360auto{
+  font-size: 11pt;
+  animation:rt360 1s linear infinite;
+}
+
+@keyframes rt360{
+  0%{
+    transform:rotate(0deg);
+  }
+  100%{
+    transform:rotate(360deg);
+  }
+}
+
 @media only screen and (max-width:800px){
   .slider-box{
     width:90%;

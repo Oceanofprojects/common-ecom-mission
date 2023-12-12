@@ -51,7 +51,7 @@ function loadComponent(type, data,arr=[]) {
     }else if(type == 'suggestion-card-view'){
       $('#mini-slider').empty();
       for (i = 0; i < data.data.length; i++) {
-      $('#mini-slider').append('<div class="mini-slider-slide-box"><div class="mini-slider-img-dis" style="background: url(\'assets/product_images/'+data.data[i].p_img+'\');background-position: center;background-size: cover;"></div><h1 style="padding:10px 0px;">'+data.data[i].p_name+'</h1>'+getSuggestPrice(data.data[i].price,data.data[i].offer)+'<a href="index.php?pid='+data.data[i].p_id+'&controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4" style="padding:5px 10px;border-radius:3px;background:cornflowerblue;color:#ddd;text-decoration:none;font-size:9pt;">Buy now&nbsp;&nbsp;<span class="fa fa-shopping-cart"></span></a></div>');
+      $('#mini-slider').append('<div class="mini-slider-slide-box"><div class="mini-slider-img-dis" style="background: url(\'assets/product_images/'+data.data[i].p_img+'\');background-position: center;background-size: cover;"></div><h1 style="padding:10px 0px;font-size:13pt;">'+data.data[i].p_name+'</h1>'+getSuggestPrice(data.data[i].price,data.data[i].offer)+'<a href="index.php?pid='+data.data[i].p_id+'&controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4" style="padding:5px 10px;border-radius:3px;background:cornflowerblue;color:#ddd;text-decoration:none;font-size:9pt;">Buy now&nbsp;&nbsp;<span class="fa fa-shopping-cart"></span></a></div>');
       }
 
     }

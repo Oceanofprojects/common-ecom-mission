@@ -40,6 +40,18 @@ $productMdl = new products();
         }
         </style>
         <?php
+
+
+        $cc_info = $productMdl->raiseCcReq();
+        // print_r($cc_info);
+        if($cc_info['status']){
+            if(is_numeric($cc_info['data'])){
+                $cc_price = $cc_info['data'];   
+            }else{
+                $cc_price = " <span class='fa fa-spinner rotate360auto'></span> <small style='color:tomato'>Please wait couple of minutes</small>";                
+            }
+        }
+
         if(isset($data['data']['product_detail'])){
         $cartPrdList = $data['data']['product_detail'];
         if(count($cartPrdList) ==0){
@@ -58,18 +70,23 @@ $productMdl = new products();
                 <tr>
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 1</label>
-                        <small>&nbsp;Please check selected item.</small><br><br>
+                        <small>&nbsp;Please check selected items.</small><br><br>
                         <label><b>Selected items (<?php echo count($cartPrdList);?>) : </b></label><br><br>
                         <?php
                         for($i=0;$i<count($cartPrdList);$i++){
                          echo "<p style='padding:5px 0px;'>".$cartPrdList[$i]['p_name']."&nbsp;&nbsp;<span class='fa fa-angle-double-right'></span>&nbsp;&nbsp;".$cartPrdList[$i]['qnty']."</p>";
                         }
                         ?><br>
-                        <h3>Total Price :<?php echo $data['data']['total_cost'];?></h3><br><br>
-
+                        <hr><br>
+                        <h3>Product Price : <?php echo $data['data']['total_cost'];?></h3><br>
+                        <h3>Courier Price : <?php echo $cc_price;?></h3><br>
+                        <h3 style="padding:10px;background: lightgreen;">Total : <?php echo (is_numeric($cc_price))?$cc_price+$data['data']['total_cost']:"TBD";?></h3><br>
                     </td>
                 </tr>
-                <tr>
+                <?php
+                if(is_numeric($cc_price)){
+                ?>
+                <tr id="step2">
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 2</label>
                         <small>&nbsp;Scan G-pay QR to pay money (<b>#Please check UPI ID/Name before make
@@ -102,6 +119,9 @@ $productMdl = new products();
 
                     </td>
                 </tr>
+                <?php
+                    }
+                ?>
 
             </table><br>
         </form>

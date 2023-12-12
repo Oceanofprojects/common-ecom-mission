@@ -2,11 +2,15 @@
 <html lang="en">
 
 <head>
-    <title><?php echo $data['title'];?></title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <title><?php echo $data['title'];?></title>
+    <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/components.js"></script>
