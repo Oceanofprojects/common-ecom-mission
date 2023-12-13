@@ -155,7 +155,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    // echo hash_hmac('sha256','isCcReqExist',9050);
+    // echo hash_hmac('sha256','getCcRequest',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

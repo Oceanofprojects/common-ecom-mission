@@ -43,12 +43,12 @@ $productMdl = new products();
 
 
         $cc_info = $productMdl->raiseCcReq();
-        // print_r($cc_info);
+        print_r($cc_info);
         if($cc_info['status']){
             if(is_numeric($cc_info['data'])){
                 $cc_price = $cc_info['data'];   
             }else{
-                $cc_price = " <span class='fa fa-spinner rotate360auto'></span> <small style='color:tomato'>Please wait couple of minutes</small>";                
+                $cc_price = " <span class='fa fa-spinner rotate360auto'></span> <small style='color:tomato'>Please wait couple of minutes</small> <b>/</b> <small>Enquiry : <a href='#'>+91 00000 00000</a></small>";                
             }
         }
 
@@ -70,7 +70,7 @@ $productMdl = new products();
                 <tr>
                     <td>
                         <label style="background:navy;color:#ddd;padding:5px;">Step 1</label>
-                        <small>&nbsp;Please check selected items.</small><br><br>
+                        <small>&nbsp;Please check selected items. <u>(If item not showing? <a href="#" onclick="location.reload()">Refresh</a>)</u></small><br><br>
                         <label><b>Selected items (<?php echo count($cartPrdList);?>) : </b></label><br><br>
                         <?php
                         for($i=0;$i<count($cartPrdList);$i++){

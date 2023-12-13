@@ -44,6 +44,8 @@ class adminController extends commonController
             echo json_encode($this->adminMdl->changeOrderStatus());
       }else if(hash_equals(hash_hmac($algo,'updateCusFAdmin',$skey),$req['key'])){
             echo json_encode($this->adminMdl->updateCusFAdmin());
+      }else if(hash_equals(hash_hmac($algo,'getCcRequest',$skey),$req['key'])){
+            echo json_encode($this->prdMdl->getCcReq($_GET['cid']));
       }else if(hash_equals(hash_hmac($algo,'getCusOrderList',$skey),$req['key'])){
         $this->view("main/productStatusCpanel", array(
             "title" => "Client product contol",
@@ -63,6 +65,11 @@ class adminController extends commonController
         $this->view("main/cusInfo", array(
             "title" => "Customer Info",
             "data"=>$this->cusMdl->getUserInfoById(base64_decode($_GET['cid']))
+        ));
+      }else if(hash_equals(hash_hmac($algo,'gotoCcRequest',$skey),$req['key'])){
+        $this->view("main/ccRequest", array(
+            "title" => "Customer's CC-Request",
+            "data"=>$this->prdMdl-> getCcReq()
         ));
       }else{
         $this->index();

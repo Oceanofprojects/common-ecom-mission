@@ -6,9 +6,9 @@ function loadComponent(type, data,arr=[]) {
           boxIdtyRnd = Math.floor(Math.random() * 9999999);
           $('.item-container').append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" id=\"myfav'+favRnd+'\" onclick=\"add_fav(\'myfav'+favRnd+'\',\'' + data.data[i].p_id +
-              '\')\"></h6><div class=\"img-src\" style=\"background:url(assets/product_images/' +
+              '\')\"></h6><div class=\"img-src\" style=\"background:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1)),url(assets/product_images/' +
               data.data[i].p_img +
-              ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
+              ');background-size:cover;background-position:center;border-radius:5px;\"></div><br><h3 style="color:#555a" align="center" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')">' +
               data.data[i].p_name +
               '</h3>'+ isOff(data.data[i].price,data.data[i].offer,off_price) +''+
               check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
@@ -46,7 +46,7 @@ function loadComponent(type, data,arr=[]) {
       }
       $('.cate-container').empty();
       for(i=0;i<itr;i++){
-        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+((data[i].starting_price!=null)?'Starts @ '+data[i].starting_price:'View Products')+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></a>');
+        $('.cate-container').append('<a href="index.php?cate_id='+data[i].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7"><center><div class="cate-box" style="background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(\'assets/category_images/'+data[i].cate_img+'\');background-size:cover;background-position:center"><span>'+((data[i].starting_price!=null)?'Starts @ '+data[i].starting_price:'View Products')+'</span></div><br><h2 align="center" style="color:#123">'+data[i].cate+'</h2></center></a>');
       }
     }else if(type == 'suggestion-card-view'){
       $('#mini-slider').empty();

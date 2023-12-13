@@ -398,10 +398,15 @@ if($this->cid == null){
 		}
 	}
 
-	public function mycart(){
-		$uid = $this->cid;
+	public function mycart($defid = ''){
+		//default ID for admin changes
+		if(empty($defid)){
+			$uid = $this->cid;			
+		}else{
+			$uid = $defid;
+		}
 		if($uid == null){
-			echo json_encode(['status'=>false,'data'=>[],'message'=>'Please login to make action !.']);
+			return ['status'=>false,'data'=>[],'message'=>'Please login to make action !.'];
 		}else{
 			$oldCart = false;//default - false
 			$tmptbl='products';
@@ -447,15 +452,15 @@ if($this->cid == null){
 			$flag = $this->generateQuery($arr);
 				if($flag['status']){
 					if(count($flag['data'])!==0){
-						echo json_encode(['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart]);
+						return ['status'=>true,'data'=>$flag['data'],'old_r'=>$oldCart];
 					}else{
-						echo json_encode(['status'=>false,'data'=>[],'message'=>'Cart list zero','old_r'=>true]);
+						return ['status'=>false,'data'=>[],'message'=>'Cart list zero','old_r'=>true];
 					}
 				}else{
-					echo json_encode(['status'=>false,'data'=>[],'message'=>'Err in fetch cart','old_r'=>true]);
+					return ['status'=>false,'data'=>[],'message'=>'Err in fetch cart','old_r'=>true];
 				}
 		}
-		exit;
+		// exit;
 
 	}
 
@@ -1199,36 +1204,63 @@ public function updateCusPrdWTOrPrd($orderRes){
 			}
 		}
 
-		// public function isCcReqExist(){
-
-		// }
+		public function getCcReq($defid = ''){
+			$arr = [
+						'tbl_name'=>'cc_request',
+						'action'=>'select',
+						'data'=>[],
+						'query-exc'=>true];
+			if(!empty($defid)){
+				$arr['condition']=["cid='".$defid."'","req_status=1"];
+				$arr['order'] = ['cc_req_id','desc'];
+				$arr['limit'] = 1; 
+			}else{
+				$arr['condition']=["req_status=1"];
+				$arr['order'] = ['cc_req_id','asc']; 
+			}
+			// $arr = [
+			// 			'tbl_name'=>'cc_request',
+			// 			'action'=>'select',
+			// 			'data'=>[],
+			// 			'condition'=>["cid='".$defid."'","req_status=1"],
+			// 			'order'=>['cc_req_id','desc'],
+			// 			'limit'=>1,
+			// 			'query-exc'=>true];
+						$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						if(count($flag['data'])>0){
+							return ['status'=>true,'data'=>$flag['data'],'message'=>"CC reqst"];
+						}else{
+						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];							
+						}
+					}
+		}
 		public function raiseCcReq(){
 			if($this->cid == null){
 						return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
 			}else{
-					$arr = [
-						'tbl_name'=>'cc_request',
-						'action'=>'select',
-						'data'=>[],
-						'condition'=>["cid='".$this->cid."'","req_status=1"],
-						'order'=>['cc_req_id','desc'],
-						'limit'=>1,
-						'query-exc'=>true];
-						$flag=$this->generateQuery($arr);
-					if($flag['status'] == 'success'){
-						if(count($flag['data'])>0){
-							$db_cc_items = $flag['data'][0]['total_product'];
-							$cur_cc_items = $this->get_cate_num();
-							if($db_cc_items == $cur_cc_items){
-									return ['status'=>true,'data'=>$flag['data'][0]['cc_price'],'message'=>'CC request already exists'];
-							}
-						}
-					}else{
-						return ['status'=>false,'data'=>[],'message'=>'err in fetch cc-req'];
-					}
-
+				$cc_info = $this->getCcReq($this->cid);
+				if($cc_info['status']){
+						return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'CC request already exists'];
+				}
+					// $arr = [
+					// 	'tbl_name'=>'cc_request',
+					// 	'action'=>'select',
+					// 	'data'=>[],
+					// 	'condition'=>["cid='".$this->cid."'","req_status=1"],
+					// 	'order'=>['cc_req_id','desc'],
+					// 	'limit'=>1,
+					// 	'query-exc'=>true];
+					// 	$flag=$this->generateQuery($arr);
+					// if($flag['status'] == 'success'){
+					// 	if(count($flag['data'])>0){
+					// 	}
+					// }else{
+					// 	return ['status'=>false,'data'=>[],'message'=>'err in fetch cc-req'];
+					// }
+					#return $this->mycart();
 					//NEW REQ
-				$arr = [
+					$arr = [
 						'tbl_name'=>'cc_request',
 						'action'=>'insert',
 						'data'=>["cid='".$this->cid."'","cc_price='TBD'","total_product=".$this->get_cate_num(),"req_status=1","req_date=CURRENT_DATE"],
