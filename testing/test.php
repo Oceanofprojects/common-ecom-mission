@@ -47,5 +47,5 @@ curl_close($curl);
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
-  echo $response;
+  $res =json_decode($response,true);
 }

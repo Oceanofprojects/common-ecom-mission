@@ -32,7 +32,7 @@
     require_once 'Model/productModel.php';
     $productMdl = new products();
         if(isset($_GET['adDefCid']) && !empty($_GET['adDefCid'])){
-            $id = $_GET['adDefCid'];
+            echo "<input type=\"text\" id=\"cid\" value=\"".$_GET['adDefCid']."\" hidden>";
             $cusCart = $productMdl->mycart(base64_decode($_GET['adDefCid']));
             if($cusCart['status']){
                    $cusCart = $cusCart['data'];
@@ -50,12 +50,11 @@
     <br>
     <center>
 
-    &nbsp;&nbsp;<span>C-ID : <a href="#"><?php echo base64_decode($id);?></a></span><br>
-    <br><input type="number" min="1" name="" placeholder="Enter Courier price" style="outline: none;"><input type="button" value="CC Price" name="" style="background:lightgreen;color:#000;border:.2px solid #555a;padding:0px 5px;outline: none;">
+    <br><input type="number" min="1" name="" id="cCprice" placeholder="Enter Courier price" style="outline: none;"><input type="button" value="CC Price" name="" onclick="upCcPrice()" style="background:lightgreen;color:#000;border:.2px solid #555a;padding:0px 5px;outline: none;">
     <br>
     <br>
-        <table id="jquery-datatable-example-no-configuration" class="display" style="width:90vw">
-                <thead>
+        <table class="display" style="width:90vw" border="1">
+                <thead style="background:#123;color:#ddd">
                     <tr>
                         <th>P-ID</th>
                         <th>Product</th>
@@ -77,13 +76,15 @@
     </table>
     </center>
 </div>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('#jquery-datatable-example-no-configuration').DataTable();
-    });
-$('.mycart').fadeIn(100);
-    </script>
 
+<?php
+
+    if(isset($_GET['adDefCid']) && !empty($_GET['adDefCid'])){
+        echo "<script>$('.mycart').fadeIn(100);</script>";
+    }
+    
+
+?>
 
    
     <!-- Common message box  -->
@@ -101,7 +102,7 @@ $('.mycart').fadeIn(100);
     <center>
         <h2>Customers Orders</h2>
         <section style="width:100%;overflow:scroll">
-            <table id="jquery-datatable-example-no-configuration" class="display" style="width:100vw">
+        <table id="jquery-datatable-example-no-configuration" class="display" style="width:90vw">
                 <thead>
                     <tr>
                         <th>C-ID</th>
@@ -114,7 +115,8 @@ $('.mycart').fadeIn(100);
                 if($data['data']['data'] !==0){
                     $res = $data['data']['data']; 
                     for($i=0;$i<count($res);$i++){
-                          echo "<tr><td><a href='#'>{$res[$i]['cid']}</a></td><td><a href='#' onclick='getCusCart(document.URL,{$res[$i]['cid']})'>Product Details</a></td><td>{$res[$i]['req_date']}</td></tr>";
+                          echo "<tr><td><a href='index.php?key=1037d9ea3af16d70f0ce197f737e4ca6a3d1f436ce0365689334069ea9772565&cid=".base64_encode($res[$i]['cid'])."&controller=admin'>{$res[$i]['cid']}</a></td><td><a href='#' onclick='getCusCart(document.URL,{$res[$i]['cid']})'>Product Details</a></td><td>{$res[$i]['req_date']}</td></tr>";
+
                     }
                 }
                 // controller=admin&cid={$res[$i]['cid']}&key=459a868460381fdf9a2bbb902e8bbc38cbd52f91860be724dafdec2a3fea415c
@@ -124,9 +126,38 @@ $('.mycart').fadeIn(100);
             </table>
         </section>
     </center>
-    <script>
+            <script type="text/javascript">
+    $(document).ready(function() {
+        $('#jquery-datatable-example-no-configuration').DataTable();
+    });
     function getCusCart(url,id){
-        location.href= url.replace('key','&adDefCid='+btoa(id)+'&key');
+        if(!url.includes('adDefCid')){
+        location.href= url.replace('&key','&adDefCid='+btoa(id)+'&key');
+        }
+        $('.mycart').fadeIn(100);
+
+    }
+
+    function upCcPrice(){
+        v = $('#cCprice').val();
+        id = $('#cid').val();
+        if(id.trim().length>0){
+        if(v.trim().length>0){
+            performAjx('index.php', 'get','key=d82ad5ba605dbca852baf0522e9042a46cf6603b6bbf0f3e83fd1ded017963af&controller=admin&ccprice=' + v+'&cid='+id, (res) => {
+                d = JSON.parse(res);
+                if(d.status){
+                  alert(d.message);
+                }else{
+                  alert(d.message);
+                }
+              });
+        }else{
+            alert('Please enter CC price');
+        }
+        }else{
+            alert('Invalid CUSTOMER')
+        }
+
     }
     </script>
 </body>

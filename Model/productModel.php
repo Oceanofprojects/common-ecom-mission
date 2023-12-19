@@ -706,7 +706,7 @@ if($this->cid == null){
 		}
 
 	}
-public function getCartByIdNDate($date){
+public function getCartByIdNDate(){
 	if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
@@ -714,7 +714,7 @@ public function getCartByIdNDate($date){
 						'tbl_name' => 'mycart',
 						'action' => 'select',
 						'data' => ['p_id','quantity'],
-						'condition'=>['cid='.$this->cid,"_date='".$date."'","cart_edit_flag=1"],
+						'condition'=>['cid='.$this->cid,"cart_edit_flag=1"],
 						'query-exc'=>true
 					];
 					$flag=$this->generateQuery($arr);
@@ -729,8 +729,8 @@ public function getCartByIdNDate($date){
 		if($this->cid == null){
 			return ['status'=>false,'data'=>[],'message'=>'Please login !'];
 		}else{
-			$cart_date = date('Y-m-d');
-			$mycart_data = $this->getCartByIdNDate($cart_date);
+			// $cart_date = date('Y-m-d');
+			$mycart_data = $this->getCartByIdNDate();
 
 				if(count($mycart_data)!==0){
 					for($i=0;$i<count($mycart_data);$i++){//get customer ordered  product ID and qunty sep
@@ -1243,34 +1243,74 @@ public function updateCusPrdWTOrPrd($orderRes){
 				if($cc_info['status']){
 						return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'CC request already exists'];
 				}
-					// $arr = [
-					// 	'tbl_name'=>'cc_request',
-					// 	'action'=>'select',
-					// 	'data'=>[],
-					// 	'condition'=>["cid='".$this->cid."'","req_status=1"],
-					// 	'order'=>['cc_req_id','desc'],
-					// 	'limit'=>1,
-					// 	'query-exc'=>true];
-					// 	$flag=$this->generateQuery($arr);
-					// if($flag['status'] == 'success'){
-					// 	if(count($flag['data'])>0){
-					// 	}
-					// }else{
-					// 	return ['status'=>false,'data'=>[],'message'=>'err in fetch cc-req'];
-					// }
-					#return $this->mycart();
-					//NEW REQ
+	
+
+				//new req
 					$arr = [
 						'tbl_name'=>'cc_request',
 						'action'=>'insert',
 						'data'=>["cid='".$this->cid."'","cc_price='TBD'","total_product=".$this->get_cate_num(),"req_status=1","req_date=CURRENT_DATE"],
 						'query-exc'=>true];
 					if($this->generateQuery($arr)['status'] == 'success'){
+
+
+									/**notification
+				 * optional
+				 * 
+				 * */
+				$params=array(
+'token' => '',//yvvvaffvramlnxn2',
+'to' => '+91',
+'body' => 'New order from our customer ID :'.$this->cid
+);
+$curl = curl_init();
+curl_setopt_array($curl, array(
+  CURLOPT_URL => "https://api.ultramsg.com/instance71197/messages/chat",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_SSL_VERIFYHOST => 0,
+  CURLOPT_SSL_VERIFYPEER => 0,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => http_build_query($params),
+  CURLOPT_HTTPHEADER => array(
+    "content-type: application/x-www-form-urlencoded"
+  ),
+));
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+// if ($err) {
+// //  echo "cURL Error #:" . $err;
+// } else {
+//   $res =json_decode($response,true);
+// }
 						return ['status'=>true,'data'=>[],'message'=>'Request sent successfully'];
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>'err in raise cc req'];
 					}
 			}	
+		}
+
+		public function upCcPrice($id,$price){
+			$arr =[
+					'tbl_name'=>'cc_request',
+					'data'=>["cc_price=$price"],
+					'action'=>'update',
+					'condition'=>["manual"=>["cid='".base64_decode($id)."' AND req_status=1"]],
+					'query-exc'=>true
+				  ];
+				  $flag=$this->generateQuery($arr);
+					if($flag['status']){
+					  return ['status'=>true,'data'=>$flag['data'],'message'=>"CC price updated!."];
+				  }else{
+					return ['status'=>false,'data'=>[],'message'=>"Err in update CC price"];
+				  }
 		}
 
 }//CLASS END

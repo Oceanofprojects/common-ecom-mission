@@ -46,6 +46,12 @@ class adminController extends commonController
             echo json_encode($this->adminMdl->updateCusFAdmin());
       }else if(hash_equals(hash_hmac($algo,'getCcRequest',$skey),$req['key'])){
             echo json_encode($this->prdMdl->getCcReq($_GET['cid']));
+      }else if(hash_equals(hash_hmac($algo,'upCcPrice',$skey),$req['key'])){
+        if((isset($_GET['ccprice']) && !empty($_GET['ccprice'])) && (isset($_GET['cid']) && !empty($_GET['cid']))){
+           echo json_encode($this->prdMdl->upCcPrice($_GET['cid'],$_GET['ccprice']));            
+        }else{
+           echo json_encode(['status'=>false,'data'=>[],'message'=>'Please enter vaild args']);            
+        }
       }else if(hash_equals(hash_hmac($algo,'getCusOrderList',$skey),$req['key'])){
         $this->view("main/productStatusCpanel", array(
             "title" => "Client product contol",
