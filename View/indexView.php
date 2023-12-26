@@ -59,6 +59,7 @@
     <br><br>
     <div class="item-container">
         <?php
+    
       if(count($data['data'])!==0){
         echo "<script>loadComponent('nor-card-view',".json_encode($data['data']).")</script>";
       }

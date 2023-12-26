@@ -1218,14 +1218,6 @@ public function updateCusPrdWTOrPrd($orderRes){
 				$arr['condition']=["req_status=1"];
 				$arr['order'] = ['cc_req_id','asc']; 
 			}
-			// $arr = [
-			// 			'tbl_name'=>'cc_request',
-			// 			'action'=>'select',
-			// 			'data'=>[],
-			// 			'condition'=>["cid='".$defid."'","req_status=1"],
-			// 			'order'=>['cc_req_id','desc'],
-			// 			'limit'=>1,
-			// 			'query-exc'=>true];
 						$flag=$this->generateQuery($arr);
 					if($flag['status'] == 'success'){
 						if(count($flag['data'])>0){

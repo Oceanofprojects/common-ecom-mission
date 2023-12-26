@@ -8,7 +8,11 @@ require_once('../Model/customerModel.php');
 
 
 //shop info
+$info = json_decode(file_get_contents('../View/main/info.json'));//basic datas
 $prdObj = new products();
+if(!isset($_GET['invoice_id'])){
+    die('Invaild invoice ID, Please check.');
+}
 $productList = $prdObj->getOrderDetailById($_GET['invoice_id'])['data'];
 if(count($productList)!==0){
     $products = $productList[0];
@@ -56,10 +60,10 @@ $cusInfo = $cus['data'][0];
 }else{
     die('Invaild customer');
 }
-$shop_name = "ONLINE SUPER MARKET";
-$shop_address = "NO:4 Shankar nagar, Pallavaram, chennai - 44";
-$shop_owner_name = "mani";
-$shop_contact = "xxxxx xxxxx";
+$shop_name = $info->business->name;
+$shop_address = $info->business->address;
+$shop_owner_name = $info->owner->name;
+$shop_contact = $info->business->phone;
 $shop_social_media = "insta,what,fb";
 //Customer info
 

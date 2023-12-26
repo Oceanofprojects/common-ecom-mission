@@ -100,7 +100,7 @@
                     <td>
                         <select name="role">
                         <?php
-                            echo "<option value=\"\">Select Role</option><option value=\"".$cusdata['role']."\">Admin</option>
+                            echo "<option value=\"\">Select Role</option><option value=\"admin\">Admin</option>
                             <option value=\"customer\">Customer</option><option value=\"block\">Block</option>";                         
                         ?>
                         </select>        

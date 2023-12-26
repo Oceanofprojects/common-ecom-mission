@@ -131,14 +131,16 @@
 }
 
     </style>
-
+<?php
+$info = json_decode(file_get_contents('View/main/info.json'));//basic datas
+?>
 <footer class="ft-layer">
         <div class="ft-l-info ft-sub-div"><br>
             <img src="assets/common-images/logo.png" style="border-radius:100px;" alt="Logo" height="100px" width="100px"><br><br>
-            <h2>Your shop name</h2><br>
-            <p>Spread love to plants</p>
+            <h2><?php echo $info->business->name;?></h2><br>
+            <p><?php echo $info->business->slogan;?></p>
             <br><br><br>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.7986291841326!2d80.20490457420618!3d13.048486113189687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266c25648d6c5%3A0xf3ce2da2a246c00d!2sForum%20mall%2C%20SH%20113%2C%20Ottagapalayam%2C%20Kannika%20Puram%2C%20Vadapalani%2C%20Chennai%2C%20Tamil%20Nadu%20600026!5e0!3m2!1sen!2sin!4v1696065491315!5m2!1sen!2sin" id="gMap" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="<?php echo $info->business->google_map_location;?>" id="gMap" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="ft-r-info ft-sub-div">
             <!-- <div class="ft-r-tp-box">
@@ -163,10 +165,10 @@
             <div class="ft-r-bm-box">
                 <ul>
                     <li><span>Reach us</span></li>
-                    <li><a href="#">No. 48, Test street, Pallavaram main road, Chennai- 600232.</a></li>
-                    <li><a href="#">Land mark - Test land mark (Opt)</a></li>
-                    <li><a href="tel:+910000000">+91 xxxxx xxxxx</a></li>
-                    <li><a href="mailto:">testaccount@gmail.com</a></li>
+                    <li><a href="#"><?php echo $info->business->address;?></a></li>
+                    <li><a href="#"><?php echo $info->business->address;?></a></li>
+                    <li><a href="tel:<?php echo '+91 '.$info->business->phone;?>"><?php echo '+91 '.$info->business->phone;?></a></li>
+                    <li><a href="mailto:<?php echo $info->social_media->mail;?>"><?php echo $info->social_media->mail;?></a></li>
                 </ul>
                 <ul>
                     <li><span>Quick links</span></li>
@@ -184,10 +186,10 @@
                 </ul>
                 <ul>
                     <li><span>Follow us</span></li>
-                    <li><a href="#">Whatsapp</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#"></a></li>
+                    <li><a href="<?php echo 'https://api.whatsapp.com/send?phone=+91'.$info->social_media->whatsapp;?>">Whatsapp</a></li>
+                    <li><a href="<?php echo $info->social_media->facebook;?>">Facebook</a></li>
+                    <li><a href="<?php echo $info->social_media->instagram;?>">Instagram</a></li>
+                    <li><a href="<?php echo $info->social_media->twitter;?>">Twitter</a></li>
                 </ul>
                 <ul>
                     <li><span>Policy</span></li>
@@ -204,5 +206,5 @@
     </footer>
     <div style="display: flex;justify-content:center;align-items: center;flex-direction: column;text-align:center;padding:30px 0px;background:#123">
       <hr width="20%">
-      <p style="color:#fff"><br><br>2024, All rights reserved xxxx<br><br><br><a href="#" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a><br><br></p>
+      <p style="color:#fff"><br><br>2024, All rights reserved, <?php echo $info->business->name;?><br><br><br><a href="https://www.instagram.com/_the_mani_maran_?utm_source=ig_web_button_share_sheet&igsh=OGQ5ZDc2ODk2ZA==" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a><br><br></p>
     </div>
