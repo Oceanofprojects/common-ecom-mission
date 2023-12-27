@@ -45,7 +45,7 @@
     </div>
     <br><br><br><br>
     <center>
-        <a href="index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product"
+        <a href="index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product&cate_flow=<?php echo base64_encode('listing');?>"
             class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">More
             Categories</a>
     </center>

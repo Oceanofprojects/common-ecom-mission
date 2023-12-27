@@ -124,7 +124,7 @@ class products extends commonModel{
 		if($req['type'] == 'getCateReview'){
 			//cate filter
 			unset($arr['data']);
-			$arr['data']=['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate ORDER BY RAND()"]];
+			$arr['data']=['manual'=>["$cus.profile,$cus.c_name as name,$cus.city as location,review.review,review.rating,review.created_at,review.sno,review.p_id,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]];
 
 			$arr['join_param']=[
 				[$cus,'left_join','cid','cid'],
@@ -232,7 +232,7 @@ class products extends commonModel{
 	public function get_product(){
 		if(isset($_GET['pid'])){
 				$p_id = $_GET['pid'];
-$q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '".$p_id."' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '".$p_id."') ORDER BY RAND() LIMIT 10";
+$q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '".$p_id."' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '".$p_id."') ORDER BY p.p_id ASC LIMIT 5";
 				$sql = $this->db->prepare($q);
 				if($sql->execute()){
 					$res = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -378,6 +378,15 @@ if($this->cid == null){
 
 	public function get_cate_list(){
 		$tmptbl = 'product_category';
+		
+		$limit = "LIMIT 5";
+
+		if(isset($_GET['cate_flow'])){
+			if(base64_decode($_GET['cate_flow']) == 'listing'){
+				$limit = "";
+			}
+		}
+
 		$arr = [
 			'tbl_name'=>$tmptbl,
 			'action'=>'join',
@@ -385,7 +394,7 @@ if($this->cid == null){
 			'join_param'=>[
 				['products','left_join','cate_id','cate_id']
 			],
-			'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
+			'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND() ".$limit]],
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);

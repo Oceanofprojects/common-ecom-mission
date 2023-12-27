@@ -71,7 +71,7 @@ class productController extends commonController
         echo json_encode($this->productMdl->deleteCategory());
       }else if(hash_equals(hash_hmac($algo,'getProductByRange',$skey),$req['key'])){
         $from = $_GET['from'] + $_GET['to'];
-        $to = 5;//get five new product
+        $to = 4;//get four new product
         echo json_encode($this->productMdl->get_all(['from-range'=>$from,'to-range'=>$to]));
       }else if(hash_equals(hash_hmac($algo,'moreCategory',$skey),$req['key'])){
         $this->view("category/moreCate", array(
@@ -171,7 +171,8 @@ class productController extends commonController
       $inc1 = 0;
       $inc2 = 0;
       if(count($products['data'])!==0){
-        for($i=0;$i<count($products['data']);$i++){
+        //get four item for suggest
+        for($i=0;$i<((count($products['data'])>=5)?5:count($products['data']));$i++){
           if($products['data'][$i]['p_id'] == $_GET['pid']){
             $selected_product['data'][$inc1] = $products['data'][$i];
             $inc1++;
