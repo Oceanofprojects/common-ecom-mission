@@ -87,6 +87,8 @@
         min-width: 200px;
         height: 300px;
         width: 100%;
+        box-shadow:0px 0px 5px 0px rgba(0,0,0,.5);
+        
     }
 
     .details-sub-imgs {
@@ -158,6 +160,8 @@
     <?php
 
     require_once __DIR__.'/../../sections/header.php';
+    // require_once 'View/main/business_info.php';
+
     if(isset($data['data']['data'])){
     if($data['data']['data'] == 0){
       echo "Err in viewing product";
@@ -179,8 +183,11 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
 $url .= $_SERVER['HTTP_HOST'];
 $url .= $_SERVER['REQUEST_URI'];
 
-?>    
+require_once __DIR__.'/../../Model/productModel.php';
+$cusObj = new products();
+$info = $cusObj->business_info();
 
+?>    
 
 
 
@@ -190,11 +197,11 @@ $url .= $_SERVER['REQUEST_URI'];
             </a>
         </div>
         <div class="share_link_box">
-            <a href="https://wa.me/?text=YOUR_TEXT%20YOUR_URL" class="fa fa-whatsapp">
+            <a href="<?php echo 'https://wa.me/91'.$info['social_media']['whatsapp'];?>" class="fa fa-whatsapp">
             </a>
         </div>
         <div class="share_link_box">
-<input type="text" style="color:#ddda;border:none;background:transparent; outline:none" value="<?php echo $url;?>" id="productURL">
+<input type="text" style="color:#ddda;border:none;background:transparent; width:.1px; outline:none" value="<?php echo $url;?>" id="productURL">
             <a href="#" class="fa fa-copy" onclick="copyToClip()" style="padding:5px;">
             </a>
         </div>

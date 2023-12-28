@@ -1,41 +1,40 @@
 <?php
 require_once __DIR__.'/../Model/productModel.php';
 $cusObj = new products();
-// $_COOKIE['uid']
-//print_r($cusObj->getUserId($_COOKIE['uid']));exit;
+$info = $cusObj->business_info();
 $userState = $cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));
 if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
-	$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
-		<ul class="li2">
-			<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
-			<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
-		</ul>
-	</li>';
+    $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
+        <ul class="li2">
+            <li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
+            <li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
+        </ul>
+    </li>';
 }else if($userState[0] && $userState[2] == 'admin'){//ADMIN VIEW MENU
-		$extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
-			<ul class="li2">
+        $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
+            <ul class="li2">
             <li><a href="#"><span class="fa fa-th"></span>Product</a>
-						<ul class="li3">
-			            <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
-						</ul></li>
+                        <ul class="li3">
+                        <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
+                                    <li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+                        </ul></li>
 
-						<li><a href="#"><span class="fa fa-list"></span>Category</a>
-						<ul class="li3">
-			            <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-									<li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
-						</ul></li>
+                        <li><a href="#"><span class="fa fa-list"></span>Category</a>
+                        <ul class="li3">
+                        <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
+                                    <li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+                        </ul></li>
 
 
 
 <li><a href="index.php?key=6c5bce7dca7b1d43b37e1bb86a016ee0307342ea1bb4a75c87111f6ed090ee68&controller=admin"><span class="fa fa-users"></span>Customers</a></li>
 <li><a href="index.php?key=4ed65d87253931bd029d4d57a24ceaece22cd710e095f9f343802cdb0de272b0&controller=admin"><span class="fa fa-cubes"></span>Products</a></li>
                         <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-bar-chart"></span>P-Status</a></li>
-						<li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
-					<li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
+                        <li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
+                    <li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
 
-			</ul>
-		</li>';
+            </ul>
+        </li>';
 }else{
   $extraLinks = '<li><a href="index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home"><span class="fa fa-sign-in"></span>login</a></li>';
 }
@@ -208,12 +207,12 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 
 
 /*.init a{
-//	background:navy;
+//  background:navy;
 }
-	.init a small{
-		padding:0px 5px;
-		font-size:10pt;
-	}*/
+    .init a small{
+        padding:0px 5px;
+        font-size:10pt;
+    }*/
 .init li {
     list-style: none;
 }
@@ -396,16 +395,16 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 @media only screen and (max-width: 400px) {}
 </style>
 
-<!-- 		<div class="init" style="color:#555;">
-			<div id="i_cons">
-				<ul>
-					<li><a href="#" class="fa fa-envelope" title="Mail" style="background:linear-gradient(red,darkred);color:#fff;"></a></li>
-				<li><a href="#" target="blank" class="fa fa-instagram" style="background:linear-gradient(#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff;"></a></li>
-				<li><a href="#" target="blank" class="fa fa-facebook" style="background:linear-gradient(#3b5998,#3b5998);color:#fff"></a></li>
-			<li><a href="#" class="fa fa-whatsapp" title="Whatsapp" style="background:linear-gradient(#075E54,#075E54);color:#fff;"></a></li>
-		</ul>
-			</div>
-		</div> -->
+<!--        <div class="init" style="color:#555;">
+            <div id="i_cons">
+                <ul>
+                    <li><a href="#" class="fa fa-envelope" title="Mail" style="background:linear-gradient(red,darkred);color:#fff;"></a></li>
+                <li><a href="#" target="blank" class="fa fa-instagram" style="background:linear-gradient(#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff;"></a></li>
+                <li><a href="#" target="blank" class="fa fa-facebook" style="background:linear-gradient(#3b5998,#3b5998);color:#fff"></a></li>
+            <li><a href="#" class="fa fa-whatsapp" title="Whatsapp" style="background:linear-gradient(#075E54,#075E54);color:#fff;"></a></li>
+        </ul>
+            </div>
+        </div> -->
 
 <script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
 <div class="loader">
@@ -443,11 +442,11 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     <a href="#" onclick="dis_my_cart()" style="background:cornflowerblue;" class="fa fa-shopping-bag cartBag">
         <span class="cartIndi"></span></a>
 
-    <a href="https://api.whatsapp.com/send?phone=+91xxxxxx&text=msg" class="fa fa-whatsapp"></a>
+    <a href="https://wa.me/91<?php echo $info['social_media']['whatsapp'];?>" class="fa fa-whatsapp"></a>
 
-    <a href="https://api.whatsapp.com/send?phone=+91xxxxxx&text=msg" class="fa fa-instagram"></a>
+    <a href="<?php echo $info['social_media']['instagram'];?>" class="fa fa-instagram"></a>
 
-    <a href="https://api.whatsapp.com/send?phone=+91xxxxxx&text=msg" class="fa fa-facebook-official"></a>
+    <a href="<?php echo $info['social_media']['facebook'];?>" class="fa fa-facebook-official"></a>
 
 </div>
 

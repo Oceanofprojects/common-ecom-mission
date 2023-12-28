@@ -7,10 +7,10 @@
     font-weight: bolder;
 }
 body{
-  background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('../assets/common-images/bg.png');
+  background:linear-gradient(rgba(256,256,256,.7),rgba(256,256,256,.7)),url('../assets/common-images/bg.png');
   background-position: center;
   background-attachment:fixed;
-  background-size:300px;
+  background-size:500px;
 }
 ::-webkit-scrollbar{
   width: 1px;

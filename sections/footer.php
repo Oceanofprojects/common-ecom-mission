@@ -40,7 +40,7 @@
  }
 
  .ft-social-links ul a,.ft-r-bm-box ul li a{
-    color:#fff;
+    color:#fffa;
     text-decoration: none;
  }
  .ft-social-links ul a:hover,.ft-r-bm-box ul li a:hover{
@@ -132,43 +132,45 @@
 
     </style>
 <?php
-$info = json_decode(file_get_contents('View/main/info.json'));//basic datas
+require_once __DIR__.'/../Model/productModel.php';
+$cusObj = new products();
+$info = $cusObj->business_info();
 ?>
 <footer class="ft-layer">
         <div class="ft-l-info ft-sub-div"><br>
             <img src="assets/common-images/logo.png" style="border-radius:100px;" alt="Logo" height="100px" width="100px"><br><br>
-            <h2><?php echo $info->business->name;?></h2><br>
-            <p><?php echo $info->business->slogan;?></p>
+            <h2><?php echo $info['business']['name'];?></h2><br>
+            <p><?php echo $info['business']['slogan'];?></p>
             <br><br><br>
-            <iframe src="<?php echo $info->business->google_map_location;?>" id="gMap" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="<?php echo $info['business']['google_map_location'];?>" id="gMap" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="ft-r-info ft-sub-div">
-            <!-- <div class="ft-r-tp-box">
+            <div class="ft-r-tp-box">
                 <div class="ft-social-links">
                     <span>Follow us</span>
                     <ul>
-                        <li><a href="#" class="fa fa-instagram"></a></li>
-                        <li><a href="#" class="fa fa-facebook-official"></a></li>
-                        <li><a href="#" class="fa fa-whatsapp"></a></li>
-                        <li><a href="#" class="fa fa-telegram"></a></li>
+                        <li><a href="<?php echo $info['social_media']['instagram'];?>" class="fa fa-instagram"></a></li>
+                        <li><a href="<?php echo $info['social_media']['facebook'];?>" class="fa fa-facebook-official"></a></li>
+                        <li><a href="<?php echo 'https://wa.me/91'.$info['social_media']['whatsapp'];?>" class="fa fa-whatsapp"></a></li>
+                        <li><a href="<?php echo $info['social_media']['youtube'];?>" class="fa fa-youtube-play"></a></li>
                     </ul>
                 </div>
                 <div class="ft-subscribe-layer">
                     <span>Follow us</span>
                     <div class="ft-subscribe" style="margin:0px">
                         <input type="email" name="" id="subscribe" placeholder="Enter Email ID">
-                        <input style="background-color:orange;" type="button" value="Send" id="subscribeBtn">
+                        <input style="background-color:lightgreen;" type="button" value="Send" id="subscribeBtn">
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <div class="ft-r-bm-box">
                 <ul>
                     <li><span>Reach us</span></li>
-                    <li><a href="#"><?php echo $info->business->address;?></a></li>
-                    <li><a href="#"><?php echo $info->business->address;?></a></li>
-                    <li><a href="tel:<?php echo '+91 '.$info->business->phone;?>"><?php echo '+91 '.$info->business->phone;?></a></li>
-                    <li><a href="mailto:<?php echo $info->social_media->mail;?>"><?php echo $info->social_media->mail;?></a></li>
+                    <li><a href="#"><?php echo $info['business']['address'];?></a></li>
+                    <li><a href="tel:<?php echo '+91 '.$info['business']['phone'];?>"><?php echo '+91 '.$info['business']['phone'];?></a></li>
+                    <li><a href="<?php echo 'https://wa.me/91'.$info['business']['whatsapp'];?>"><?php echo '+91 '.$info['business']['whatsapp'];?></a></li>
+                    <li><a href="mailto:<?php echo $info['social_media']['mail'];?>"><?php echo $info['social_media']['mail'];?></a></li>
                 </ul>
                 <ul>
                     <li><span>Quick links</span></li>
@@ -184,13 +186,13 @@ $info = json_decode(file_get_contents('View/main/info.json'));//basic datas
                     <li><a href="#">Safe CC</a></li>
                     <li><a href="#">Offers</a></li>
                 </ul>
-                <ul>
+<!--                 <ul>
                     <li><span>Follow us</span></li>
                     <li><a href="<?php echo 'https://api.whatsapp.com/send?phone=+91'.$info->social_media->whatsapp;?>">Whatsapp</a></li>
                     <li><a href="<?php echo $info->social_media->facebook;?>">Facebook</a></li>
                     <li><a href="<?php echo $info->social_media->instagram;?>">Instagram</a></li>
                     <li><a href="<?php echo $info->social_media->twitter;?>">Twitter</a></li>
-                </ul>
+                </ul> -->
                 <ul>
                     <li><span>Policy</span></li>
                     <li><a href="#">Shipping Policy</a></li>
@@ -206,5 +208,5 @@ $info = json_decode(file_get_contents('View/main/info.json'));//basic datas
     </footer>
     <div style="display: flex;justify-content:center;align-items: center;flex-direction: column;text-align:center;padding:30px 0px;background:#123">
       <hr width="20%">
-      <p style="color:#fff"><br><br>2024, All rights reserved, <?php echo $info->business->name;?><br><br><br><a href="https://www.instagram.com/_the_mani_maran_?utm_source=ig_web_button_share_sheet&igsh=OGQ5ZDc2ODk2ZA==" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a><br><br></p>
+      <h2 style="color:#fff;font-size:13pt"><br><br>2024, All rights reserved, <?php echo $info['business']['name'];?><br><br><br><a href="https://www.instagram.com/_the_mani_maran_?utm_source=ig_web_button_share_sheet&igsh=OGQ5ZDc2ODk2ZA==" style="color:#fe019a">Designed by <span class="fa fa-heart"></span> </a><br><br></h2>
     </div>

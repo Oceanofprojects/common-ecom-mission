@@ -311,7 +311,7 @@ if($this->cid == null){
 			$arr = [
 				'tbl_name'=>$tmptbl,
 				'action'=>'join',
-				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
+				'data'=>['manual'=>["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',4)) as catesets"]],
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
@@ -1313,6 +1313,35 @@ curl_close($curl);
 					return ['status'=>false,'data'=>[],'message'=>"Err in update CC price"];
 				  }
 		}
+
+		public function business_info(){
+      return [
+    "business"=>[
+        "name"=>"Green Garden",
+        "slogan"=>"Elysian maker",
+        "whatsapp"=>1234567890,
+        "phone"=>1234567890,
+        "address"=>"Test address 1, sans akns akmns akm skas",
+        "city"=>"Chennai",
+        "pincode"=>"600044",
+        "google_map_location"=>"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.7986291841326!2d80.20490457420618!3d13.048486113189687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266c25648d6c5%3A0xf3ce2da2a246c00d!2sForum%20mall%2C%20SH%20113%2C%20Ottagapalayam%2C%20Kannika%20Puram%2C%20Vadapalani%2C%20Chennai%2C%20Tamil%20Nadu%20600026!5e0!3m2!1sen!2sin!4v1696065491315!5m2!1sen!2sin"
+    ],
+    "social_media"=>[
+        "whatsapp"=>1234567890,
+        "instagram"=>"#",
+        "facebook"=>"#",
+        "twitter"=>"#",
+        "youtube"=>"#",
+        "mail"=>"test@gmail.com"
+    ],
+    "owner"=>[
+        "name"=>"Test name",
+        "whatsapp"=>1234567890,
+        "phone"=>1234567890
+    ]
+];
+
+    }
 
 }//CLASS END
 

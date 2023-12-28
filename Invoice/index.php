@@ -5,11 +5,15 @@
 require_once('TCPDF/tcpdf.php');
 require_once('../Model/productModel.php');
 require_once('../Model/customerModel.php');
+//require_once '../View/main/business_info.php';//business info
 
 
 //shop info
-$info = json_decode(file_get_contents('../View/main/info.json'));//basic datas
+
 $prdObj = new products();
+
+$info = $prdObj->business_info();
+
 if(!isset($_GET['invoice_id'])){
     die('Invaild invoice ID, Please check.');
 }
@@ -60,10 +64,10 @@ $cusInfo = $cus['data'][0];
 }else{
     die('Invaild customer');
 }
-$shop_name = $info->business->name;
-$shop_address = $info->business->address;
-$shop_owner_name = $info->owner->name;
-$shop_contact = $info->business->phone;
+$shop_name = $info['business']['name'];
+$shop_address = $info['business']['address'];
+$shop_owner_name = $info['owner']['name'];
+$shop_contact = 'Ph-'.$info['business']['phone'].', Whatsapp-'.$info['business']['whatsapp'];
 $shop_social_media = "insta,what,fb";
 //Customer info
 
@@ -83,7 +87,7 @@ $pdf->SetTitle('Invoice Bill');
 $pdf->SetSubject('Invoice Bill');
 $pdf->SetKeywords('INVOICE, PDF, Bill');
 // set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, 0,$shop_name,$shop_address.', Phone number :'. $shop_contact, array(0,64,255), array(0,64,128));
+$pdf->SetHeaderData(PDF_HEADER_LOGO, 0,$shop_name,$shop_address.', '. $shop_contact, array(0,64,255), array(0,64,128));
 $pdf->setFooterData(array(0,64,0), array(0,64,128));
 
 // set header and footer fonts
