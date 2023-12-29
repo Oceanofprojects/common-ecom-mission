@@ -55,6 +55,26 @@ class homeController extends commonController
             "title" => "Cpanel",
             "data"=>[]
         ));
+      }else if(hash_equals(hash_hmac($algo,'shippingpolicy',$skey),$req['key'])){
+        $business_info = $this->productMdl->business_info();
+        $b_name = "";
+        if(count($business_info)>0){
+          $b_name = $business_info['business']['name']." ";
+        }
+        $this->view("policy/shipping_policy", array(
+            "title" => $b_name."shipping policy",
+            "data"=>['info'=>$business_info]
+        ));
+      }else if(hash_equals(hash_hmac($algo,'refundpolicy',$skey),$req['key'])){
+        $business_info = $this->productMdl->business_info();
+        $b_name = "";
+        if(count($business_info)>0){
+          $b_name = $business_info['business']['name']." ";
+        }
+        $this->view("policy/refund_policy", array(
+            "title" => $b_name."refund policy",
+            "data"=>['info'=>$business_info]
+        ));
       }else{
         $this->index();
       }

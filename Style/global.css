@@ -232,7 +232,7 @@ cursor: pointer;
 .head-info{
   text-align: center;
 }
-.head-info h1{
+.head-info h1,.head-info h3{
   margin:15px 0px;
   padding:5px 0px;
   position:relative;
@@ -240,7 +240,7 @@ cursor: pointer;
   left:0px;
 }
 
-.head-info h1:after{
+.head-info h1:after,.head-info h3:after{
   content: '';
   position:absolute;
   bottom: 0px;

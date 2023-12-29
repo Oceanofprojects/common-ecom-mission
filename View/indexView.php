@@ -156,7 +156,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    // echo hash_hmac('sha256','upCcPrice',9050);
+    // echo hash_hmac('sha256','refundpolicy',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 
