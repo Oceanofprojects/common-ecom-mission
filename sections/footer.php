@@ -197,7 +197,9 @@ $info = $cusObj->business_info();
                     <li><span>Policy</span></li>
                     <li><a href="index.php?controller=home&key=d75c9c5bdb3499137659ecfe86f846bbc126a25bd6fe91ef16f6983b3536df02">Shipping Policy</a></li>
                     <li><a href="index.php?controller=home&key=d45cd0f4c84fe88efa0fc4f23105a7ed1d868302f794afba92eccce80c286742">Refund Policy</a></li>
+                    <li><a href="index.php?controller=home&key=ae8e01dd7500c73fe6762c7d13811f29326bce000c76851fba66fe39c57524e4">Replacement Policy</a></li>
                 </ul>
+
                 <ul>
                     <li><span>Credits</span></li>
                     <li><a href="https://www.pexels.com/">Image by Pexel</a></li>

@@ -21,28 +21,28 @@
     require_once 'sections/msg_bot.php';
     ?>
     <style>
-        section{
+         .static_temp{
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
 
         }
-        section div{
+        .static_temp div{
             width:90%;
-        }
-        section h3{
+        }.static_temp h3{
+            text-align: left;
             padding:10px;
             margin:10px 0px;
             background: lightblue;
             text-weight:bolder;
         }
 
-p{
+.static_temp p{
     padding:0px 20px;
     text-align: justify;
 }
-section div span a{
+.static_temp div span a{
     color:navy;
 }
     </style>
@@ -56,7 +56,8 @@ section div span a{
 
     ?>
 
-    <section>
+    <section class="static_temp">
+        <center>
         <br>
         <h1 align="center"><b>Refund Policy</b></h1>
         <br><br><br>
@@ -109,7 +110,7 @@ If approved, your refund will be processed, and a credit will be automatically a
                 <br><br>
 Thank you for choosing <b><?php echo $info['business']['name'];?></b>!</p>
         </div>
-
+</center>
 
     </section>
     <br><br><br>

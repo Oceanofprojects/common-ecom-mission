@@ -75,6 +75,16 @@ class homeController extends commonController
             "title" => $b_name."refund policy",
             "data"=>['info'=>$business_info]
         ));
+      }else if(hash_equals(hash_hmac($algo,'replacementpolicy',$skey),$req['key'])){
+        $business_info = $this->productMdl->business_info();
+        $b_name = "";
+        if(count($business_info)>0){
+          $b_name = $business_info['business']['name']." ";
+        }
+        $this->view("policy/replacement_policy", array(
+            "title" => $b_name."replacement policy",
+            "data"=>['info'=>$business_info]
+        ));
       }else{
         $this->index();
       }
