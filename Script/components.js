@@ -114,7 +114,7 @@ function mycartComponent(data){
                 cart_edit_flag='0';
                 $('#mycarttbl').append("<tr><td>" + data.data[
                         ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
-                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (off_price * data.data[ci].quantity) +
+                    .data[ci].quantity + " (" + data.data[ci].unit + ")</td><td>" + (off_price * data.data[ci].quantity) +
                     "rs</td><td>-</td></tr>");
               }else if(data.old_r == false && data.data[ci].cart_edit_flag == '1'){
                 cart_edit_flag='1';
@@ -122,7 +122,7 @@ function mycartComponent(data){
                 off_total_price += off_price * data.data[ci].quantity;
                 $('#mycarttbl').append("<tr id='cartDataRow"+ci+"'><td>" + data.data[
                         ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
-                    .data[ci].quantity + " " + data.data[ci].unit + "</td><td>" + (off_price * data.data[ci].quantity) +
+                    .data[ci].quantity + " (" + data.data[ci].unit + ")</td><td>" + (off_price * data.data[ci].quantity) +
                     "rs</td><td><button class='btn fa fa-trash' onclick='removefrommycart(" +
                     data.data[ci].cart_id + ","+ci+")'></button></td></tr>");
                 }

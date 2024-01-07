@@ -42,9 +42,9 @@ $productMdl = new products();
         <?php
 
 
-        $cc_info = $productMdl->raiseCcReq();
+        $cc_info = $productMdl->raiseCcReq($data['data']['product_detail']);
         $info = $productMdl->business_info();
-        // print_r($cc_info);
+        print_r($cc_info);
         if($cc_info['status']){
             if(is_numeric($cc_info['data'])){
                 $cc_price = $cc_info['data'];   
@@ -61,6 +61,12 @@ $productMdl = new products();
     }else{
         die('Invaild Token');
     }
+
+
+//print_r($cartPrdList);
+
+
+
         ?>
 
         <form id="frm">

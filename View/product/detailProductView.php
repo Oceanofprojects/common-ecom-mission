@@ -160,18 +160,11 @@
     <?php
 
     require_once __DIR__.'/../../sections/header.php';
-    // require_once 'View/main/business_info.php';
-
-    if(isset($data['data']['data'])){
-    if($data['data']['data'] == 0){
-      echo "Err in viewing product";
-      exit;
-    }else{
-      $resData = $data['data']['data'][0];
-    }
-  }else{
-    echo "<br><br><br><h3 align='center'>Product ID not available</h3>";exit;
-  }
+        if(count($data['selected_product']['data'][0])>0){
+            $resData=$data['selected_product']['data'][0];
+          }else{
+            echo "<br><br><br><h3 align='center'>Product ID not available</h3>";exit;
+          }
 
 $url = '';
 
@@ -231,7 +224,7 @@ $info = $cusObj->business_info();
                 <div class="details-box-head" >
                     <a href="#" class="fa fa-share-alt" onclick="$('.share_link_layer').css('display','flex')"></a>
                     <?php
-                if($data['data']['myFavExit']['status']){
+                if($data['selected_product']['myFavExit']['status']){
                   $favIndi = "fa fa-heart";
                 }else{
                   $favIndi = "fa fa-heart-o";
@@ -289,7 +282,7 @@ $info = $cusObj->business_info();
                     </tr>
                     <tr>
                         <th>Category</th>
-                        <td><?php echo $resData['p_name'].', <a href="index.php?cate_id='.$resData['cate_id'].'&cate='.$resData['cate'].'&cate_img='.$resData['cate_img'].'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More</a>';?>
+                        <td><?php echo $resData['p_name'].', <a href="index.php?cate_id='.$resData['cate_id'].'&cate='.$resData['cate_id'].'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">More</a>';?>
                         </td>
                     </tr>
                     <tr>

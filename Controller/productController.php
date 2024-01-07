@@ -158,22 +158,32 @@ class productController extends commonController
 //    addProduct
 
     public function productDetail(){
-      $products = $this->productMdl->get_product();
+      if(isset($_GET['pid'])){
+        $pid = $_GET['pid'];        
+      }else{
+        die('P-ID not found');
+      }
+      $products = $this->productMdl->get_product_wt_suggestion($pid);
+      if(count($products['data'])==0){
+        die('Oops!..P-ID not found');
+      }
+//      print_r($products);exit;
       if($products['status']){
         $selected_product['status'] = true;
         $selected_product['message'] = 'Select product fetched successfully';
-        $selected_product['myFavExit']=$products['myFavExit'];//$this->productMdl->myfavExist($_GET['pid']);
+        $selected_product['myFavExit']=$products['data']['myFavExit'];//$products['myFavExit'];//$this->productMdl->myfavExist($_GET['pid']);
         $suggest_product['status'] = true;
         $suggest_product['message'] = 'Suggestion product fetched for Selected product';
         $suggest_product['data']=[];//default EMPTY
 
       }
+      $products = $products['data'];
       $inc1 = 0;
       $inc2 = 0;
-      if(count($products['data'])!==0){
+      if(count($products['data'])>0){
         //get four item for suggest
-        for($i=0;$i<((count($products['data'])>=5)?5:count($products['data']));$i++){
-          if($products['data'][$i]['p_id'] == $_GET['pid']){
+        for($i=0;$i<count($products['data']);$i++){
+          if($products['data'][$i]['p_id'] == $pid){
             $selected_product['data'][$inc1] = $products['data'][$i];
             $inc1++;
           }else{
@@ -184,7 +194,7 @@ class productController extends commonController
       }
       $this->view("product/detailProduct", array(
           "title" => "Product detail",
-          "data"=>$selected_product,
+          "selected_product"=>$selected_product,
           "suggestion"=>$suggest_product
       ));
     }

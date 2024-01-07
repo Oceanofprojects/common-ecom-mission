@@ -72,7 +72,7 @@ class products extends commonModel{
        	'query-exc'=>true
 			];    
     $flag = $this->generateQuery($arr);
-	if($flag['status']){
+	if($flag['status'] == 'success'){
 			$res=$flag['data'];
 			return ['status'=>true,'data'=>$res,'message'=>'Products fetched successfully'];
 		}else{
@@ -80,10 +80,6 @@ class products extends commonModel{
 		}
 	}
 
-	public function get_suggestion($datas){
-		$cate = $datas[0];//Get cate
-		return "asasasasasasasas";
-	}
 
 	public function addToFav(){
 		if($this->cid == null){
@@ -229,21 +225,41 @@ class products extends commonModel{
 		  }
 	}
 
-	public function get_product(){
-		if(isset($_GET['pid'])){
-				$p_id = $_GET['pid'];
-$q = "SELECT *,pc.cate_name as cate FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '".$p_id."' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '".$p_id."') ORDER BY p.p_id ASC LIMIT 5";
-				$sql = $this->db->prepare($q);
-				if($sql->execute()){
-					$res = $sql->fetchAll(PDO::FETCH_ASSOC);
-					return ['status'=>true,'data'=>$res,'message'=>'Product details fetched','myFavExit'=>$this->myfavExist($p_id)];
-				}else{
-					return ['status'=>false,'data'=>[],'message'=>'Err in get product details','myFavExit'=>$this->myfavExist($p_id)];
-				}
+	public function get_product_wt_suggestion($pid){
+		$arr = [
+				'tbl_name'=>'products',
+				'action'=>'select',
+				'data'=>[],
+				'condition'=>['manual'=>["p_id='".$pid."'"]],
+				'limit'=>1,
+       	'query-exc'=>true
+			];    
+    $product = $this->generateQuery($arr);
+    if($product['status'] == 'success'){
+				if(isset($product['data'][0]['cate_id']) && !empty($product['data'][0]['cate_id'])){
+//					$product['data'][0]['myFavExit']=$this->myfavExist($pid);
+					$arr = [
+						'tbl_name'=>'products',
+						'action'=>'select',
+						'data'=>[],
+						'condition'=>['raw-manual'=>["WHERE cate_id='".$product['data'][0]['cate_id']."' AND p_id!='".$pid."' ORDER BY RAND() LIMIT 4"]],
+		       	'query-exc'=>true
+					];    
+			    $suggest = $this->generateQuery($arr);
+			    if($suggest['status'] == 'success'){
+			    	$suggest['myFavExit']=$this->myfavExist($pid);
+			    	array_push($suggest['data'],$product['data'][0]);
+						return ['status'=>true,'data'=>$suggest,'message'=>'Products fetched successfully'];
+					}else{
+						return ['status'=>false,'data'=>[],'message'=>'Products fetch Failed'];
+					}
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>'Cate ID not found for this product'];
+			}
 		}else{
-			return ['status'=>false,'data'=>[],'message'=>'Something went wrong. please try again.'];
+			return ['status'=>false,'data'=>[],'message'=>'Products suggestion fetch Failed'];
 		}
-//SELECT * FROM products as p  left join product_category as pc on p.cate_id=pc.cate_id WHERE p_id = '4ZS112' OR p.cate_id=(SELECT cate_id FROM products WHERE p_id = '4ZS112')
+
 	}
 
 	public function addToCart(){
@@ -1236,13 +1252,63 @@ public function updateCusPrdWTOrPrd($orderRes){
 						}
 					}
 		}
-		public function raiseCcReq(){
+
+		public function compare_my_assoc($arr1,$arr2){
+//arr2 new product list 
+			function p_id_exist($p_id){
+				echo $p_id.'<br>';
+			}
+			for($i=0;$i<count($arr2);$i++){
+				p_id_exist($arr2[$i]['p_id']);
+
+//				}
+			}
+			
+//			return true;
+			// function c($arr1){
+			// 	print_r($arr1);
+			// }
+			// c($arr1);
+				exit();
+
+		}
+
+		public function is_any_new_product_in_cart($id,$product_list){
+			$arr = [
+						'tbl_name'=>'cc_request',
+						'action'=>'select',
+						'condition'=>['manual'=>["cid='".$id."'","req_status=1"]],
+						'order'=>['cc_req_id','desc'],
+						'limit'=>1, 
+						'data'=>[],
+						'query-exc'=>true
+					];
+
+						$flag=$this->generateQuery($arr);
+					if($flag['status'] == 'success'){
+						if(count($flag['data'])>0){
+							$db_product = json_decode($flag['data'][0]['total_product'],true);
+							if($this->compare_my_assoc($db_product,$product_list)){
+								return ['status'=>true,'data'=>[],'message'=>'No changes, Good to go and cc req already exists.'];
+							}else{
+								return ['status'=>false,'data'=>[],'message'=>'Changes in cart items'];
+							}
+						}else{
+						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];							
+						}
+					}
+		}
+		public function raiseCcReq($data){
+			//$data contains product id and qnty
 			if($this->cid == null){
 						return ['status'=>false,'data'=>[],'message'=>"Please login to make action !"];
 			}else{
 				$cc_info = $this->getCcReq($this->cid);
 				if($cc_info['status']){
-						return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'CC request already exists'];
+					$check_cart_item = $this->is_any_new_product_in_cart($this->cid,$data);
+					if($check_cart_item['status']){
+						return $check_cart_item;	
+					}	
 				}
 	
 
@@ -1250,7 +1316,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 					$arr = [
 						'tbl_name'=>'cc_request',
 						'action'=>'insert',
-						'data'=>["cid='".$this->cid."'","cc_price='TBD'","total_product=".$this->get_cate_num(),"req_status=1","req_date=CURRENT_DATE"],
+						'data'=>["cid='".$this->cid."'","cc_price='TBD'","total_product='".json_encode($data)."'","req_status=1","req_date=CURRENT_DATE"],
 						'query-exc'=>true];
 					if($this->generateQuery($arr)['status'] == 'success'){
 
