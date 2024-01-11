@@ -1254,23 +1254,24 @@ public function updateCusPrdWTOrPrd($orderRes){
 		}
 
 		public function compare_my_assoc($arr1,$arr2){
-//arr2 new product list 
-			function p_id_exist($p_id){
-				echo $p_id.'<br>';
-			}
-			for($i=0;$i<count($arr2);$i++){
-				p_id_exist($arr2[$i]['p_id']);
-
-//				}
-			}
 			
-//			return true;
-			// function c($arr1){
-			// 	print_r($arr1);
-			// }
-			// c($arr1);
-				exit();
+				for($i=0;$i<count($arr2);$i++){
+					for($j=0;$j<count($arr1);$j++) {
+						if($arr2[$i]['p_id'] == $arr1[$j]['p_id']){
+							if($arr2[$i]['qnty'] == $arr1[$j]['qnty']){
+								return true;
+							}else{
+								return false;							
+							}
+						}else{
+							if(($j+1)==count($arr1)){
+								return false;
+							}
+						}
+					}
+				}
 
+			
 		}
 
 		public function is_any_new_product_in_cart($id,$product_list){
@@ -1288,6 +1289,9 @@ public function updateCusPrdWTOrPrd($orderRes){
 					if($flag['status'] == 'success'){
 						if(count($flag['data'])>0){
 							$db_product = json_decode($flag['data'][0]['total_product'],true);
+							if(count($db_product) !== count($product_list)){
+								return ['status'=>false,'data'=>[],'message'=>'Changes in cart items'];
+							}
 							if($this->compare_my_assoc($db_product,$product_list)){
 								return ['status'=>true,'data'=>[],'message'=>'No changes, Good to go and cc req already exists.'];
 							}else{
@@ -1298,6 +1302,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 						}
 					}
 		}
+
 		public function raiseCcReq($data){
 			//$data contains product id and qnty
 			if($this->cid == null){
@@ -1310,9 +1315,15 @@ public function updateCusPrdWTOrPrd($orderRes){
 						return $check_cart_item;	
 					}	
 				}
-	
 
-				//new req
+				//UPDATE REQ to 0
+				$this->generateQuery([
+						'tbl_name'=>'cc_request',
+						'action'=>'update',
+						'data'=>["req_status=0"],
+						'condition'=>['manual'=>["cid='".$this->cid."'"]],
+						'query-exc'=>true]);
+	
 					$arr = [
 						'tbl_name'=>'cc_request',
 						'action'=>'insert',
@@ -1325,11 +1336,15 @@ public function updateCusPrdWTOrPrd($orderRes){
 				 * optional
 				 * 
 				 * */
+									$update_cc_url = 'https://test.com/index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9';
 				$params=array(
-'token' => '',//yvvvaffvramlnxn2',
-'to' => '+91',
-'body' => 'New order from our customer ID :'.$this->cid
-);
+'token' =>'yvvvaffvramlnxn2',
+'to' => '+918939068212',
+'body' => '*New order from our customer* \n
+	ID : '.$this->cid.',\n
+	Update CC Price : '.$update_cc_url.',\n
+	- Bot 
+	');
 $curl = curl_init();
 curl_setopt_array($curl, array(
   CURLOPT_URL => "https://api.ultramsg.com/instance71197/messages/chat",
