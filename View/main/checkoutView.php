@@ -40,11 +40,12 @@ $productMdl = new products();
         }
         </style>
         <?php
-
-
+        if(!isset($data['data']['product_detail'])){
+        die('Invaild Token');exit;
+}
         $cc_info = $productMdl->raiseCcReq($data['data']['product_detail']);
         $info = $productMdl->business_info();
-        print_r($cc_info);
+        // print_r($cc_info);
         if($cc_info['status']){
             if(is_numeric($cc_info['data'])){
                 $cc_price = $cc_info['data'];   
