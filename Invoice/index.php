@@ -5,14 +5,15 @@
 require_once('TCPDF/tcpdf.php');
 require_once('../Model/productModel.php');
 require_once('../Model/customerModel.php');
+require_once('../Controller/spacesettingController.php');
+$bis_info = new spacesetting();
+$info = $bis_info->business_info();
 //require_once '../View/main/business_info.php';//business info
 
 
 //shop info
 
 $prdObj = new products();
-
-$info = $prdObj->business_info();
 
 if(!isset($_GET['invoice_id'])){
     die('Invaild invoice ID, Please check.');

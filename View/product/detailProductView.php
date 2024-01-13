@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-        <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,8 +87,8 @@
         min-width: 200px;
         height: 300px;
         width: 100%;
-        box-shadow:0px 0px 5px 0px rgba(0,0,0,.5);
-        
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+
     }
 
     .details-sub-imgs {
@@ -112,49 +112,53 @@
         cursor: pointer;
     }
 
-        .share_link_layer {
-        position:fixed;
-        top:0px;
-        left:0px;
-        background:rgba(0,0,0,.8);
+    .share_link_layer {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        background: rgba(0, 0, 0, .8);
         display: flex;
-        justify-content:center;
+        justify-content: center;
         align-items: center;
         flex-wrap: wrap;
-        height:100vh;
-        width:100%;
+        height: 100vh;
+        width: 100%;
         display: none;
-        z-index:15;
+        z-index: 15;
     }
 
     .share_link_box {
-/*        height:30px;
+        /*        height:30px;
         width:30px;*/
         display: flex;
-        justify-content:center;
+        justify-content: center;
         align-items: center;
         background: #fff;
-        margin:10px 10px;
-        padding:8px;
+        margin: 10px 10px;
+        padding: 8px;
         text-align: center;
-        border-radius:100px;
-        border:.2px solid rgba(0,0,0,.1);
+        border-radius: 100px;
+        border: .2px solid rgba(0, 0, 0, .1);
     }
-    .share_link_box a{
+
+    .share_link_box a {
         text-decoration: none;
-        color:#123;
+        color: #123;
     }
-    .share_link_box span{
-        margin:10px;
+
+    .share_link_box span {
+        margin: 10px;
 
         font-size: 10pt;
     }
+
     .share_link_box:hover {
         background: #123;
-        box-shadow:0px 0px 10px 0px rgba(256,256,256,1);
+        box-shadow: 0px 0px 10px 0px rgba(256, 256, 256, 1);
     }
-    .share_link_box:hover > a{
-        color:#fff;
+
+    .share_link_box:hover>a {
+        color: #fff;
     }
     </style>
     <?php
@@ -176,11 +180,11 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
 $url .= $_SERVER['HTTP_HOST'];
 $url .= $_SERVER['REQUEST_URI'];
 
-require_once __DIR__.'/../../Model/productModel.php';
-$cusObj = new products();
+require_once __DIR__.'/../../Controller/spacesettingController.php';
+$cusObj = new spacesetting();
 $info = $cusObj->business_info();
 
-?>    
+?>
 
 
 
@@ -194,11 +198,12 @@ $info = $cusObj->business_info();
             </a>
         </div>
         <div class="share_link_box">
-<input type="text" style="color:#ddda;border:none;background:transparent; width:.1px; outline:none" value="<?php echo $url;?>" id="productURL">
+            <input type="text" style="color:#ddda;border:none;background:transparent; width:.1px; outline:none"
+                value="<?php echo $url;?>" id="productURL">
             <a href="#" class="fa fa-copy" onclick="copyToClip()" style="padding:5px;">
             </a>
         </div>
-<!--         <div class="share_link_box">
+        <!--         <div class="share_link_box">
             <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL" class="fa fa-facebook-official">
             </a>
         </div>
@@ -208,9 +213,9 @@ $info = $cusObj->business_info();
         <div class="share_link_box">
             <a href="mailto:?subject=[SUBJECT]&body=[BODY]" class="fa fa-envelope">
             </a> -->
-<!--             https://twitter.com/intent/tweet?text=YOUR_TEXT&url=YOUR_URL
+        <!--             https://twitter.com/intent/tweet?text=YOUR_TEXT&url=YOUR_URL
             https://www.reddit.com/submit?url=YOUR_URL&title=YOUR_TITLE -->
-<!--         </div>
+        <!--         </div>
         <div class="share_link_box">
             <a href="https://pinterest.com/pin/create/button/?url=[URL]&media=[IMAGE_URL]&description=[DESCRIPTION]" class="fa fa-pinterest">
             </a>
@@ -221,7 +226,7 @@ $info = $cusObj->business_info();
     <center>
         <section class="details" style="background:#fff">
             <div class="details-box-layer">
-                <div class="details-box-head" >
+                <div class="details-box-head">
                     <a href="#" class="fa fa-share-alt" onclick="$('.share_link_layer').css('display','flex')"></a>
                     <?php
                 if($data['selected_product']['myFavExit']['status']){
@@ -237,7 +242,7 @@ $info = $cusObj->business_info();
                     style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;">
                 </div>
                 <br>
-           <?php
+                <?php
                   if($resData['offer'] > 0){
                     echo "<span style=\"text-decoration:line-through;font-size:15pt;text-decoration-color:red;\">".$resData['price']."rs</span><sup>".$resData['offer']."%</sup>&nbsp;&nbsp;&nbsp;&nbsp;<span>".($resData['price'] - ($resData['price']*$resData['offer']/100))."rs</span><br>";
                   }else{
@@ -312,7 +317,7 @@ $info = $cusObj->business_info();
     </center>
     <br><br><br>
 
-    
+
     <center> <img width="50%" src="assets/common-images/end_line.png" alt=""> </center>
     <h2 align="center">Suggestion Product</h2><br><br><br>
 
@@ -355,13 +360,12 @@ $p_id=$resData['p_id'];
   ?>
     <script src="Script/reviewSlide.js"></script>
     <script type="text/javascript">
-
-        function copyToClip(){
-            $('#productURL').select();
-            document.execCommand("copy");
-              dis_msg_box('#000','lightgreen','URL Copied !!');
-           $('.share_link_layer').css('display','none');    
-        }
+    function copyToClip() {
+        $('#productURL').select();
+        document.execCommand("copy");
+        dis_msg_box('#000', 'lightgreen', 'URL Copied !!');
+        $('.share_link_layer').css('display', 'none');
+    }
     </script>
 </body>
 

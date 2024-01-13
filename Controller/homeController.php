@@ -11,11 +11,12 @@ class homeController extends commonController
     {
         //init
         require_once __DIR__ . "/../Model/productModel.php";
+        require_once __DIR__.'/../Controller/spacesettingController.php';
 
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 
         //Product Model
-
+        $this->bis_info = new spacesetting();
         $this->productMdl = new products();
     }
     /**
@@ -56,7 +57,7 @@ class homeController extends commonController
             "data"=>[]
         ));
       }else if(hash_equals(hash_hmac($algo,'shippingpolicy',$skey),$req['key'])){
-        $business_info = $this->productMdl->business_info();
+        $business_info = $this->bis_info->business_info();
         $b_name = "";
         if(count($business_info)>0){
           $b_name = $business_info['business']['name']." ";
@@ -66,7 +67,7 @@ class homeController extends commonController
             "data"=>['info'=>$business_info]
         ));
       }else if(hash_equals(hash_hmac($algo,'refundpolicy',$skey),$req['key'])){
-        $business_info = $this->productMdl->business_info();
+        $business_info = $this->bis_info->business_info();
         $b_name = "";
         if(count($business_info)>0){
           $b_name = $business_info['business']['name']." ";
@@ -76,7 +77,7 @@ class homeController extends commonController
             "data"=>['info'=>$business_info]
         ));
       }else if(hash_equals(hash_hmac($algo,'replacementpolicy',$skey),$req['key'])){
-        $business_info = $this->productMdl->business_info();
+        $business_info = $this->bis_info->business_info();
         $b_name = "";
         if(count($business_info)>0){
           $b_name = $business_info['business']['name']." ";

@@ -70,19 +70,22 @@
     <center>
         <button id="loadMoreProduct"
             onclick="loadMoreProduct('key=5b9a4ec28c6ebd73521c41b554fc3f5ec02d546cb0d381ac83e3140f044f43a4&controller=product<?php echo $rng;?>')"
-            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button">            More Products&nbsp;<span class="fa fa-angle-double-down"></span> </button>
+            class="btn" style="background:cornflowerblue;color:#fff;text-decoration:none" name="button"> More
+            Products&nbsp;<span class="fa fa-angle-double-down"></span> </button>
     </center>
     <br><br><br>
-    <section style="background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)) 20%,url('assets/common-images/leaf1.jpg');background-attachment:fixed; background-size:cover; height:250px;padding:10px;display:flex;flex-direction:column;justify-content: center; align-content: center;">
+    <section
+        style="background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)) 20%,url('assets/common-images/leaf1.jpg');background-attachment:fixed; background-size:cover; height:250px;padding:10px;display:flex;flex-direction:column;justify-content: center; align-content: center;">
         <div>
-        <h1 style="margin:10px;color:#fff;font-size:2em;">Top Quality & Collective Plants Available</h1>
-        <br>
-        <button id="loadMoreProduct"
-            onclick="window.open('index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product','_self')"
-            class="btn" style="background:darkorange;color:#fff;text-decoration:none" name="button">            Explore Nows&nbsp;&nbsp;<span class="fa fa-angle-double-right"></span> </button>
-            </div>
+            <h1 style="margin:10px;color:#fff;font-size:2em;">Top Quality & Collective Plants Available</h1>
+            <br>
+            <button id="loadMoreProduct"
+                onclick="window.open('index.php?key=1cf31b8f97c87304e97cd86a13916753d77e16a1edb4bebfe3909aaea983e20f&controller=product','_self')"
+                class="btn" style="background:darkorange;color:#fff;text-decoration:none" name="button"> Explore
+                Nows&nbsp;&nbsp;<span class="fa fa-angle-double-right"></span> </button>
+        </div>
     </section>
-<br><br>
+    <br><br>
     <section class="cateSetProductsLoaderLayer">
         <!-- LOAD CATEGORY WITH PRODUCTS -->
         <?php 
@@ -114,11 +117,11 @@
 
          ?>
     </section>
-<br>
-<br>
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
     <?php 
 
@@ -156,7 +159,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    // echo hash_hmac('sha256','replacementpolicy',9050);
+    // echo hash_hmac('sha256','hotlist',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

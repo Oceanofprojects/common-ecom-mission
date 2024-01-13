@@ -109,6 +109,11 @@ class productController extends commonController
             "data"=>$this->productMdl->checkout()//$this->productMdl->getCartByIdNDate(date('Y-m-d'))
            //$this->productMdl->checkoutFinal()
         ));
+      }else if(hash_equals(hash_hmac($algo,'hotlist',$skey),$req['key'])){
+        $this->view("product/todayshotlist", array(
+            "title" => "Today's Hot List",
+            "data"=>[1,1,1,1]
+        ));
       }else if(hash_equals(hash_hmac($algo,'addSlider',$skey),$req['key'])){
         echo json_encode($this->productMdl->addSlider());
       }else if(hash_equals(hash_hmac($algo,'getOrderDetailById',$skey),$req['key'])){

@@ -392,7 +392,7 @@ function op_search(){
   $('.search_layer').css('top','0px');
   }else{
   coursep_menu();
-  $('.search_layer').css('top','-100%');
+  $('.search_layer').css('top','-1000%');
   }
   menutmp++;
 }

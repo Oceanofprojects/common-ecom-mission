@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__.'/../Model/productModel.php';
+require_once __DIR__.'/../Controller/spacesettingController.php';
 $cusObj = new products();
-$info = $cusObj->business_info();
+$bis_info = new spacesetting();
+$info = $bis_info->business_info();
 $userState = $cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));
 if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
@@ -48,7 +50,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 10px;
+    padding: 10px 10px;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, .3);
     z-index: 10;
     background: #fff;
@@ -70,7 +72,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     height: 50px;
     width: 50px;
     border-radius: 50px;
-    border:1px solid rgba(0,0,0,.1);
+    border: 1px solid rgba(0, 0, 0, .1);
 }
 
 .menu {
@@ -85,7 +87,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     padding: 0px 5px;
     margin: 0px 5px;
     transition: .3s;
-    border:.1px solid transparent;
+    border: .1px solid transparent;
 }
 
 
@@ -133,7 +135,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 .menu li:hover {
     cursor: pointer;
     border-radius: 5px;
-    border-color:#ddd;
+    border-color: #ddd;
 
 }
 
@@ -164,7 +166,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     left: -25px;
     display: none;
     border-radius: 5px;
-    background:#fff;
+    background: #fff;
     border: .2px solid rgba(0, 0, 0, .1);
 }
 
@@ -191,10 +193,10 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 .init {
     text-align: right;
     padding: 0px 20px;
-    background: var(--df_bl_color);
+    background: #fff;
     backdrop-filter: blur(10px);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 
 }
@@ -203,16 +205,10 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #123;
+    border-radius: 0px 0px 10px 10px;
 }
 
-
-/*.init a{
-//  background:navy;
-}
-    .init a small{
-        padding:0px 5px;
-        font-size:10pt;
-    }*/
 .init li {
     list-style: none;
 }
@@ -220,14 +216,17 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 .init a {
     font-size: 13pt;
     text-decoration: none;
-    padding: 7px 9px;
+    padding: 10px 9px;
     cursor: pointer;
-    color: var(--df_wt_color1);
+    color: #ddd;
+    margin: 0px 2px;
+    outline: none;
     text-decoration: none;
 }
 
 .init a:hover {
-    color: red;
+    color: #fff;
+    text-shadow: 0px 0px 10px #ddd;
     cursor: pointer;
 }
 
@@ -256,14 +255,15 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 }
 
 .search_layer {
-    background: transparent;
+    background: rgba(0, 0, 0, .2);
+    backdrop-filter: blur(10px);
     position: fixed;
-    top: -100%;
+    top: -1000%;
     left: 0px;
     width: 100%;
-    height:100vh;
+    height: 100vh;
     z-index: 12;
-    transition: .3s;
+    /* transition: .3s; */
 }
 
 .search_box {
@@ -395,16 +395,19 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 @media only screen and (max-width: 400px) {}
 </style>
 
-<!--        <div class="init" style="color:#555;">
-            <div id="i_cons">
-                <ul>
-                    <li><a href="#" class="fa fa-envelope" title="Mail" style="background:linear-gradient(red,darkred);color:#fff;"></a></li>
-                <li><a href="#" target="blank" class="fa fa-instagram" style="background:linear-gradient(#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff;"></a></li>
-                <li><a href="#" target="blank" class="fa fa-facebook" style="background:linear-gradient(#3b5998,#3b5998);color:#fff"></a></li>
-            <li><a href="#" class="fa fa-whatsapp" title="Whatsapp" style="background:linear-gradient(#075E54,#075E54);color:#fff;"></a></li>
+<div class="init" style="color:#555;">
+    <div id="i_cons">
+        <ul>
+            <li><a href="#" onclick="op_search()" class="fa fa-search" title="Search"></a></li>
+            <li><a href="#" class="fa fa-bell" title="Notification"></a></li>
+            <li><a href="index.php?controller=product&key=bfbf58401ee274819e86f65c59fcde97bd22bf1a93df8109f50a4717eb13d21f"
+                    class="fa fa-fire" title="Top list"></a></li>
+            <li><a href="tel:<?php echo $info['business']['phone'];?>" class="fa fa-phone" title="Phone"></a></li>
+            <li><a href="https://wa.me/91<?php echo $info['social_media']['whatsapp'];?>" class="fa fa-whatsapp"
+                    title="Whatsapp"></a></li>
         </ul>
-            </div>
-        </div> -->
+    </div>
+</div>
 
 <script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
 <div class="loader">
@@ -430,10 +433,12 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
             <li><a
                     href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"><span
                         class="fa fa-home"></span>home</a></li>
-            <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li>
+            <!-- <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li> -->
             <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>Wishlist</a></li>
             <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>
-<li><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span class="fa fa-truck"></span>Track</a></li>
+            <li><a
+                    href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span
+                        class="fa fa-truck"></span>Track</a></li>
             <?php echo $extraLinks;?>
         </ul>
     </nav>
@@ -511,7 +516,8 @@ function menu() {
     <center>
         <div class="search_box"><input type="search" id="search_product" list="" placeholder="Search here"><span
                 class="fa fa-search" onclick="searchProduct('detailProduct','search_product')"
-                style="color:#555a;cursor:pointer;background:cornflowerblue;padding:8px;border-radius:5px;"></span></div>
+                style="color:#555a;cursor:pointer;background:cornflowerblue;padding:8px;border-radius:5px;"></span>
+        </div>
         <br>
         <span class="fa fa-close"
             style="padding:20px;background:tomato;border-radius: 100%;color:#000;cursor:pointer;border:1px solid #555a;box-shadow:0px 0px 10px 0px rgba(0, 0, 0, .5);"
