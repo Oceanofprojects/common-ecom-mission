@@ -31,6 +31,7 @@ class adminCtrl extends commonModel{
             'join_param'=>[
                 ['customers','left_join','cid','cid'],
             ],
+            'order'=>[$tmptbl.'.s_no','desc'],
             'query-exc'=>true
         ];
         $flag=$this->generateQuery($arr);

@@ -1161,6 +1161,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 				'data'=>['manual'=>['order_id as id,cart_date as date']],
 				'action'=>'select',
 				'condition'=>["cid='".$this->cid."'"],
+				'order'=>['s_no','desc'],
 				'query-exc'=>true
 			  ];
 			  $flag=$this->generateQuery($arr);
@@ -1229,6 +1230,17 @@ public function updateCusPrdWTOrPrd($orderRes){
 			}
 		}
 
+		public function getCcReqFromInv(){
+			return $this->generateQuery([
+						'tbl_name'=>'cc_request',
+						'action'=>'select',
+						'data'=>[],
+						'condition'=>['manual'=>["cid='".$this->cid."'"]],
+						'order'=>['cc_req_id','desc'],
+						'limit'=>1,
+						'query-exc'=>true]);;
+		}
+
 		public function getCcReq($defid = ''){
 			$arr = [
 						'tbl_name'=>'cc_request',
@@ -1289,6 +1301,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 					if($flag['status'] == 'success'){
 						if(count($flag['data'])>0){
 							$db_product = json_decode($flag['data'][0]['total_product'],true);
+
 							if(count($db_product) !== count($product_list)){
 								return ['status'=>false,'data'=>[],'message'=>'Changes in cart items'];
 							}
@@ -1312,7 +1325,9 @@ public function updateCusPrdWTOrPrd($orderRes){
 				if($cc_info['status']){
 					$check_cart_item = $this->is_any_new_product_in_cart($this->cid,$data);
 					if($check_cart_item['status']){
-						return $check_cart_item;	
+						if(count($cc_info)>0){
+							return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'Cc price'];	
+						}
 					}	
 				}
 

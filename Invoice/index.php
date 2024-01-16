@@ -55,7 +55,14 @@ for($i=0;$i<count($list);$i++){
    }
 
 }
+$cc = $prdObj->getCcReqFromInv();
+if(count($cc['data'])>0){
+    $cc_price = $cc['data'][0]['cc_price'];
+}else{
+    $cc_price=0;//Err val    
+}
 
+$total = $total+$cc_price;
 
 $cusObj = new customer();
 $cus = $cusObj->getUserInfoById();
@@ -204,6 +211,13 @@ $html = <<<EOD
     <tr>
    <td colspan="5" ></td>
     <td colspan="2" style="text-align:right;">Saving(%) - {$o_off}rs</td>
+</tr>
+ <tr>
+    <td colspan="7" ></td>
+    </tr>
+<tr>
+   <td colspan="5" ></td>
+    <td colspan="2" style="text-align:right;">Courier Charges - {$cc_price}rs</td>
 </tr>
     <tr>
         <td colspan="7" align="center">

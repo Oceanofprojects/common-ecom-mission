@@ -22,8 +22,11 @@
 <body>
     <?php
     require_once 'Model/productModel.php';
-$productMdl = new products();
     require_once 'sections/header.php';
+    require_once 'Controller/spacesettingController.php';
+    
+$productMdl = new products();
+$bis_info = new spacesetting();
     // print_r($data['data']['product_detail']);
     // exit;
     ?>
@@ -44,8 +47,8 @@ $productMdl = new products();
         die('Invaild Token');exit;
 }
         $cc_info = $productMdl->raiseCcReq($data['data']['product_detail']);
-        $info = $productMdl->business_info();
-        // print_r($cc_info);
+        $info = $bis_info->business_info();
+
         if($cc_info['status']){
             if(is_numeric($cc_info['data'])){
                 $cc_price = $cc_info['data'];   
