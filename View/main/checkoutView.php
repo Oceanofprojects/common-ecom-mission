@@ -24,7 +24,7 @@
     require_once 'Model/productModel.php';
     require_once 'sections/header.php';
     require_once 'Controller/spacesettingController.php';
-    
+
 $productMdl = new products();
 $bis_info = new spacesetting();
     // print_r($data['data']['product_detail']);
@@ -45,15 +45,20 @@ $bis_info = new spacesetting();
         <?php
         if(!isset($data['data']['product_detail'])){
         die('Invaild Token');exit;
-}
+          }
+          $tot_qnt=null;
+          foreach ($data['data']['product_detail'] as $item) {
+            $tot_qnt += $item['qnty'];
+          }
+          echo "<script>var item = btoa(btoa(".($tot_qnt+9050)."));</script>";
         $cc_info = $productMdl->raiseCcReq($data['data']['product_detail']);
         $info = $bis_info->business_info();
 
         if($cc_info['status']){
             if(is_numeric($cc_info['data'])){
-                $cc_price = $cc_info['data'];   
+                $cc_price = $cc_info['data'];
             }else{
-                $cc_price = " <span class='fa fa-spinner rotate360auto'></span> <small style='color:tomato'>Please wait couple of minutes</small> <b>or</b> <small>Enquiry : <a href='tel:".$info['business']['phone']."'>".$info['business']['phone']."</a>, <a href='https://wa.me/".$info['business']['whatsapp']."'>".$info['business']['whatsapp']."</a></small>";                
+                $cc_price = " <span class='fa fa-spinner rotate360auto'></span> <small style='color:tomato'>Please wait couple of minutes</small> <b>or</b> <small>Enquiry : <a href='tel:".$info['business']['phone']."'>".$info['business']['phone']."</a>, <a href='https://wa.me/".$info['business']['whatsapp']."'>".$info['business']['whatsapp']."</a></small>";
             }
         }
 
@@ -143,7 +148,7 @@ $bis_info = new spacesetting();
             dis_msg_box('#000', 'tomato', 'Please select payment proof image !');
         } else {
             performAjxForFiles('index.php', '#frm',
-                '?controller=product&key=9139fb9fc1c8a937ed92c4b4550cf57ab5ac7bff859837c41e27a451583a8883', (
+                '?controller=product&item='+item+'&key=9139fb9fc1c8a937ed92c4b4550cf57ab5ac7bff859837c41e27a451583a8883', (
                     res) => {
                     d = JSON.parse(res)
                     if (d.status) {
@@ -155,7 +160,10 @@ $bis_info = new spacesetting();
                         );
                         dis_msg_box('#000', 'lightgreen', d.message);
                     } else {
+                      if(d.ac == 'reload_required'){
                         dis_msg_box('#000', 'tomato', d.message);
+                        window.location.reload();
+                      }
                     }
                 });
         }

@@ -61,7 +61,9 @@ if(count($cc['data'])>0){
 }else{
     $cc_price=0;//Err val    
 }
-
+if(!is_numeric($cc_price)){
+        die("Oops!, Please add Courier Charges ");
+}
 $total = $total+$cc_price;
 
 $cusObj = new customer();

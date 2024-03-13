@@ -70,7 +70,7 @@ class products extends commonModel{
 				'data'=>[],
 				'order'=>['s_no','desc'],
        	'query-exc'=>true
-			];    
+			];
     $flag = $this->generateQuery($arr);
 	if($flag['status'] == 'success'){
 			$res=$flag['data'];
@@ -233,7 +233,7 @@ class products extends commonModel{
 				'condition'=>['manual'=>["p_id='".$pid."'"]],
 				'limit'=>1,
        	'query-exc'=>true
-			];    
+			];
     $product = $this->generateQuery($arr);
     if($product['status'] == 'success'){
 				if(isset($product['data'][0]['cate_id']) && !empty($product['data'][0]['cate_id'])){
@@ -244,7 +244,7 @@ class products extends commonModel{
 						'data'=>[],
 						'condition'=>['raw-manual'=>["WHERE cate_id='".$product['data'][0]['cate_id']."' AND p_id!='".$pid."' ORDER BY RAND() LIMIT 4"]],
 		       	'query-exc'=>true
-					];    
+					];
 			    $suggest = $this->generateQuery($arr);
 			    if($suggest['status'] == 'success'){
 			    	$suggest['myFavExit']=$this->myfavExist($pid);
@@ -394,7 +394,7 @@ if($this->cid == null){
 
 	public function get_cate_list(){
 		$tmptbl = 'product_category';
-		
+
 		$limit = "LIMIT 5";
 
 		if(isset($_GET['cate_flow'])){
@@ -426,7 +426,7 @@ if($this->cid == null){
 	public function mycart($defid = ''){
 		//default ID for admin changes
 		if(empty($defid)){
-			$uid = $this->cid;			
+			$uid = $this->cid;
 		}else{
 			$uid = $defid;
 		}
@@ -772,9 +772,9 @@ public function getCartByIdNDate(){
 								return $pro_data_list_flag;
 							}
 							//IMP SEC CALC PRODUCT QUANTITY AND UPDATE DB
-							
+
 							return $this->cQtyWToQty($cur_or_data_list,$pro_data_list,$product_detail,$cus_or_pr_id_list);//product_detail & cus_or_pr_id_list is var used for checkoutfinal()
-							
+
 				}else{
 				return ['status'=>false,'data'=>[],'message'=>'cart list zero'];
 				}
@@ -805,7 +805,7 @@ public function getCartByIdNDate(){
 public function calcOffer($price,$off,$qnty){
 	$offer = ($price * $off)/100;
 	$or_price = $price-$offer;
-	return $or_price*$qnty; 
+	return $or_price*$qnty;
 }
 
 public function changeCcReqAccess(){
@@ -832,6 +832,15 @@ public function changeCcReqAccess(){
 public function checkoutFinal(){
 	$cart_date = date('Y-m-d');
 	$checkout_flag = $this->checkout();
+	$client_item_count = base64_decode(base64_decode($_GET['item']));//dbl check cart client count
+	$client_item_count = (is_numeric($client_item_count))?intval($client_item_count):0;
+	$tot_qnt=null;
+  foreach ($checkout_flag['product_detail'] as $item) {
+    $tot_qnt += $item['qnty'];
+  }
+  if(($client_item_count-9050) !== $tot_qnt){//9050 temp
+  	die(json_encode(['status'=>false,'data'=>[],'message'=>'item count mismatched !','ac'=>'reload_required']));
+  }
 	if($checkout_flag['status']){//if all product aval
 		$upPrds_flag = $this->updateCusPrdWTOrPrd($checkout_flag['upt_qnty']);
 		if($upPrds_flag['status']){
@@ -861,7 +870,7 @@ public function checkoutFinal(){
 	}else{
 		return $checkout_flag;
 	}
-		
+
 }
 
 public function updateCusPrdWTOrPrd($orderRes){
@@ -1034,7 +1043,6 @@ public function updateCusPrdWTOrPrd($orderRes){
 		public function deleteCategory(){
 			$cate_id = $_GET['cate_id'];
 		$q = "SELECT p_id FROM products  WHERE cate_id = '$cate_id'";
-		echo $q;exit;
 		$sql = $this->db->prepare($q);
 		if($sql->execute()){
 			$res = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -1059,7 +1067,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 						return $deletAllProductUnderCategory;
 					}
 				}
-				
+
 			}//END IF
 			$q = "DELETE FROM product_category WHERE cate_id='$cate_id'";
 				$sql = $this->db->prepare($q);
@@ -1193,7 +1201,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 					return ['status'=>false,'data'=>[],'message'=>"Err in fetch order list"];
 				  }
 			}
-	
+
 			}
 
 			public function productDelivered($id){
@@ -1222,7 +1230,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 				}else{
 				if(isset($_FILES['file1'])){
 					if($_FILES['file1']['size'] !==0){
-						return $this->checkoutFinal();//Client final checkout	
+						return $this->checkoutFinal();//Client final checkout
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>"Please select payment proof image"];
 					}
@@ -1250,30 +1258,30 @@ public function updateCusPrdWTOrPrd($orderRes){
 			if(!empty($defid)){
 				$arr['condition']=["cid='".$defid."'","req_status=1"];
 				$arr['order'] = ['cc_req_id','desc'];
-				$arr['limit'] = 1; 
+				$arr['limit'] = 1;
 			}else{
 				$arr['condition']=["req_status=1"];
-				$arr['order'] = ['cc_req_id','asc']; 
+				$arr['order'] = ['cc_req_id','asc'];
 			}
 						$flag=$this->generateQuery($arr);
 					if($flag['status'] == 'success'){
 						if(count($flag['data'])>0){
 							return ['status'=>true,'data'=>$flag['data'],'message'=>"CC reqst"];
 						}else{
-						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];							
+						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];
 						}
 					}
 		}
 
 		public function compare_my_assoc($arr1,$arr2){
-			
+
 				for($i=0;$i<count($arr2);$i++){
 					for($j=0;$j<count($arr1);$j++) {
 						if($arr2[$i]['p_id'] == $arr1[$j]['p_id']){
 							if($arr2[$i]['qnty'] == $arr1[$j]['qnty']){
 								return true;
 							}else{
-								return false;							
+								return false;
 							}
 						}else{
 							if(($j+1)==count($arr1)){
@@ -1283,7 +1291,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 					}
 				}
 
-			
+
 		}
 
 		public function is_any_new_product_in_cart($id,$product_list){
@@ -1292,7 +1300,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 						'action'=>'select',
 						'condition'=>['manual'=>["cid='".$id."'","req_status=1"]],
 						'order'=>['cc_req_id','desc'],
-						'limit'=>1, 
+						'limit'=>1,
 						'data'=>[],
 						'query-exc'=>true
 					];
@@ -1311,7 +1319,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 								return ['status'=>false,'data'=>[],'message'=>'Changes in cart items'];
 							}
 						}else{
-						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];							
+						return ['status'=>false,'data'=>[],'message'=>"Needs to raise CC req"];
 						}
 					}
 		}
@@ -1326,9 +1334,9 @@ public function updateCusPrdWTOrPrd($orderRes){
 					$check_cart_item = $this->is_any_new_product_in_cart($this->cid,$data);
 					if($check_cart_item['status']){
 						if(count($cc_info)>0){
-							return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'Cc price'];	
+							return ['status'=>true,'data'=>$cc_info['data'][0]['cc_price'],'message'=>'Cc price'];
 						}
-					}	
+					}
 				}
 
 
@@ -1340,7 +1348,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 						'data'=>["req_status=0"],
 						'condition'=>['manual'=>["cid='".$this->cid."'"]],
 						'query-exc'=>true]);
-	
+
 					$arr = [
 						'tbl_name'=>'cc_request',
 						'action'=>'insert',
@@ -1351,7 +1359,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 
 									/**notification
 				 * optional
-				 * 
+				 *
 				 * */
 $update_cc_url = 'https://test.com/index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9';
 				$params=array(
@@ -1360,7 +1368,7 @@ $update_cc_url = 'https://test.com/index.php?controller=admin&key=f76543c3830696
 'body' => '*New order from our customer* \n
 	ID : '.$this->cid.',\n
 	Update CC Price : '.$update_cc_url.',\n
-	- Bot 
+	- Bot
 	');
 $curl = curl_init();
 curl_setopt_array($curl, array(
@@ -1393,7 +1401,7 @@ curl_close($curl);
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>'err in raise cc req'];
 					}
-			}	
+			}
 		}
 
 		public function upCcPrice($id,$price){
@@ -1412,7 +1420,7 @@ curl_close($curl);
 				  }
 		}
 
-		
+
 
 }//CLASS END
 

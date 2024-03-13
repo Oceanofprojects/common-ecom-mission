@@ -64,7 +64,21 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
       }else if(hash_equals(hash_hmac($algo,'completedClientOrder',$skey),$req['key'])){
-        echo json_encode($this->productMdl->completedClientOrder());
+        // $check_dbl_check = $this->productMdl->checkout();
+        // print_r($check_dbl_check);
+        // $tot_qnt=null;
+        // foreach ($check_dbl_check['product_detail'] as $item) {
+        //   $tot_qnt += $item['qnty'];
+        // }
+        // if(is_array($check_dbl_check['product_detail']) && count($check_dbl_check['product_detail'])>0){
+        // (!isset($_GET['item']))?die(json_encode(['status'=>false,'data'=>[],'message'=>'item count not exists'])):true;
+        //   $sec_item = intval(base64_decode($_GET['item']));
+        //   if(($sec_item-9050) == $tot_qnt){
+            echo json_encode($this->productMdl->completedClientOrder());
+        //   }else{
+        //     echo json_encode(['status'=>false,'data'=>[],'message'=>'New product founded. Please wait..','flag'=>'refresh']);
+        //   }
+        // }
       }else if(hash_equals(hash_hmac($algo,'deleteProduct',$skey),$req['key'])){
         echo json_encode($this->productMdl->deleteProduct());
       }else if(hash_equals(hash_hmac($algo,'deleteCategory',$skey),$req['key'])){
@@ -164,7 +178,7 @@ class productController extends commonController
 
     public function productDetail(){
       if(isset($_GET['pid'])){
-        $pid = $_GET['pid'];        
+        $pid = $_GET['pid'];
       }else{
         die('P-ID not found');
       }
