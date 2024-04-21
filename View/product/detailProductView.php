@@ -87,7 +87,7 @@
         min-width: 200px;
         height: 300px;
         width: 100%;
-        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+/*        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);*/
 
     }
 
