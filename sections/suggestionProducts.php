@@ -16,18 +16,18 @@
     width: 95%;
     display: flex;
     justify-content:center;
-    align-items: center;
     flex-wrap: wrap;
 }
 
 
 .mini-slider-slide-box {
+    flex: 1;
     text-align: center;
     background-color: #fff;
     box-shadow:0px 10px 10px 2.5px rgba(0,0,0,.3);
     padding: 20px 1px;
     width:100%;
-    max-width: 240px;
+    min-width: 240px;
     margin: 10px;
     border-radius: 5px;
     border: .2px solid rgba(0, 0, 0, .2);

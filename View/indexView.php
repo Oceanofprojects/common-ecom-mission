@@ -54,7 +54,7 @@
 
     <div class="head-info">
         <h1>Latest Products</h1>
-        <p>Our store lastest update !</p>
+        <p>Our store latest update !</p>
     </div>
     <br><br>
     <div class="item-container">
@@ -159,7 +159,7 @@ if($review['status']){
     <br><br><br><br>
 
     <?php
-    // echo hash_hmac('sha256','hotlist',9050);
+    // echo hash_hmac('sha256','transferSubProductByID',9050);
 
     require_once __DIR__.'/../sections/footer.php';
 

@@ -160,9 +160,23 @@
     .share_link_box:hover>a {
         color: #fff;
     }
+
+    .subset_load{
+        display: grid;
+  height: 100px;
+  width: 100%;
+  overflow: scroll;
+    }
+    .subset_load_lyr{
+        display: flex;
+        justify-content:space-around;
+    }
+
+
+
     </style>
     <?php
-
+// echo '<pre>'.json_encode($data,JSON_PRETTY_PRINT);exit;
     require_once __DIR__.'/../../sections/header.php';
         if(count($data['selected_product']['data'][0])>0){
             $resData=$data['selected_product']['data'][0];
@@ -226,6 +240,7 @@ $info = $cusObj->business_info();
     <center>
         <section class="details" style="background:#fff">
             <div class="details-box-layer">
+
                 <div class="details-box-head">
                     <a href="#" class="fa fa-share-alt" onclick="$('.share_link_layer').css('display','flex')"></a>
                     <?php
@@ -241,7 +256,25 @@ $info = $cusObj->business_info();
                 <div class="details-box-main-img"
                     style="background:url('assets/product_images/<?php echo $resData['p_img'];?>');background-position: center;background-size: cover;">
                 </div>
-                <br>
+                                    <?php
+                    if(isset($data['selected_product_subsets']['data']) && count($data['selected_product_subsets']['data'])>0){
+                        echo '<div style="margin:5px 0px;border-radius:5px;padding:5px 0px;color:#123;width:100%;background:lightgreen;"><span>Different price</span></div><div class="subset_load">
+                    <div class="subset_load_lyr">';
+                         foreach ($data['selected_product_subsets']['data'] as $key => $value) {
+                            $r = 'assets/product_images/'.$value['p_img'];
+                            $bdr = ($resData['p_id'] == $value['p_id'])?'cornflowerblue;box-shadow:0px 0px 5px 2px rgba(0,0,0,.3)':'#555a';
+                           echo "<div class='bx' style='border-radius:3px;position: relative;top:0px;left:0px;flex:1;border:2px solid ".$bdr.";margin:2px; max-width:100px;margin-top:5px;cursor: pointer;background:url($r);background-position: center;background-size: cover;'  onclick=\"window.open('index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid=".$value['p_id']."')\"><span style='position: absolute;bottom:0px;right: 0px;background:#123;color:#ddd;font-size:8pt;padding:0px 5px;'>{$value['price']}rs</span></div>";
+
+                        }
+                        echo '</div>
+                </div>';
+                    }else{
+                        echo '<br>';
+                    }
+
+
+                ?>
+
                 <?php
                   if($resData['offer'] > 0){
                     echo "<span style=\"text-decoration:line-through;font-size:15pt;text-decoration-color:red;\">".$resData['price']."rs</span><sup>".$resData['offer']."%</sup>&nbsp;&nbsp;&nbsp;&nbsp;<span>".($resData['price'] - ($resData['price']*$resData['offer']/100))."rs</span><br>";

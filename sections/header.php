@@ -15,10 +15,15 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 }else if($userState[0] && $userState[2] == 'admin'){//ADMIN VIEW MENU
         $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
             <ul class="li2">
-            <li><a href="#"><span class="fa fa-th"></span>Product</a>
+            <li><a href="#"><span class="fa fa-th"></span>Item</a>
                         <ul class="li3">
                         <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
                                     <li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+                        </ul></li>
+                                    <li><a href="#"><span class="fa fa-th"></span>Sub-Item</a>
+                        <ul class="li3">
+                        <li><a href="index.php?controller=product&key=8a0f72fd3fcbf1251465c4c08ca83ec220d386abdadda14deea943df38b79d22"><span class="fa fa-plus"></span>Add</a></li>
+                        <li><a href="index.php?controller=product&key=d02d50e91c94b56391c8a26675321efacaa55b019ea4c4e43a8da6ac3e8336e9"><span class="fa fa-refresh"></span>Transfer</a></li>           
                         </ul></li>
 
                         <li><a href="#"><span class="fa fa-list"></span>Category</a>
@@ -135,8 +140,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 .menu li:hover {
     cursor: pointer;
     border-radius: 5px;
-    border-color: #ddd;
-
+    border-bottom-color: #ddd;
 }
 
 .menu li:hover>a small {
@@ -395,7 +399,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
 @media only screen and (max-width: 400px) {}
 </style>
 
-<div class="init" style="color:#555;">
+<!-- <div class="init" style="color:#555;display: none;">
     <div id="i_cons">
         <ul>
             <li><a href="#" onclick="op_search()" class="fa fa-search" title="Search"></a></li>
@@ -407,7 +411,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
                     title="Whatsapp"></a></li>
         </ul>
     </div>
-</div>
+</div> -->
 
 <script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
 <div class="loader">
@@ -433,6 +437,8 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
             <li><a
                     href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"><span
                         class="fa fa-home"></span>home</a></li>
+                        <li><a onclick="op_search()" href="#" title="Search"><span
+                        class="fa fa-search"></span>search</a></li>
             <!-- <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li> -->
             <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>Wishlist</a></li>
             <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>

@@ -1,8 +1,34 @@
 <?php
 
+trait ecomDataMine{
+    public function getEcomData($tbl,$col='',$con){
+        if(empty($tbl) || empty($con)){
+            return ['status'=>false,'res'=>[],'message','Empty param in data fetcher'];
+        }
+        if(is_array($col)){
+            $col = implode(',',$col);
+        }else if(empty($col)){
+            $col = '*';
+        }
+        $q = "SELECT $col FROM $tbl WHERE $con";
+        $sql = $this->db->prepare($q);
+        if ($sql->execute()) {
+            $res = $sql->fetchAll(PDO::FETCH_ASSOC);
+            if(is_array($res) && count($res)!==0){
+                return ['status'=>true,'res'=>$res,'message','Ecom -> Mine -> Data -> Success !'];
+            }else{
+                return ['status'=>false,'res'=>[],'message','Zero fetch :: ecom->mine'];
+            }
+        }else{
+            return ['status'=>false,'res'=>[],'message','issue in data fetcher !'];
+        }
+    }
+}
+
 
 class commonModel
 {
+    use ecomDataMine;
     private $table;
     public $query;
 
@@ -137,24 +163,25 @@ class commonModel
          *   IF DEBUGING IS ENABLE
          *
          */
-        if(isset($_REQUEST['DEBUG_INFO']) && strtoupper($_REQUEST['DEBUG_INFO']) == 'YES'){
-            echo json_encode(['DEBUG_STATUS'=>true,'DEBUG_MSG'=>'DEBUG_VIEW Enabled','DEBUG_QUERY_STATUS'=>'Query generated successfully.','DEBUG_QUERY'=>$this->query]);
-            exit;
-        }else if (isset($_REQUEST['DEBUG_MODE']) && strtoupper($_REQUEST['DEBUG_MODE']) == 'YES') {
-            echo "<table border='1'><tr><th>Data Field</th><th>Data</th></tr><tr><td>DEBUG_MODE</td><td>true</td></tr><tr><td>DEBUG_MSG</td><td>DEBUG_MODE Enabled.</td></tr><tr><td>Query Status</td><td>Query generated successfully</td></tr><tr><td>Query</td><td>{$this->query}</td></tr></table>";exit;
-        }
+        // if(isset($_REQUEST['DEBUG_INFO']) && strtoupper($_REQUEST['DEBUG_INFO']) == 'YES'){
+        //     echo json_encode(['DEBUG_STATUS'=>true,'DEBUG_MSG'=>'DEBUG_VIEW Enabled','DEBUG_QUERY_STATUS'=>'Query generated successfully.','DEBUG_QUERY'=>$this->query]);
+        //     exit;
+        // }else if (isset($_REQUEST['DEBUG_MODE']) && strtoupper($_REQUEST['DEBUG_MODE']) == 'YES') {
+        //     echo "<table border='1'><tr><th>Data Field</th><th>Data</th></tr><tr><td>DEBUG_MODE</td><td>true</td></tr><tr><td>DEBUG_MSG</td><td>DEBUG_MODE Enabled.</td></tr><tr><td>Query Status</td><td>Query generated successfully</td></tr><tr><td>Query</td><td>{$this->query}</td></tr></table>";exit;
+        // }
 
         if(isset($this->arColVal['query-exc']) && $this->arColVal['query-exc'] == true){
           //PREPARE QUERY
           $sql = $this->db->prepare($this->query);
           //RUNNING QUERY
           if ($sql->execute()) {
+                  $num = $sql->rowCount();
               if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
                   //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
                   $res = $sql->fetchAll(PDO::FETCH_ASSOC);//GETTING ALL DATA
-                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', $res);
+                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', $res,$num);
               } else {
-                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', '');
+                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', '',$num);
               }
           } else {
               return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Query Exec Failed','details'=>['code'=>$sql->errorInfo()[1],'message'=>$sql->errorInfo()[2]]];
@@ -178,12 +205,12 @@ class commonModel
             return $qr;
     }
 
-    public function outPut($outPutType, $qResult)
+    public function outPut($outPutType, $qResult,$numrows)
     {
         if ($outPutType == 'json' || $outPutType == 'JSON') {
-            return json_encode(['status' => 'success', 'data' => $qResult, 'msg' => 'Query Successfuly Executed']);
+            return json_encode(['status' => 'success', 'data' => $qResult, 'msg' => 'Query Successfuly Executed','numrows'=>$numrows]);
         } else {
-            return ['status' => 'success', 'data' => $qResult, 'msg' => 'Query Successfuly Executed'];
+            return ['status' => 'success', 'data' => $qResult, 'msg' => 'Query Successfuly Executed','numrows'=>$numrows];
         }
     }
 
@@ -345,6 +372,10 @@ class commonModel
             return $alNum;
         }
 
+    }
+
+    public function inj_validate($x){
+        return htmlspecialchars(addslashes($x));
     }
 
 }

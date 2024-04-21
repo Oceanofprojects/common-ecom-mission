@@ -34,6 +34,7 @@ class commonController{
                                 return [['status'=>false,'msg'=>'Please Enter '.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]).', Min length '.$validateArgs[$j][2].' characters','validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
                             }else{
                                 array_push($this->validateResults,['status'=>true,'msg'=>'Condition Passed for :'.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>true]);
+
                             }
                         }
                         else if($validateArgs[$j][1] == 'checkMaxLength'){
@@ -59,6 +60,13 @@ class commonController{
                         array_push($this->validateResults,['status'=>true,'msg'=>'Condition Passed for :'.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>true]);
                         }else{
                         return [['status'=>false,'msg'=>'Please Remove Special characters/Spaces '.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
+                        }
+                    }else if($validateArgs[$j][1] == 'check' && $validateArgs[$j][2] == 'isNotContainSpecialChars_allow_space'){//IS HAVING ANY SEPCIAL CHARACTERS NOTSPACE
+                        $data[$validateArgs[$j][0]] = str_replace(' ','MYEXTSPACE',$data[$validateArgs[$j][0]]);
+                        if(!preg_match('@[^\w]@', $data[$validateArgs[$j][0]])){
+                        array_push($this->validateResults,['status'=>true,'msg'=>'Condition Passed for :'.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>true]);
+                        }else{
+                        return [['status'=>false,'msg'=>'Please Remove Special characters '.$this->removeUniqueWordForLabel($validateArgs,$validateArgs[$j][0]),'validateFlag'=>false,'attr'=>$validateArgs[$j][0]]];
                         }
                     }else if($validateArgs[$j][1] == 'check' && $validateArgs[$j][2] == 'isNum'){//IS NUMBER??
                             if(is_numeric($data[$validateArgs[$j][0]])){
@@ -128,9 +136,21 @@ class commonController{
             for($i = 0;$i < count($validateArrs);$i++){
                 if($validateArrs[$i][1] == "remove"){
                     return strtoupper(str_replace($validateArrs[$i][0],'',str_replace('_',' ',$arrData)));
+                }else if($validateArrs[$i][1] == "auto_remove"){
+                   $d = explode('_',$arrData);
+                    if(is_array($d) && count($d)>0){
+                        for ($i=0; $i <count($d); $i++) { 
+                            if(strlen($d[$i]) != 1){
+                                $tmp_d[] = $d[$i];
+                            }
+                        }
+                            $arrData = implode('_',$tmp_d); 
+
+                    }
+                    return strtoupper(str_replace('_',' ',$arrData));
                 }
             }
-            return strtoupper(str_replace('_',' ',$arrData));
+
         }
 
 }

@@ -1,0 +1,4 @@
+1 - middleware custom req -> POST/GET
+2 - validate for every form inputs
+3 - checkout flow(double check total+quantity)
+4 - payment gateway

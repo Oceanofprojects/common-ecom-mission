@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 "use strict";
 
 !function() {
@@ -23,4 +23,19 @@
 }();
 drift.SNIPPET_VERSION = '0.3.1';
 drift.load('9mnf9s7wi58i');
+</script> -->
+
+<!-- Brevo Conversations {literal} -->
+<script>
+    (function(d, w, c) {
+        w.BrevoConversationsID = '661245a196289a0a0d1a9bdb';
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'BrevoConversations');
 </script>
+<!-- /Brevo Conversations {/literal} -->

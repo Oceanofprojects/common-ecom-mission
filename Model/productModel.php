@@ -21,7 +21,7 @@ class products extends commonModel{
 		}
 	}
 
-	public function get_all($range=[]){
+	public function get_all($range=[],$subset_filter=true){
 		if(is_array($range) && count($range)!==0){
 			$fromRange = $range['from-range'];
 			$toRange = $range['to-range'];
@@ -53,6 +53,9 @@ class products extends commonModel{
        'query-exc'=>true
 			];
     }
+    if($subset_filter){
+			$arr['condition'] = ["is_subitem=0"];
+		}
     $flag = $this->generateQuery($arr);
 	if($flag['status']){
 			$res=$flag['data'];
@@ -225,6 +228,37 @@ class products extends commonModel{
 		  }
 	}
 
+	public function getSubSetsByPID($pid){
+				$fetcher_res = $this->getEcomData('products','p_id,is_subitem,subset_id',"p_id =  '$pid'");
+				if($fetcher_res['status']){
+						$f_res = $fetcher_res['res'][0];
+					if($f_res['is_subitem'] == '1'){
+						//subset
+						$fetcher_res = $this->getEcomData('products','',"subset_id =  '".$f_res['p_id']."'");
+						if($fetcher_res['status']){
+							return ['status'=>true,'data'=>$fetcher_res['res'],'message'=>'Subsets fetched Data MINE'];//default 0-> single product; 1 -> having subitem
+						}else{
+							return $fetcher_res;
+						}
+					}else{
+						//not subset
+						$fetcher_res = $this->getEcomData('products','',"subset_id =  '$pid'");
+						if($fetcher_res['status']){
+							return ['status'=>true,'data'=>$fetcher_res['res'],'message'=>'Subsets fetched Data MINE'];//default 0-> single product; 1 -> having subitem
+						}else{
+							return $fetcher_res;
+						}
+
+					}
+		//				return ['status'=>true,'data'=>$fetcher_res['res'],'message'=>'Subsets fetched Data MINE'];//default 0-> single product; 1 -> having subitem
+				}else{
+					return $fetcher_res;
+				}
+
+				
+
+	}
+
 	public function get_product_wt_suggestion($pid){
 		$arr = [
 				'tbl_name'=>'products',
@@ -249,7 +283,7 @@ class products extends commonModel{
 			    if($suggest['status'] == 'success'){
 			    	$suggest['myFavExit']=$this->myfavExist($pid);
 			    	array_push($suggest['data'],$product['data'][0]);
-						return ['status'=>true,'data'=>$suggest,'message'=>'Products fetched successfully'];
+						return ['status'=>true,'data'=>$suggest,'message'=>'Products fetched successfully','subsets'=>[1,2,22,2]];
 					}else{
 						return ['status'=>false,'data'=>[],'message'=>'Products fetch Failed'];
 					}
@@ -321,7 +355,7 @@ class products extends commonModel{
 	}
 
 
-	public function getProductUnderCategory(){
+	public function getProductUnderCategory($subset_filter=true){
 		$tmptbl = 'products';
 if($this->cid == null){
 			$arr = [
@@ -331,7 +365,7 @@ if($this->cid == null){
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
+				'condition'=>['raw-manual'=>["WHERE $tmptbl.is_subitem = 0 GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
 				'limit'=>4,
     	'query-exc'=>true
 			];
@@ -343,7 +377,7 @@ if($this->cid == null){
 				'join_param'=>[
 					['product_category','left_join','cate_id','cate_id']
 				],
-				'condition'=>['raw-manual'=>["GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
+				'condition'=>['raw-manual'=>["WHERE $tmptbl.is_subitem = 0 GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
 				'limit'=>4,
    	'query-exc'=>true
 			];
@@ -593,22 +627,46 @@ if($this->cid == null){
 				}
 	}
 
-	public function addProduct(){
-		$_POST['p_id']=$this->genRnd('alpha_numeric',6);
-		$fileFlag = $this->uploadFile('assets/product_images/','file1');
-		if($fileFlag['status']){
-			$_POST['p_img'] = $fileFlag['data'];
+	public function addProduct($subitem=0,$subitem_id=''){
+			$_POST['p_id']=$this->genRnd('alpha_numeric',6);			
+			$_POST['subset_id']=$subitem_id;//Product parent ID		
+		$_POST['is_subitem'] = $subitem;//default 0-> single product; 1 -> having subitem
+		$_POST['p_status'] = 1;//default 1-> active; 0 -> inactive
+		// $_POST['p_name'] = htmlspecialchars($_POST['p_name']);
+		if($subitem){//1
+			if($_FILES['file1']['size'] !== 0 && !empty($_FILES['file1']['name'])){
+				$fileFlag = $this->uploadFile('assets/product_images/','file1');
+				if($fileFlag['status']){
+					$_POST['p_img'] = $fileFlag['data'];
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>$fileFlag['message']];
+				}
+			}else{
+				$fetcher_res = $this->getEcomData('products','p_img as img',"p_id =  '$subitem_id'");
+				if($fetcher_res['status']){
+						$_POST['p_img'] = $fetcher_res['res'][0]['img'];//default 0-> single product; 1 -> having subitem
+				}else{
+					return $fetcher_res;
+				}
+			}
 		}else{
-			return ['status'=>false,'data'=>[],'message'=>$fileFlag['status']];
+			$fileFlag = $this->uploadFile('assets/product_images/','file1');
+			if($fileFlag['status']){
+				$_POST['p_img'] = $fileFlag['data'];
+			}else{
+				return ['status'=>false,'data'=>[],'message'=>$fileFlag['message']];
+			}			
 		}
-		if(preg_match('/[\"\']/', $_POST['p_desc'])){
-			return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in product name !, Please remove it.'];
-		}else if(preg_match('/[\"\']/', $_POST['tags'])){
-			return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in tags!, Please remove it.'];
-		}else{
-			$_POST['p_desc'] = htmlspecialchars($_POST['p_desc']);
-			$_POST['tags'] = htmlspecialchars($_POST['tags']);
-		}
+
+		// if(preg_match('/[\"\']/', $_POST['p_desc'])){
+		// 	return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in product name !, Please remove it.'];
+		// }else if(preg_match('/[\"\']/', $_POST['tags'])){
+		// 	return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in tags!, Please remove it.'];
+		// }else{
+		$_POST['p_name'] = $this->inj_validate($_POST['p_name']);
+		$_POST['p_desc'] = $this->inj_validate($_POST['p_desc']);
+		$_POST['tags'] = $this->inj_validate($_POST['tags']);
+		// }
 		$arr = [
 			'tbl_name'=>'products',
 			'action'=>'insert',
@@ -620,6 +678,56 @@ if($this->cid == null){
 			return ['status'=>true,'data'=>[],'message'=>'Product uploaded Successfully'];
 		}else{
 			return ['status'=>false,'data'=>[],'message'=>'Failed to upload Product'];
+		}
+	}
+
+	public function addSubProduct(){
+		if(isset($_POST['p_id']) && !empty($_POST['p_id'])){
+			unset($_POST['product_flow']);
+			return $this->addProduct(1,$_POST['p_id']);
+		}
+	}
+
+	public function transferSubProduct($pid,$cid){
+		//Parent ID & Child ID
+		$arr = [
+			'tbl_name'=>'products',
+			'action'=>'select',
+			'data'=>['is_subitem'],
+			'condition'=>["p_id='".$pid."'"],
+			'query-exc'=>true
+		];
+		$flag = $this->generateQuery($arr);
+		if($flag['status']){
+			// print_r($flag['data']);exit;
+			
+			if(count($flag['data'])>0){
+					
+					if($flag['data'][0]['is_subitem'] == '0' || $flag['data'][0]['is_subitem'] == 0){
+						$arr = [
+						'tbl_name'=>'products',
+						'action'=>'update',
+						'data'=>['subset_id="'.$cid.'"'],
+						'condition'=>["p_id='".$pid."'"],
+						'query-exc'=>true
+							];
+						$flag = $this->generateQuery($arr);
+						if($flag['status']){
+							return ['status'=>true,'data'=>[],'message'=>'Product replaced Successfully','idRW'=>$flag['numrows']];
+						}else{
+							return ['status'=>false,'data'=>[],'message'=>'Failed to transfer Product'];
+						}
+					}else{
+							return ['status'=>false,'data'=>[],'message'=>'Given parent ID is Child ID, Please give parent ID to transfer Product'];
+					}
+
+
+				}else{
+					return ['status'=>false,'data'=>[],'message'=>'Product not available, please check P-ID'];
+				}
+
+				}else{
+			return ['status'=>false,'data'=>[],'message'=>$flag['message']];
 		}
 	}
 
@@ -648,8 +756,20 @@ if($this->cid == null){
 
 	public function editProduct(){
 		$p_id=$_POST['p_id'];
+		$fetcher_res = $this->getEcomData('products','is_subitem as subitem',"p_id =  '$p_id'");
+		if($fetcher_res['status']){
+				$_POST['is_subitem'] = intval($fetcher_res['res'][0]['subitem']);//default 0-> single product; 1 -> having subitem
+		}else{
+			return $fetcher_res;
+		}
+		// $_POST['p_name'] = $this->inj_validate($_POST['p_name']);
+		// $_POST['p_desc'] = $this->inj_validate($_POST['p_desc']);
+		// $_POST['tags'] = $this->inj_validate($_POST['tags']);
+
+
+		$_POST['p_status'] = 1;//default 1-> active; 0 -> inactive
 		$old_img_name = $_POST['p_img'];
-		$_POST['p_desc'] = htmlspecialchars($_POST['p_desc']);
+		// $_POST['p_desc'] = htmlspecialchars($_POST['p_desc']);
 		unset($_POST['p_img']);
 		unset($_POST['p_id']);
 		if($_FILES['file1']['size'] == 0 && $_FILES['file1']['name'] == ''){
@@ -674,7 +794,6 @@ if($this->cid == null){
 			'query-exc'=>true
 		];
 		$flag = $this->generateQuery($arr);
-		// echo $flag;exit;
 		if($flag['status']){
 			return ['status'=>true,'data'=>[],'message'=>'Product updated Successfully'];
 		}else{
@@ -834,6 +953,8 @@ public function checkoutFinal(){
 	$checkout_flag = $this->checkout();
 	$client_item_count = base64_decode(base64_decode($_GET['item']));//dbl check cart client count
 	$client_item_count = (is_numeric($client_item_count))?intval($client_item_count):0;
+	// echo '<pre>'.json_encode($checkout_flag,JSON_PRETTY_PRINT);exit;
+
 	$tot_qnt=null;
   foreach ($checkout_flag['product_detail'] as $item) {
     $tot_qnt += $item['qnty'];
@@ -971,6 +1092,7 @@ public function updateCusPrdWTOrPrd($orderRes){
 	  }
 
 	  public function search($val){
+
 			$tmptbl = 'products';
 		if($this->cid == null){
 			$arr = [
@@ -982,10 +1104,11 @@ public function updateCusPrdWTOrPrd($orderRes){
 			 ],
 			  'limit'=>20,
 			  'order'=>['p_id','asc'],
-			  'condition'=>['manual'=>["p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR product_category.cate_name LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
+			  'condition'=>['manual'=>["$subset_args p_id LIKE '%$val% 'OR p_name LIKE '%$val%'  OR product_category.cate_name LIKE '%$val%' OR p_desc LIKE '%$val%' OR tags LIKE '%$val%'"]],
 			 'query-exc'=>true
 			];
 		  }else{
+
 				$arr = [
 					'tbl_name'=>$tmptbl,
 					'action'=>'join',

@@ -498,6 +498,7 @@ function fillEditForm(data){
   $('#disOldImgLink').show();
   $('#disOldUrl').attr('href','assets/product_images/'+data.p_img);
   $('#p_id').val(data.p_id);
+  $('#cate_name').val(data.cate_id);
   $('#p_img').val(data.p_img);
   $('#p_name').val(data.p_name);
   $('#desc').val(data.p_desc);

@@ -6,11 +6,12 @@
     font-family: 'Poppins', sans-serif;
     font-weight: bolder;
 }
+
 body{
   background:linear-gradient(rgba(256,256,256,.7),rgba(256,256,256,.7)),url('../assets/common-images/bg.png');
   background-position: center;
   background-attachment:fixed;
-  background-size:500px;
+  background-size:500px;    
 }
 ::-webkit-scrollbar{
   width: 1px;
@@ -19,7 +20,7 @@ body{
 .item-container,.cateSetProductsLoaderLayer .cateSetProductsLoaderLayerBox {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+/*    align-items: center;*/
     flex-wrap: wrap;
     z-index: 1;
 }
@@ -27,7 +28,7 @@ body{
 .item-container .box,.cateSetProductsLoaderLayer .box{
     flex: 1;
     min-width: 240px;
-    max-width: 240px;
+    max-width: 300px;
     border: 1px solid rgba(0, 0, 0, .2);
     padding: 10px;
     margin: 25px;

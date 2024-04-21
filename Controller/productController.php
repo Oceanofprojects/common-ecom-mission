@@ -1,22 +1,31 @@
 <?php
 
 require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
-
-
+require_once __DIR__ . "/../Middleware/middleware.php"; //REQ-MIDDLEWARE
+use MW\ReqMiddleWare as RMW;
 
 class productController extends commonController
 {
-
     public function __construct()
     {
         //init
         require_once __DIR__ . "/../Model/productModel.php";
-
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 
         //Product Model
-
+        // $d = [
+        //   'name'=>'mani',
+        //   'age'=>20,
+        //   'opt'=>12,
+        //   'hack'=>1,
+        //   'ha'=>1212
+        // ];
+        // $un = RMW::validReq($d,['name','age','class']);
+        // $properReq = RMW::unsetReqArgs($un,$d);
+        // print_r($properReq);
         $this->productMdl = new products();
+// die('as');
+
     }
     public function getReviews($data){
       return $this->productMdl->getReview($data);
@@ -40,9 +49,75 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'moveToEditProduct',$skey),$req['key'])){
         $this->moveToEditProduct();
       }else if(hash_equals(hash_hmac($algo,'addProduct',$skey),$req['key'])){
-        echo json_encode($this->productMdl->addProduct());
+        $validateArgs = [
+            ['p_name', 'check', 'isNotEmpty'],
+            ['p_name', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['unit', 'check', 'isNotEmpty'],
+            ['unit', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['p_desc', 'check', 'isNotEmpty'],
+            ['p_desc', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['tags', 'check', 'isNotEmpty'],
+            ['tags', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['', 'auto_remove', 'forLabelMsg']//auto remove ext
+        ]; //VALIDATE CONDITIONS ARGS
+        $flag = $this->autoValidate($_POST, $validateArgs)[0];
+        if($flag['status']){
+          echo json_encode($this->productMdl->addProduct());
+        }else{
+          echo json_encode(['status'=>false,'data'=>[],'message'=>$flag['msg']]);
+        }
       }else if(hash_equals(hash_hmac($algo,'editProduct',$skey),$req['key'])){
-        echo json_encode($this->productMdl->editProduct());
+        if(isset($_POST['product_flow'])){
+          //sub product ADD(Same flow so methos reused)
+          if(isset($_POST['product_flow']) && $_POST['product_flow'] == 'sub_item'){
+              echo json_encode($this->productMdl->addSubProduct());
+          }
+        }else{
+          //product edit
+           $validateArgs = [
+            ['p_name', 'check', 'isNotEmpty'],
+            ['p_name', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['unit', 'check', 'isNotEmpty'],
+            ['unit', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['p_desc', 'check', 'isNotEmpty'],
+            ['p_desc', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['tags', 'check', 'isNotEmpty'],
+            ['tags', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['', 'auto_remove', 'forLabelMsg']//auto remove ext
+        ]; //VALIDATE CONDITIONS ARGS
+        $flag = $this->autoValidate($_POST, $validateArgs)[0];
+        if($flag['status']){
+          echo json_encode($this->productMdl->editProduct());
+        }else{
+          echo json_encode(['status'=>false,'data'=>[],'message'=>$flag['msg']]);
+        }
+
+        }
+      }else if(hash_equals(hash_hmac($algo,'transferSubProductByID',$skey),$req['key'])){
+         $validateArgs = [
+            ['pid', 'check', 'isNotEmpty'],
+            ['cid', 'check', 'isNotEmpty'],
+            ['pid', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['cid', 'check', 'isNotContainSpecialChars_allow_space'],
+        ]; //VALIDATE CONDITIONS ARGS
+
+        $flag = $this->autoValidate($_GET, $validateArgs)[0];
+
+        if($flag['status']){
+          echo json_encode($this->productMdl->transferSubProduct($_GET['pid'],$_GET['cid']));
+        }else{
+          echo json_encode(['status'=>false,'data'=>[],'message'=>$flag['msg']]);
+        }
+      }else if(hash_equals(hash_hmac($algo,'moveToAddSubProduct',$skey),$req['key'])){
+            $this->view("sub_product/addSubProduct", array(
+              "title" => "Add Sub-Product",
+              "data"=>[]
+          ));
+      }else if(hash_equals(hash_hmac($algo,'moveToTransferSubProduct',$skey),$req['key'])){
+            $this->view("sub_product/transferSubItem", array(
+              "title" => "Transfer Sub-Product",
+              "data"=>[]
+          ));
       }else if(hash_equals(hash_hmac($algo,'addCategory',$skey),$req['key'])){
         echo json_encode($this->productMdl->addCategory());
       }else if(hash_equals(hash_hmac($algo,'viewProduct',$skey),$req['key'])){
@@ -214,7 +289,8 @@ class productController extends commonController
       $this->view("product/detailProduct", array(
           "title" => "Product detail",
           "selected_product"=>$selected_product,
-          "suggestion"=>$suggest_product
+          "suggestion"=>$suggest_product,
+          "selected_product_subsets"=>$this->productMdl->getSubSetsByPID($selected_product['data'][0]['p_id'])
       ));
     }
 

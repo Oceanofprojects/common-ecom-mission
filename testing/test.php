@@ -15,8 +15,6 @@
 
 
 
-
-
 // $params=array(
 // 'token' => 'yvvvaffvramlnxn2',
 // 'to' => '+918939068212',
@@ -53,3 +51,4 @@
 
 //   require  '..\View\main\info.json';
 #print_r(json_decode($v,true));
+?>
