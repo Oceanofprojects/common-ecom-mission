@@ -22,7 +22,6 @@
 
     <?php
 
-
   require_once __DIR__.'/../../sections/header.php';
   if(isset($data['data']['data'][0]['cate'])){
       $cate_name = $data['data']['data'][0]['cate'];

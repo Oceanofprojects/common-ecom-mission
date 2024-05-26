@@ -31,6 +31,7 @@ class commonModel
     use ecomDataMine;
     private $table;
     public $query;
+    public $bind_values = [];
 
     public function generateQuery($arData = ''){
         if(is_array($arData)){
@@ -99,15 +100,19 @@ class commonModel
             }else if(isset($this->arColVal['condition']['manual'])){
                 $condition = 'WHERE ' . $this->arColVal['condition']['manual'][0];
             }else if(isset($this->arColVal['condition']['auto'])){
-                $condition = 'WHERE ' . $this->dataSep('con', $this->arColVal['condition']['auto']);
+                $make_param = $this->dataSep('con', $this->arColVal['condition']['auto']);
+                // $this->preBindParam($make_param['bind_param']);
+                // $this->bind_values = ($this->isBindParamEmpty())?$this->bind_values
+                $this->preBindParam($make_param['bind_param']);
+                $condition = 'WHERE ' . $make_param['column_bind'];
             }else{
-                $condition = 'WHERE ' . $this->dataSep('con', $this->arColVal['condition']);
+                $make_param = $this->dataSep('con', $this->arColVal['condition']);
+                $this->preBindParam($make_param['bind_param']);
+                $condition = 'WHERE ' . $make_param['column_bind'];
             }
         }else{
             $condition = '';
         }
-//        $condition = (isset($this->arColVal['condition']) == 1 && (count($this->arColVal['condition']) != 0)) ? 'WHERE ' . $this->dataSep('con', $this->arColVal['condition']) : '';
-
         //GENERATE RESULT ARRANGEMENT(ASC,DESC)
         if (isset($this->arColVal['order']) == 1) {
                 if(count($this->arColVal['order']) !== 0){
@@ -130,17 +135,22 @@ class commonModel
             $limit = '';
         }
 
-
+        // $bind_values = [];
         //QUERY GENERATION BASED ON ACTION VALUE
         if (strtoupper($this->arColVal['action']) == 'INSERT') {
             $insertcolname = '(' . $this->getSepKey($this->arColVal['data']) . ') ';
-            $insertColVal = 'VALUES (' . $this->getSepVal($this->arColVal['data']) . ')';
+            $make_param = $this->getSepVal($this->arColVal['data']);
+            // $this->bind_values = $make_param['bind_param'];
+            $this->preBindParam($make_param['bind_param']);
+            $insertColVal = 'VALUES (' . $make_param['column_bind'] . ')';
             $this->query = $action . ' INTO ' . $this->table . ' ' . $insertcolname . ' ' . $insertColVal;
         } else if (strtoupper($this->arColVal['action']) == 'SELECT') {
             $this->query = $action . ' ' . $data . ' FROM ' . $this->table . ' ' . $condition . ' ' . $order . ' ' . $limit;
         } else if (strtoupper($this->arColVal['action']) == 'UPDATE') {
             if(count($this->arColVal['data']) !== 0){
-                $this->query = $action . ' ' . $this->table . ' SET ' . $data = $this->dataSep('up_sep', $this->arColVal['data']) . ' ' . $condition;
+                $make_param = $this->dataSep('up_sep', $this->arColVal['data']);
+                $this->preBindParam($make_param['bind_param']);
+                $this->query = $action . ' ' . $this->table . ' SET ' . $make_param['column_bind'] . ' ' . $condition;
             }else{
                 return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Data param empty!, Param must for UPDATE'];
             }
@@ -158,23 +168,16 @@ class commonModel
             }
         }
 
-
-        /*
-         *   IF DEBUGING IS ENABLE
-         *
-         */
-        // if(isset($_REQUEST['DEBUG_INFO']) && strtoupper($_REQUEST['DEBUG_INFO']) == 'YES'){
-        //     echo json_encode(['DEBUG_STATUS'=>true,'DEBUG_MSG'=>'DEBUG_VIEW Enabled','DEBUG_QUERY_STATUS'=>'Query generated successfully.','DEBUG_QUERY'=>$this->query]);
-        //     exit;
-        // }else if (isset($_REQUEST['DEBUG_MODE']) && strtoupper($_REQUEST['DEBUG_MODE']) == 'YES') {
-        //     echo "<table border='1'><tr><th>Data Field</th><th>Data</th></tr><tr><td>DEBUG_MODE</td><td>true</td></tr><tr><td>DEBUG_MSG</td><td>DEBUG_MODE Enabled.</td></tr><tr><td>Query Status</td><td>Query generated successfully</td></tr><tr><td>Query</td><td>{$this->query}</td></tr></table>";exit;
-        // }
-
         if(isset($this->arColVal['query-exc']) && $this->arColVal['query-exc'] == true){
+
           //PREPARE QUERY
           $sql = $this->db->prepare($this->query);
+
+
           //RUNNING QUERY
-          if ($sql->execute()) {
+
+          if ($sql->execute($this->bind_values)) {
+                $this->bind_values = [];//Reset params
                   $num = $sql->rowCount();
               if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
                   //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
@@ -232,7 +235,6 @@ class commonModel
         $data = '';
         for ($i = 0; $i < count($arData); $i++) {
             if ($type == 'con') { //WHERE CONDITION SEP
-
                 for($y=0;$y<count($expressions);$y++){//Expression Handling (=,<=,>=,<,>,!=)
                     if(preg_match('@'.$expressions[$y].'@',$arData[$i])){
                          $expression = $expressions[$y];
@@ -274,19 +276,27 @@ class commonModel
                         }
                     }
                 }else{
+                    $val = ':'.trim($sepCalVal[0]);
                     if (($i + 1) == count($arData)) { //FINDING LAST VALUE TO AVOID SEPARETION ENTRY(AND)
-                        $data .= "`" . $sepCalVal[0] . "` $expression ". $sepCalVal[1];
+                        $res[$val] = $sepCalVal[1];
+                        $data .= trim($sepCalVal[0]).' '.$expression.' '.$val;
                     } else {
-                        $data .= "`" . $sepCalVal[0] . "` $expression " . $sepCalVal[1] . " ".$combineOpt." ";
+                        $res[$val] =$sepCalVal[1];
+                        $data .= trim($sepCalVal[0]).' '.$expression.' '.$val.''.$combineOpt;
                     }
                 }
+                // return ['column_bind'=>$data,'bind_param'=>$res];
 
             } elseif ($type == 'up_sep') { //UPDATE SEP
                 $sepCalVal = explode('=', $arData[$i]);
+                        trim($sepCalVal[0]);
+                        $val = ':'.trim($sepCalVal[0]);
                     if (($i + 1) == count($arData)) { //FINDING LAST VALUE TO AVOID SEPARETION ENTRY(,)
-                        $data .= "`" . $sepCalVal[0] . "`=" . $sepCalVal[1].'';
+                        $res[$val] = $sepCalVal[1];
+                        $data .= trim($sepCalVal[0]) . " = ".$val;
                     } else {
-                        $data .= "`" . $sepCalVal[0] . "`=" . $sepCalVal[1] . ",";
+                        $res[$val] = $sepCalVal[1];
+                        $data .= trim($sepCalVal[0]) . " = " . $val . ",";
                     }
             } else {
                 if (($i + 1) == count($arData)) { //FINDING LAST VALUE TO AVOID SEPARETION ENTRY(,)
@@ -296,8 +306,12 @@ class commonModel
                 }
             }
         }
-        return $data;
-    }
+        if($type == 'con' OR $type == 'up_sep'){
+            return ['column_bind'=>$data,'bind_param'=>$res];            
+        }else{
+            return $data;
+        }
+}
 
     public function getSepKey($arr)
     { //MAKING KEY LIST (COLUMN NAME)
@@ -317,13 +331,19 @@ class commonModel
         $sepValueData = '';
         for ($itr = 0; $itr < count($arr); $itr++) {
             $sepVal = explode('=', $arr[$itr]);
+
+            $val = ':'.trim($sepVal[0]);
             if (($itr + 1) == count($arr)) { //FINDING LAST VALUE TO AVOID SEPARETION ENTRY(,)
-                $sepValueData .= $sepVal[1];
+                $sepValueData .= $val;
+                $res[$val] = trim($sepVal[1]);
             } else {
-                $sepValueData .= $sepVal[1] . ",";
+                $sepValueData .= $val . ",";
+                $res[$val] = trim($sepVal[1]);
             }
         }
-        return $sepValueData;
+        return ['column_bind'=>$sepValueData,'bind_param'=>$res];
+
+        // return $sepValueData;
 
     }
     public function genArAssocToColSep($assocArr)
@@ -376,6 +396,18 @@ class commonModel
 
     public function inj_validate($x){
         return htmlspecialchars(addslashes($x));
+    }
+
+    public function preBindParam($params){
+        if(is_array($params)){
+            if(count($this->bind_values)){
+                $this->bind_values = array_merge($params,$this->bind_values);
+            }else{
+                $this->bind_values = $params;
+            }
+        }else{
+            $this->bind_values = $params;
+        }
     }
 
 }

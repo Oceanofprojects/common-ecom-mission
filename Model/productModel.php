@@ -3,6 +3,8 @@
 require_once __DIR__.'/../core/connect.php';
 require_once __DIR__.'/../Model/commonModel.php';
 require_once __DIR__.'/../Model/customerModel.php';
+require_once __DIR__ . "/../Middleware/middleware.php"; //REQ-MIDDLEWARE
+use MW\ReqMiddleWare as RMW;
 
 class products extends commonModel{
 	use userData;
@@ -632,7 +634,6 @@ if($this->cid == null){
 			$_POST['subset_id']=$subitem_id;//Product parent ID		
 		$_POST['is_subitem'] = $subitem;//default 0-> single product; 1 -> having subitem
 		$_POST['p_status'] = 1;//default 1-> active; 0 -> inactive
-		// $_POST['p_name'] = htmlspecialchars($_POST['p_name']);
 		if($subitem){//1
 			if($_FILES['file1']['size'] !== 0 && !empty($_FILES['file1']['name'])){
 				$fileFlag = $this->uploadFile('assets/product_images/','file1');
@@ -658,15 +659,6 @@ if($this->cid == null){
 			}			
 		}
 
-		// if(preg_match('/[\"\']/', $_POST['p_desc'])){
-		// 	return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in product name !, Please remove it.'];
-		// }else if(preg_match('/[\"\']/', $_POST['tags'])){
-		// 	return ['status'=>false,"data"=>[],'message'=>'Sepcial chars found in tags!, Please remove it.'];
-		// }else{
-		$_POST['p_name'] = $this->inj_validate($_POST['p_name']);
-		$_POST['p_desc'] = $this->inj_validate($_POST['p_desc']);
-		$_POST['tags'] = $this->inj_validate($_POST['tags']);
-		// }
 		$arr = [
 			'tbl_name'=>'products',
 			'action'=>'insert',

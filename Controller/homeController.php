@@ -93,7 +93,7 @@ class homeController extends commonController
 
     public function index()
     {
-        $this->view("index", array(
+        $this->view("index",array(
             "title" => "Home",
             "data"=>$this->productMdl->get_all(['from-range'=>0,'to-range'=>4]),
             "cate_list"=>$this->productMdl->get_cate_list(),

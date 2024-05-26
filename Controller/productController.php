@@ -11,20 +11,8 @@ class productController extends commonController
         //init
         require_once __DIR__ . "/../Model/productModel.php";
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
-
-        //Product Model
-        // $d = [
-        //   'name'=>'mani',
-        //   'age'=>20,
-        //   'opt'=>12,
-        //   'hack'=>1,
-        //   'ha'=>1212
-        // ];
-        // $un = RMW::validReq($d,['name','age','class']);
-        // $properReq = RMW::unsetReqArgs($un,$d);
-        // print_r($properReq);
         $this->productMdl = new products();
-// die('as');
+        // $v = RMW::_sanitize($d,['name','age','class']);
 
     }
     public function getReviews($data){
@@ -39,7 +27,6 @@ class productController extends commonController
         $algo = 'sha256';
       $skey = 9050;
       if(isset($_GET['key'])){
-
         $req['key'] = $_GET['key'];
       }else{
         $req['key'] = '723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6';//default
