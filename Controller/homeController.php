@@ -2,16 +2,20 @@
 
 require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
 
+require('Lib/form/class.form_plate.php');      
 
 
 class homeController extends commonController
 {
+
+  public $form_plate;
 
     public function __construct()
     {
         //init
         require_once __DIR__ . "/../Model/productModel.php";
         require_once __DIR__.'/../Controller/spacesettingController.php';
+        $this->form_plate = new form();
 
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 
@@ -48,9 +52,24 @@ class homeController extends commonController
       }else if(hash_equals(hash_hmac($algo,'myCart',$skey),$req['key'])){
         echo json_encode($this->productMdl->mycart());
       }else if(hash_equals(hash_hmac($algo,'gotoLogin',$skey),$req['key'])){
-        header("location:View/login/");
+        // header("location:View/login/");
+        $this->form_plate->form_type = 'login_form';
+        $this->view("login/index", array(
+          "title" => "User Login :: Login to your account",
+          "data"=>[
+            'form'=>$this->form_plate->getForm()
+          ]
+      ));
       }else if(hash_equals(hash_hmac($algo,'gotosignup',$skey),$req['key'])){
-        header("location:View/signup/");
+        // header("location:View/signup/");
+        $this->form_plate->form_type = 'signin_form';
+        $this->view("signup/index", array(
+          "title" => "Customer register :: Register your account",
+          "data"=>[
+            'form'=>$this->form_plate->getForm()
+          ]
+      ));
+
       }else if(hash_equals(hash_hmac($algo,'cpanel',$skey),$req['key'])){
         $this->view("cpanel/index", array(
             "title" => "Cpanel",

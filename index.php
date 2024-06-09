@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+
+// ini_set('display_errors', 1);
 require_once __DIR__.'/Config/global.php';
 if (isset($_GET["controller"])) {
     $controllerObj = loadController($_GET["controller"]);

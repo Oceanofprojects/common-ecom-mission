@@ -11,14 +11,18 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+  <!-- Boxicons CSS -->
+<link
+  href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+  rel="stylesheet"
+/>
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/action.js"></script>
     <script src="Script/components.js"></script>
     <link rel="stylesheet" href="Style/global.css">
-</head>
-
-<body>
+    <link rel="stylesheet" href="Style/review_design.css">
+    <link rel="stylesheet" href="Style/swiper-bundle.min.css">
     <style>
     .details {
         display: flex;
@@ -128,8 +132,8 @@
     }
 
     .share_link_box {
-        /*        height:30px;
-        width:30px;*/
+        height:50px;
+        width:50px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -144,11 +148,11 @@
     .share_link_box a {
         text-decoration: none;
         color: #123;
+        font-size:15pt;
     }
 
     .share_link_box span {
         margin: 10px;
-
         font-size: 10pt;
     }
 
@@ -175,6 +179,10 @@
 
 
     </style>
+</head>
+
+<body>
+  
     <?php
 // echo '<pre>'.json_encode($data,JSON_PRETTY_PRINT);exit;
     require_once __DIR__.'/../../sections/header.php';
@@ -207,11 +215,11 @@ $info = $cusObj->business_info();
             <a class="fa fa-close" style="color:#fff;">
             </a>
         </div>
-        <div class="share_link_box">
+        <div class="share_link_box" style="background:green;">
             <a href="<?php echo 'https://wa.me/91'.$info['social_media']['whatsapp'];?>" class="fa fa-whatsapp">
             </a>
         </div>
-        <div class="share_link_box">
+        <div class="share_link_box" style="background:cornflowerblue;">
             <input type="text" style="color:#ddda;border:none;background:transparent; width:.1px; outline:none"
                 value="<?php echo $url;?>" id="productURL">
             <a href="#" class="fa fa-copy" onclick="copyToClip()" style="padding:5px;">
@@ -400,6 +408,7 @@ $p_id=$resData['p_id'];
         $('.share_link_layer').css('display', 'none');
     }
     </script>
+
 </body>
 
 </html>

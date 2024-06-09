@@ -33,7 +33,7 @@ function remove_fav(ele,p_id){
 }
 
 function signup(){
-  performAjx('../../index.php', 'get','key=a2abe3fa78380c0d025613301912c523df07b99824536a8e087736d1ff6f7ab6&controller=customer&'+$('#frm').serialize(), (res) => {
+  performAjx('index.php', 'get','key=a2abe3fa78380c0d025613301912c523df07b99824536a8e087736d1ff6f7ab6&controller=customer&'+$('#frm').serialize(), (res) => {
     d = JSON.parse(res);
     if(d.status){
       $('#dis_err').text('');
@@ -63,12 +63,12 @@ function login(){
   }else if($('#pwd').val().trim().length == 0){
     $('#dis_err').text('Please enter your password').css('color','tomato');
   }else{
-    performAjx('../../index.php', 'get','key=3d95f6ccf7e91c1cd9ef2e1533131466c515c5d559419556a2a439e7110d7716&controller=customer&'+$('#frm').serialize(), (res) => {
+    performAjx('index.php', 'get','key=3d95f6ccf7e91c1cd9ef2e1533131466c515c5d559419556a2a439e7110d7716&controller=customer&'+$('#frm').serialize(), (res) => {
       d = JSON.parse(res);
       if(d.status){
         $('#dis_err').text('');
         $('#frm')[0].reset();
-      window.open('../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
+      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
       }else{
         $('#dis_err').text(d.msg).css('color','tomato');
       }

@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<!-- Created By CodingLab - www.codinglabweb.com -->
 <html lang="en" dir="ltr">
   <head>
-    <title>Customer login page</title>
+    <title><?=$data['title']?></title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../../assets/common-images/logo.png" type="image/x-icon" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../assets/common-images/logo.png" />
+    <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <?php
-    require_once '../../sections/msg_bot.php';
+    require_once 'sections/msg_bot.php';
     ?>
 
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <script src="../../Script/action.js"></script>
-    <script src="../../Script/commonScript.js"></script>
+     <script src="Script/action.js"></script>
+    <script src="Script/commonScript.js"></script>
      <style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 
@@ -32,7 +31,7 @@ html, body{
   height: 100vh;
   width: 100%;
   place-items: center;
-background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('../../assets/common-images/bg.png');
+background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('assets/common-images/bg.png');
 background-position: center;
 background-attachment: fixed;
         background-size: 200px;
@@ -165,12 +164,12 @@ background-attachment: fixed;
   <body>
     <div class="container">
       <div style="text-align:right;">
-      <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;" href="../../index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6" class="fa fa-home"></a>
+      <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;" href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6" class="fa fa-home"></a>
       |
-      <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;" href="../../index.php?key=7ab9f0816f33d9932efd3468b387bd287546f9ee276cc0d53f75336761a9959d&controller=home" class="fa fa-user-plus"></a>
+      <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;" href="index.php?key=7ab9f0816f33d9932efd3468b387bd287546f9ee276cc0d53f75336761a9959d&controller=home" class="fa fa-user-plus"></a>
       </div>
-      
-      <form action="#" class="form" id="frm">
+      <?=$data['data']['form']?>
+      <!-- <form action="#" class="form" id="frm">
         <div class="title">Login</div>
         <br>
         <p style="color:tomato" id="dis_err"></p>
@@ -188,8 +187,8 @@ background-attachment: fixed;
           <input type="button" style="background:cornflowerblue" class="btn" value="Login" onclick="login()">
         </div>
                 <br>
-                <div class="option">New user? Please <a href="../../index.php?key=7ab9f0816f33d9932efd3468b387bd287546f9ee276cc0d53f75336761a9959d&controller=home">Signup</a></div>
-      </form>
+                <div class="option">New user? Please <a href="index.php?key=7ab9f0816f33d9932efd3468b387bd287546f9ee276cc0d53f75336761a9959d&controller=home">Signup</a></div>
+      </form> -->
       
     </div>
   </body>

@@ -10,11 +10,17 @@
     <link rel="icon" href="assets/common-images/logo.png" type="image/x-icon" />
     <link rel="shortcut icon" type="image/x-icon" href="assets/common-images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+  href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+  rel="stylesheet"
+/>
     <script src="Script/commonScript.js"></script>
     <script src="Script/jquery.min.js"></script>
     <script src="Script/components.js"></script>
     <script src="Script/action.js"></script>
     <link rel="stylesheet" href="Style/global.css">
+    <link rel="stylesheet" href="Style/review_design.css">
+    <link rel="stylesheet" href="Style/swiper-bundle.min.css">
     <?php
     require_once __DIR__.'/../sections/msg_bot.php';
     ?>

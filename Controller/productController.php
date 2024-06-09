@@ -1,8 +1,6 @@
 <?php
 
 require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
-require_once __DIR__ . "/../Middleware/middleware.php"; //REQ-MIDDLEWARE
-use MW\ReqMiddleWare as RMW;
 
 class productController extends commonController
 {

@@ -21,10 +21,10 @@ class customer extends commonModel{
 		$data['role'] = 'customer';
 		$arr = [
             'pre_condition' => ['isDuplicate' => [
-                ['email', "'" . $data['email'] . "'"],
-                ['ph_num', "'" . $data['ph_num'] . "'"],
-                ['whatsapp_num', "'" . $data['whatsapp_num'] . "'"]
-                ]],
+                ['email',$data['email']],
+                ['ph_num',$data['ph_num']],
+                ['whatsapp_num',$data['whatsapp_num']]
+            ]],
             'tbl_name' => 'customers',
             'action' => 'INSERT',
             'data' => $this->genArAssocToColSep($data),
@@ -44,7 +44,7 @@ class customer extends commonModel{
             'tbl_name' => 'customers',
             'action' => 'select',
             'data' => ['manual'=>['count(cid) as resC']],
-			'condition'=>["email='$data[email]'","ph_num='$data[ph_num]'","whatsapp_num='$data[whatsapp_num]'"],
+			'condition'=>["email=$data[email]","ph_num=$data[ph_num]","whatsapp_num=$data[whatsapp_num]"],
 			'conditionCombineOpt'=>'OR',
 			'query-exc'=>true
         ];
@@ -61,7 +61,7 @@ class customer extends commonModel{
 			            'tbl_name' => 'customers',
 			            'action' => 'update',
 			            'data' => $this->genArAssocToColSep($data),
-						'condition'=>["cid='".$cflag[1]."'"],
+						'condition'=>["cid=".$cflag[1]],
 						'query-exc'=>true
 					    ];
 						$uptSetting = $this->generateQuery($arr);
@@ -89,7 +89,7 @@ class customer extends commonModel{
             'tbl_name' => 'customers',
             'action' => 'select',
             'data' => ['cid','pwd','role'],
-			'condition'=>["c_name='".$idnty."'","email='".$idnty."'","cid='".$idnty."'","ph_num='".$idnty."'","whatsapp_num='".$idnty."'"],
+			'condition'=>["c_name=$idnty","email=$idnty","cid=$idnty","ph_num=$idnty","whatsapp_num=$idnty"],
 			'conditionCombineOpt'=>'OR',
 			'query-exc'=>true
         ];
@@ -102,7 +102,7 @@ class customer extends commonModel{
 		$arr = [
             'tbl_name' => 'cus_log',
             'action' => 'insert',
-            'data' => ["uid='$uid'","cid='$cid'","ip_ad='$ip'","_date=CURRENT_DATE"],
+            'data' => ["uid=$uid","cid=$cid","ip_ad=$ip"],
 			'query-exc'=>true
         ];
 		$res = $this->generateQuery($arr);
@@ -119,46 +119,51 @@ trait userData{
 			'tbl_name'=>'customers',
 			'action'=>'select',
 			'data'=>['role'],
-			'condition'=>['manual'=>['cid="'.$id.'"']],
+			'condition'=>['manual'=>["cid='$id'"]],
 					'query-exc'=>true
 		];
 		$res=$this->generateQuery($arr);
 		return ($res['data'][0]['role'] !== null)?$res['data'][0]['role']:'';
 	} 
 	public function getUserId($id){
-			$arr = [
-				'tbl_name'=>'cus_log',
-				'action'=>'select',
-				'data'=>[],
-        'condition'=>['manual'=>['uid="'.$id.'" AND _date=CURRENT_DATE']],
-				'query-exc'=>true
-			];
-			$data = $this->generateQuery($arr);
-			if($data['status'] && count($data['data']) !==0){
-				return [true,$data['data'][0]['cid'],$this->getUserRoleById($data['data'][0]['cid'])];
-			}else{
-				return [false,'UnAnth Token. Please login.'];
-			}
+		if(isset($_SESSION[$id])){
+			return [true,$_SESSION[$id],$this->getUserRoleById($_SESSION[$id])];
+		}else{
+			return [false,'UnAnth User. Please login.'];
+		}
+			// $arr = [
+			// 	'tbl_name'=>'cus_log',
+			// 	'action'=>'select',
+			// 	'data'=>[],
+        	// 	'condition'=>['manual'=>['uid="'.$id.'" AND _date=CURRENT_DATE']],
+			// 	'query-exc'=>true
+			// ];
+			// $data = $this->generateQuery($arr);
+			// if($data['status'] && count($data['data']) !==0){
+			// 	return [true,$data['data'][0]['cid'],$this->getUserRoleById($data['data'][0]['cid'])];
+			// }else{
+			// 	return [false,'UnAnth User. Please login.'];
+			// }
 	}
 
-	public function userExist($name,$pwd){
-		$q = "Select * from customers where cid='{$name}' or c_fname='{$name}' or email='{$name}' or ph_num='{$name}'";
-		$sql = $this->db->prepare($q);
-		if($sql->execute()){
-			$res = $sql->fetchAll(PDO::FETCH_ASSOC);
-			if(count($res) !== 0){
-				for($i=0;$i<count($res);$i++){
-					if(password_verify($_GET['pwd'],$res[$i]['pwd'])){
-						return ['status'=>1,'data'=>['UID'=>base64_encode($res[$i]['cid'])],'msg'=>'User Exist'];
-						exit;
-					}
-				}
-				return ['status'=>0,'data'=>[],'msg'=>'User not exist, Try again.'];
-			}else{
-				return ['status'=>0,'data'=>[],'msg'=>'UserData zero fetch'];
-			}
-		}
-	}
+	// public function userExist($name,$pwd){
+	// 	$q = "Select * from customers where cid='{$name}' or c_fname='{$name}' or email='{$name}' or ph_num='{$name}'";
+	// 	$sql = $this->db->prepare($q);
+	// 	if($sql->execute()){
+	// 		$res = $sql->fetchAll(PDO::FETCH_ASSOC);
+	// 		if(count($res) !== 0){
+	// 			for($i=0;$i<count($res);$i++){
+	// 				if(password_verify($_GET['pwd'],$res[$i]['pwd'])){
+	// 					return ['status'=>1,'data'=>['UID'=>base64_encode($res[$i]['cid'])],'msg'=>'User Exist'];
+	// 					exit;
+	// 				}
+	// 			}
+	// 			return ['status'=>0,'data'=>[],'msg'=>'User not exist, Try again.'];
+	// 		}else{
+	// 			return ['status'=>0,'data'=>[],'msg'=>'UserData zero fetch'];
+	// 		}
+	// 	}
+	// }
 
 	public function getUserInfoById($defid = ''){
 		//default ID for admin changes
@@ -181,7 +186,7 @@ trait userData{
 						'tbl_name'=>'customers',
 						'action'=>'select',
 						'data'=>['role','c_name','profile','address_1','email','c_gender','address_2','country','state','city','pin_code','ph_num','whatsapp_num'],
-					'condition'=>['manual'=>['cid="'.$cid.'"']],
+					'condition'=>['manual'=>["cid='$cid'"]],
 						'query-exc'=>true
 		];
 		$data = $this->generateQuery($arr);

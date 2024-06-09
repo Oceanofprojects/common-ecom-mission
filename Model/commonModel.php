@@ -172,8 +172,6 @@ class commonModel
 
           //PREPARE QUERY
           $sql = $this->db->prepare($this->query);
-
-
           //RUNNING QUERY
 
           if ($sql->execute($this->bind_values)) {
@@ -352,7 +350,7 @@ class commonModel
         $arVals = array_values($assocArr);
         $data = [];
         for ($i = 0; $i < count($assocArr); $i++) {
-            array_push($data, (is_numeric($arVals[$i]) == 1) ? $arKeys[$i] . "=" . $arVals[$i] : $arKeys[$i] . "='" . $arVals[$i] . "'");
+            array_push($data, $arKeys[$i] . "=" . $arVals[$i]);
         }
         return $data;
     }
