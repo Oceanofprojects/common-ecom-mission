@@ -5,290 +5,205 @@ $cusObj = new products();
 $bis_info = new spacesetting();
 $info = $bis_info->business_info();
 $userState = $cusObj->getUserId((isset($_COOKIE['uid'])?$_COOKIE['uid']:0));
+$account_nav = '<li><span class="nav-link"><span  class="fa fa-cloud"></span><a href="#">Account </a>
+                    <span class="fa fa-caret-right"></span></span>
+                <ul class="sub_menu_1">
+                    <li><span class="nav-link"><span class="fa fa-cog"></span><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer">Settings</a></span></li>
+                    <li><span class="nav-link"><span class="fa fa-sign-out"></span><a href="#" onclick="logout()">Signout</a></span></li>
+                </ul>
+                </li>';
+
 if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
-    $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
-        <ul class="li2">
-            <li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
-            <li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
-        </ul>
-    </li>';
+    $extraLinks = $account_nav;
 }else if($userState[0] && $userState[2] == 'admin'){//ADMIN VIEW MENU
-        $extraLinks = '<li><a href="#"><span class="fa fa-user-circle-o"></span>account</a>
-            <ul class="li2">
-            <li><a href="#"><span class="fa fa-th"></span>Item</a>
-                        <ul class="li3">
-                        <li><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31"><span class="fa fa-plus"></span>Add</a></li>
-                                    <li><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
+        $extraLinks = '<li><span class="nav-link"><span class="fa fa-cubes"></span><a href="#">My Store </a>
+                    <span class="fa fa-caret-right"></span></span>
+                    <ul class="sub_menu_1">
+                        <li><span class="nav-link"><span class="fa fa-sitemap"></span> <a href="#">Categories </a><span class="fa fa-caret-right"></span></span>
+                            <ul class="sub_menu_2">
+                                <li><span class="nav-link"><span class="fa fa-plus"></span><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product">Add</a></span></li>
+                                <li><span class="nav-link"><span class="fa fa-wrench"></span><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product">Edit</a></span></li>
+                            </ul>
+                        </li>
+                        <li><span class="nav-link"><span class="fa fa-cube"></span><a href="#">Products </a>
+                            <span class="fa fa-caret-right"></span></span>
+                            <ul class="sub_menu_2">
+                                <li><span class="nav-link"><span class="fa fa-list"></span><a href="index.php?key=4ed65d87253931bd029d4d57a24ceaece22cd710e095f9f343802cdb0de272b0&controller=admin">List</a></span></li>
+                                <li><span class="nav-link"><span class="fa fa-plus"></span><a href="index.php?controller=product&key=758e3a91787e546aa5b33c54525273df699d92ce4fc7e1ffeee2a2f2cd409d31">Add</a></span></li>
+                                <li><span class="nav-link"><span class="fa fa-wrench"></span><a href="index.php?key=38995a9cbf149b6a419df041c712461588b48044896138242e8df4efc48540c9&controller=product">Edit</a></span></li>
+                            </ul>
+                        </li>
+                        <li><span class="nav-link"><span class="fa fa-cube"></span><a href="#">Sub Items</a>
+                            <span class="fa fa-caret-right"></span></span>
+                            <ul class="sub_menu_2">
+                                <!---<li><span class="nav-link"><span class="fa fa-plus"></span><a href="index.php?controller=product&key=8a0f72fd3fcbf1251465c4c08ca83ec220d386abdadda14deea943df38b79d22">Add</a></span></li>--->
+                                <li><span class="nav-link"><span class="fa fa-refresh"></span><a href="index.php?controller=product&key=d02d50e91c94b56391c8a26675321efacaa55b019ea4c4e43a8da6ac3e8336e9">Transfer</a></span></li>
+                            </ul>
+                        </li>
+                        <li><span class="nav-link"><span class="fa fa-users"></span><a href="#">Customers</a>
+                            <span class="fa fa-caret-right"></span></span>
+                            <ul class="sub_menu_2">
+                            <li><span class="nav-link"><span class="fa fa-list"></span><a href="index.php?key=6c5bce7dca7b1d43b37e1bb86a016ee0307342ea1bb4a75c87111f6ed090ee68&controller=admin">List</a></span></li>
+                            <!---<li><span class="nav-link"><span class="fa fa-plus"></span><a href="#">Add-beta</a></span></li>
+                            <li><span class="nav-link"><span class="fa fa-wrench"></span><a href="#">Edit-beta</a></span></li>--->
                         </ul></li>
-                                    <li><a href="#"><span class="fa fa-th"></span>Sub-Item</a>
-                        <ul class="li3">
-                        <li><a href="index.php?controller=product&key=8a0f72fd3fcbf1251465c4c08ca83ec220d386abdadda14deea943df38b79d22"><span class="fa fa-plus"></span>Add</a></li>
-                        <li><a href="index.php?controller=product&key=d02d50e91c94b56391c8a26675321efacaa55b019ea4c4e43a8da6ac3e8336e9"><span class="fa fa-refresh"></span>Transfer</a></li>           
+                        <li><span class="nav-link"><span class="fa fa-bar-chart-o"></span><a href="#">Couriers</a>
+                            <span class="fa fa-caret-right"></span></span>
+                            <ul class="sub_menu_2">
+                            <li><span class="nav-link"><span class="fa fa-list"></span><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin">List</a></span></li>
+                            <li><span class="nav-link"><span class="fa fa-inbox"></span><a href="index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9">Request</a></span></li>
                         </ul></li>
+                        <li><span class="nav-link"><span class="fa fa-upload"></span><a href="#">Bluk upload</a></span></li>
+                    </ul>
+                </li>'.$account_nav;
 
-                        <li><a href="#"><span class="fa fa-list"></span>Category</a>
-                        <ul class="li3">
-                        <li><a href="index.php?key=cd5d521c96350ad79730bc4d02e77d0af6eb8c1f33eaee0458678f1f76d29d3d&controller=product"><span class="fa fa-plus"></span>Add</a></li>
-                                    <li><a href="index.php?key=b69927d5ea68bd565050864957490ba4025cf4a90a69780be9db9a25cba12b8d&controller=product"><span class="fa fa-edit"></span>Edit</a></li>
-                        </ul></li>
-
-
-
-<li><a href="index.php?key=6c5bce7dca7b1d43b37e1bb86a016ee0307342ea1bb4a75c87111f6ed090ee68&controller=admin"><span class="fa fa-users"></span>Customers</a></li>
-<li><a href="index.php?key=4ed65d87253931bd029d4d57a24ceaece22cd710e095f9f343802cdb0de272b0&controller=admin"><span class="fa fa-cubes"></span>Products</a></li>
-                        <li><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin"><span class="fa fa-bar-chart"></span>P-Status</a></li>
-                        <li><a href="index.php?key=168b97a9b1f1442304b12b879f1c9a6d753645ac35944cf51685e43bff059f9e&controller=customer"><span class="fa fa-cog"></span>Settings</a></li>
-                    <li><a href="#" onclick="logout()"><span class="fa fa-sign-out"></span>Signout</a></li>
-
-            </ul>
-        </li>';
 }else{
   $extraLinks = '<li><a href="index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home"><span class="fa fa-sign-in"></span>login</a></li>';
 }
 ?>
 
-<style type="text/css">
-.header_con {
-    position: sticky;
-    top: 0px;
-    left: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 10px;
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, .3);
-    z-index: 10;
-    background: #fff;
-    backdrop-filter: blur(1px);
-}
+ <style>
+        header{
+            position:relative;
+            top:0px;
+            left:0px;
+            z-index:10;
+            background-color: #fff;
+            padding:5px;
+            box-shadow:0px 5px 10px 1px rgba(0,0,0,.1);
+        }
+        nav ul{
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            transition: .3s;
+        }
+        nav ul li{
+            position: relative;
+            top:0px;left:0px;
+            padding:5px  10px;
+            background-color:#fff;
+            border-bottom:.1px solid rgba(0,0,0,.1);
+        }
+        .nav-link{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav ul li:hover{
+            cursor: pointer;
+        }
 
-.logo_layer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        header nav{
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+        }
+        header .top_nav div{
+            flex: 1;
+        }
+        .search{
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            border:.1px solid #555a;
+            border-radius: 3px;
+            flex: 1;
 
-#menu_icon {
-    display: none;
-    font-size: 18pt;
-}
+        }
+        .search input{
+            border:none;
+            outline: none;
+            background-color: transparent;
+            width:100%;
+            padding:10px;
+        }
+        .search select{
+            border:none;
+            outline: none;
+            border-right:.2px solid #555a;
+            background-color: transparent;
+            padding: 10px;
+            margin:5px 0px;
+            display: none;
+        }
+        .search option{
+            background-color:#ddda;
+        }
 
-#logo {
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
-    border: 1px solid rgba(0, 0, 0, .1);
-}
+        .search span{
+            background-color: transparent;
+            padding:15px;
+            margin-right:5px
 
-.menu {
-    width: 90%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
+        }
+        .search span:hover{
+            background-color: rgba(0,0,0,.1);
+            cursor: pointer;
+        }
 
-.menu li {
-    list-style: none;
-    padding: 0px 5px;
-    margin: 0px 5px;
-    transition: .3s;
-    border: .1px solid transparent;
-}
+         
+        header .search{
+            flex: 2;
+        }
+        .icon-layer{
+            /* flex: 2; */
+            text-align: right;
+        }
+        .icon-layer a{
+            font-size: 15pt;
+            text-decoration: none;
+            padding:7px;
+            color:#000;
+            margin:0px 10px;
+            border-radius:4px;
+        }
+        .icon-layer a:hover{
+            background-color: rgba(0,0,0,.1);
+        }
 
+        .sub_menu_1{
+            position: absolute;
+            top:40px;
+            left:0px;
+            display: none;
+        }
 
-.menu li span {
-    padding: 2px;
-    margin: 5px;
-    height: 20px;
-    width: 20px;
-    border-radius: 2px;
-    font-size: 11pt;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .sub_menu_2{
+            position: absolute;
+            top:0px;
+            left:138px;
+            display: none;
+        }
+        li:hover > .sub_menu_1{
+            display:block;
+        }
+        .sub_menu_1 li:hover > .sub_menu_2{
+            display: block;
+        }
+        li:hover{
+            background-color:rgba(0,0,0,.1);
+        }
+        li span{
+            color:#111a
+        }
 
-.menu li a {
-    text-decoration: none;
-    font-size: 11pt;
-    color: #123;
-    text-transform: capitalize;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
+        li a{
+            color: #555;
+            text-decoration: none;
+            display: flex;
+            justify-content:space-evenly;
+            align-items: center;
+            width: 100%;
+            padding:5px;
+        }
+        #menu_icon{
+            display: none;
+        }
 
-.menu li small {
-    padding: 10px;
-    transition: .3s;
-}
-
-.menu .li1 li {
-    position: relative;
-    top: 0px;
-    left: 0px;
-    float: left;
-}
-
-
-.menu .li2 li {
-    float: none;
-    z-index: 1;
-    margin-top: 10px;
-}
-
-.menu li:hover {
-    cursor: pointer;
-    border-radius: 5px;
-    border-bottom-color: #ddd;
-}
-
-.menu li:hover>a small {
-    transform: rotate(45.5deg);
-}
-
-.menu li:hover>a {
-    color: #000;
-}
-
-.menu li:hover>a span {
-    border-radius: 50px;
-    color: navy;
-}
-
-.menu .li1 li:hover>ul {
-    display: block;
-}
-
-.menu .li2 li:hover>ul {
-    display: block;
-}
-
-.menu .li2 {
-    position: absolute;
-    top: 33px;
-    left: -25px;
-    display: none;
-    border-radius: 5px;
-    background: #fff;
-    border: .2px solid rgba(0, 0, 0, .1);
-}
-
-
-.menu .li3 {
-    border: .1px solid #ddda;
-    position: absolute;
-    top: -10px;
-    right: 120px;
-    display: none;
-    background: #fff;
-    border-radius: 5px;
-}
-
-
-.menu .active {
-    border-radius: 5px;
-}
-
-.menu .active:hover>a {
-    color: var(--spl_color);
-}
-
-.init {
-    text-align: right;
-    padding: 0px 20px;
-    background: #fff;
-    backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-}
-
-.init ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #123;
-    border-radius: 0px 0px 10px 10px;
-}
-
-.init li {
-    list-style: none;
-}
-
-.init a {
-    font-size: 13pt;
-    text-decoration: none;
-    padding: 10px 9px;
-    cursor: pointer;
-    color: #ddd;
-    margin: 0px 2px;
-    outline: none;
-    text-decoration: none;
-}
-
-.init a:hover {
-    color: #fff;
-    text-shadow: 0px 0px 10px #ddd;
-    cursor: pointer;
-}
-
-.whtup-contactus {
-    position: fixed;
-    left: 0px;
-    bottom: 0px;
-    margin: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    z-index: 5;
-}
-
-
-.whtup-contactus a {
-    margin: 3px;
-    padding: 8px 10px;
-    text-decoration: none;
-    color: #fff;
-    background: rgba(0, 0, 0, .8);
-    border: .2px solid #ddd;
-    border-radius: 3px;
-    font-size: 1em;
-}
-
-.search_layer {
-    background: rgba(0, 0, 0, .2);
-    backdrop-filter: blur(10px);
-    position: fixed;
-    top: -1000%;
-    left: 0px;
-    width: 100%;
-    height: 100vh;
-    z-index: 12;
-    /* transition: .3s; */
-}
-
-.search_box {
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
-    background: #fff;
-    width: 50%;
-    border: 1px solid rgba(0, 0, 0, .3);
-    border-radius: 5px;
-}
-
-.search_box input {
-    background: transparent;
-    padding: 15px 0px;
-    width: 90%;
-    border: none;
-    outline: none;
-    letter-spacing: 1px;
-    z-index: 1;
-}
-
-.cartBag {
+        .cartBag {
     position: relative;
     top: 0px;
     left: 0px;
@@ -303,7 +218,6 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     padding: 5px;
     border-radius: 25px;
 }
-
 .loader {
     position: fixed;
     top: 0px;
@@ -317,166 +231,161 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     align-items: center;
     flex-direction: column
 }
+@media only screen and (max-width:700px){
+    .icon-layer i{
+        display: none;
+    }
+    .icon-layer a{
+        margin:0px 3px
+    }
+    .menu{
+        position: relative;
+        top:0px;left:0px;
+        align-items:flex-start;
+    }
+    header .menu ul{
+        width:200px;
+        position:absolute;
+        top:50px;
+        left:-100%;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    header .menu ul li{
+        width:100%;
+        padding-right:0px;
+        padding-left: 0px;
+        padding-bottom:0px;
+    }
+    .nav-link {
+        padding:5px;
+    }
 
-@media only screen and (max-width: 1150px) {
-    .header_con {
+    header .menu .sub_menu_1,header .menu .sub_menu_2{
+        position: relative;
+        top:0px;
+        left:0px;
+    }
+    header .menu .sub_menu_1 li:hover{
+        background-color:rgba(0,0,0,.2);
+    }
+    header .menu .sub_menu_2 li:hover{
+        background-color:rgba(0,0,0,.1);
+    }
+    #menu_icon{
+        display: block;
+        padding:5px;
+        position:absolute;
+        top:0px;
+        right:0px;
+        font-size: 15pt;;
+        background-color:rgba(0,0,0,.1);
+    }
+    .menu ul{
+        position: relative;
+        top:0px;
+        left:-265px;
+    }
+    
+}
+@media only screen and (max-width:600px){
+    header nav:first-child div:last-child{
+        display: none;
+    }
+}
+@media only screen and (max-width:500px){
+    header nav:first-child{
         flex-direction: column;
     }
 
-    #menu_icon {
-        display: flex;
-    }
-
-    .logo_layer {
-        width: 90%;
-    }
-
-    .menu {
-        justify-content: center;
-    }
-
-    .menu .li1 {
-        width: 50%;
-        display: none;
-    }
-
-    .menu .li1 li {
-        position: relative;
-        top: 0px;
-        left: 0px;
-        float: none;
-    }
-
-    .menu .li2,
-    .menu .li3 {
-        position: relative;
-        width: 90%;
-        padding: 0px;
-        left: 0px;
-        top: 0px;
-    }
-
 }
 
-@media only screen and (max-width: 550px) {
-    .search_box {
-        width: 90%;
-    }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="top_nav">
+            <div>
+                <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">
+                    <img height="90px" src="./assets/common-images/logo.png" alt="" style="height:80px;width:250px;">
+                </a>
+            </div>
+            <div class="search">
+                <select name="" id="">
+                    <option value="">Category 1</option>
+                    <option value="">Category 1</option>
+                    <option value="">Category 1</option>
+                    <option value="">Category 1</option>
+                </select>
+                <input type="text" id="search_product" placeholder="Search more then 1000+ products">
+                <span class="fa fa-search" onclick="searchProduct('detailProduct','search_product')"></span>
+            </div>
+            <div class="icon-layer">
+                <span style="display: flex;justify-content:flex-end;align-items: center;">
+                    <a href="#" style="padding:5px 10px;border-radius:5px;background-color:lightgreen;"><span class="fa fa-phone"></span><i style="padding-left: 5px; font-size: 13pt;">Contact us</i></a>                    
+                </span>
+            </div>
+        </nav>
+        <nav class="menu">
+            <ul style="border:.1px solid rgba(0,0,0,.1);">
+                <li><span class="nav-link"><span class="fa fa-home"></span><a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">Home</a></span></li>
+                <li><span class="nav-link"><span class="fa fa-truck"></span><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product">Track</a></span></li>
+                <?=$extraLinks?>    
+             </ul>
 
-    .menu {
-        width: 95%;
-    }
+            <span class="fa fa-bars" id="menu_icon"></span>
+                                
+            <div class="icon-layer">
+                <span>
+                    <a href="#" onclick="dis_my_fav()" class="fa fa-heart-o"> </a>
+                </span>
 
-    .menu .li1,
-    .menu .li2,
-    .menu .li3 {
-        width: 100%;
-    }
+                <span>
+                    <a href="#" class="fa fa-bell-o"></a>
+                </span>
 
-    .init span {
-        /*hiding all span in init class*/
-        display: none;
-    }
+                <span>
+                    <a href="#" onclick="dis_my_cart()" class="fa fa-shopping-cart  cartBag">  <span class="cartIndi"></span></a>
+                </span>
+            </div>
+        </nav>
+    </header>
+    <script>
+        $('#menu_icon').click(function(){
+            menu();
+        });
+        let menu_loop = 0;
+        function menu(){
+            if(menu_loop%2==0){
+                $('.menu ul').css({
+                'left':'0%'
+            })
+            }else{
+                $('.menu ul').css({
+                'left':'-100%'
+            })
+            }
+            menu_loop++;
+        }
 
-    #mode {
-        /*unhide span in init class*/
-        display: block;
-    }
-}
+    </script>
 
-@media only screen and (max-width: 450px) {
-
-    .menu .li2 li a,
-    .menu .li3 li a {
-        font-size: 8pt;
-    }
-
-    .init a small {
-        display: none;
-    }
-}
-
-@media only screen and (max-width: 400px) {}
-</style>
-
-<!-- <div class="init" style="color:#555;display: none;">
-    <div id="i_cons">
-        <ul>
-            <li><a href="#" onclick="op_search()" class="fa fa-search" title="Search"></a></li>
-            <li><a href="#" class="fa fa-bell" title="Notification"></a></li>
-            <li><a href="index.php?controller=product&key=bfbf58401ee274819e86f65c59fcde97bd22bf1a93df8109f50a4717eb13d21f"
-                    class="fa fa-fire" title="Top list"></a></li>
-            <li><a href="tel:<?php echo $info['business']['phone'];?>" class="fa fa-phone" title="Phone"></a></li>
-            <li><a href="https://wa.me/91<?php echo $info['social_media']['whatsapp'];?>" class="fa fa-whatsapp"
-                    title="Whatsapp"></a></li>
-        </ul>
+<div class="mycart">
+    <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
+        onclick="cls_my_cart()"></h4>
+    <h1 align="center">MY CART</h1>
+    <br>
+    <div style="display:flex;justify-content:space-around;align-items: center;">
+        <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
     </div>
-</div> -->
 
-<script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
-<div class="loader">
-    <lord-icon src="https://cdn.lordicon.com/odavpkmb.json" trigger="loop" delay="500"
-        colors="primary:#121331,secondary:#913710" style="width:100px;height:100px">
-    </lord-icon>
-    <p><b>Please wait</b></p>
+    <br>
+    <center>
+        <table id="mycarttbl">
+        </table>
+    </center>
+    <br><br><br>
 </div>
-<!-- Common message box  -->
-<div id="common_dis_msg_box">
-    <div id="msg_content_to_display"></div>
-</div>
-<!-- Common message box  -->
-<header class="header_con">
-    <div class="logo_layer">
-        <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">
-            <img src="assets/common-images/logo.png" id="logo">
-        </a>
-        <h3 class="fa fa-bars" style="color:#555" id="menu_icon" onclick="menu()"></h3>
-    </div>
-    <nav class="menu">
-        <ul class="li1">
-            <li><a
-                    href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"><span
-                        class="fa fa-home"></span>home</a></li>
-                        <li><a onclick="op_search()" href="#" title="Search"><span
-                        class="fa fa-search"></span>search</a></li>
-            <!-- <li onclick="op_search()"><a href="#"><span class="fa fa-search"></span>Search</a></li> -->
-            <li onclick="dis_my_fav()"><a href="#"><span class="fa fa-heart-o"></span>Wishlist</a></li>
-            <li onclick="dis_my_cart()"><a href="#"><span class="fa fa-shopping-cart cartBag"></span>cart</a></li>
-            <li><a
-                    href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product"><span
-                        class="fa fa-truck"></span>Track</a></li>
-            <?php echo $extraLinks;?>
-        </ul>
-    </nav>
-</header>
-<div class="whtup-contactus">
-    <a href="#" onclick="dis_my_cart()" style="background:cornflowerblue;" class="fa fa-shopping-bag cartBag">
-        <span class="cartIndi"></span></a>
-
-    <a href="https://wa.me/91<?php echo $info['social_media']['whatsapp'];?>" class="fa fa-whatsapp"></a>
-
-    <a href="<?php echo $info['social_media']['instagram'];?>" class="fa fa-instagram"></a>
-
-    <a href="<?php echo $info['social_media']['facebook'];?>" class="fa fa-facebook-official"></a>
-
-</div>
-
-<script type="text/javascript">
-var temp_menu = 0;
-
-function menu() {
-    if (temp_menu % 2 == 0) {
-        $('#menu_icon').removeClass();
-        $('#menu_icon').attr('class', 'fa fa-close');
-        $('.menu .li1').fadeIn(300)
-    } else {
-        $('#menu_icon').removeClass();
-        $('#menu_icon').attr('class', 'fa fa-bars');
-        $('.menu .li1').hide()
-    }
-    temp_menu++;
-}
-</script>
 
 <div class="myfav">
     <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
@@ -492,44 +401,7 @@ function menu() {
     <br><br><br>
 </div>
 
-<div class="mycart">
-    <h4 style="text-align:right;background:red;padding:10px;margin:10px;color:#fff" class="fa fa-close"
-        onclick="cls_my_cart()"></h4>
-    <h1 align="center">MY CART</h1>
-    <br>
-    <div style="display:flex;justify-content:space-around;align-items: center;">
-        <!-- <input style="margin:10px;padding:5px" type="date" id="cart_filter" value="<?php echo date('Y-m-d');?>"
-            onchange="dis_my_cart('cart_date_filter')">
-        <select style="margin:10px;padding:5px" id="cart_type" onchange="dis_my_cart('cart_type_filter')">
-            <option value="current">Current Cart list</option>
-            <option value="ordered">Ordered Cart list</option>
-        </select> -->
-        <button class="btn fa fa-shopping-cart" onclick="cls_my_cart()">&nbsp;Continue Shopping</button>
-    </div>
-
-    <br>
-    <center>
-        <table id="mycarttbl">
-        </table>
-    </center>
-    <br><br><br>
-
-
-</div>
-
-
-<div class="search_layer">
-    <center>
-        <div class="search_box"><input type="search" id="search_product" list="" placeholder="Search here"><span
-                class="fa fa-search" onclick="searchProduct('detailProduct','search_product')"
-                style="color:#555a;cursor:pointer;background:cornflowerblue;padding:8px;border-radius:5px;"></span>
-        </div>
-        <br>
-        <span class="fa fa-close"
-            style="padding:20px;background:tomato;border-radius: 100%;color:#000;cursor:pointer;border:1px solid #555a;box-shadow:0px 0px 10px 0px rgba(0, 0, 0, .5);"
-            onclick="op_search()"></span>
-    </center>
-</div>
+<!-- SEARCH RESULT -->
 <center>
     <section class="dis_search_result">
         <div style="display:flex;justify-content:flex-end;align-items:center">
@@ -547,3 +419,15 @@ function menu() {
         </div>
     </section>
 </center>
+
+<script src="https://cdn.lordicon.com/lordicon-1.2.0.js"></script>
+<div class="loader">
+    <lord-icon src="https://cdn.lordicon.com/odavpkmb.json" trigger="loop" delay="500"
+        colors="primary:#121331,secondary:#913710" style="width:100px;height:100px">
+    </lord-icon>
+    <p><b>Please wait</b></p>
+</div>
+<!-- Common message box  -->
+<div id="common_dis_msg_box">
+    <div id="msg_content_to_display"></div>
+</div>

@@ -1,5 +1,6 @@
 function loadComponent(type, data,arr=[]) {
     if (type == 'nor-card-view') {
+      console.log(data)
       for (i = 0; i < data.data.length; i++) {
           off_price = calc_offer(data.data[i].price, data.data[i].offer);
           favRnd = Math.floor(Math.random() * 99999);
@@ -12,7 +13,7 @@ function loadComponent(type, data,arr=[]) {
               data.data[i].p_name +
               '</h3>'+ isOff(data.data[i].price,data.data[i].offer,off_price) +''+
               check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
-                  i].p_name, data.data[i].p_id) + '</div>');
+                  i].p_name, data.data[i].p_id,data.data[i].default_cart) + '</div>');
       }
       
     }else if (type == 'layer-wt-nor-card-view') {
@@ -27,13 +28,13 @@ function loadComponent(type, data,arr=[]) {
           boxIdtyRnd = Math.floor(Math.random() * 9999999);
           $(".cateSetProductsLoader"+cateSetsRnd).append('<div class=\"box\"><h6 class=\"' + gen_fav_ind(data
                   .data[i].favExistCid) + '\" id=\"myfav'+favRnd+'\" onclick=\"add_fav(\'myfav'+favRnd+'\',\'' + data.data[i].p_id +
-              '\')\"></h6><div class=\"img-src\" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')" style=\"image-rendering: pixelated;background:url(assets/product_images/' +
+              '\')\"></h6><div class=\"img-src\" onclick="window.open(\'index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid='+data.data[i].p_id+'\')" style=\"background:url(assets/product_images/' +
               data.data[i].p_img +
               ');background-size:cover;background-position:center;border-radius:5px\"></div><br><h3 style="color:#555a" align="center">' +
               data.data[i].p_name +
               '</h3>'+ isOff(data.data[i].price,data.data[i].offer,off_price) +''+
               check_stock(boxIdtyRnd, data.data[i].stock, off_price, data.data[i].unit, data.data[
-                  i].p_name, data.data[i].p_id) + '</div>');
+                  i].p_name, data.data[i].p_id,data.data[i].default_cart) + '</div>');
       }
       $('.cateSetProductsLoaderLayer').append('<br><br><center><a style="background:lightgreen;color:#000;text-decoration:none;padding:5px;border-radius:3px;" href="index.php?cate_id='+data.data[nxtVal].cate_id+'&controller=product&action=index&key=ad2b90dede1c27608c507b022e625e0438288dd764529ec92be67f1f531aa6b7">Load More</a></center>');
 
@@ -103,16 +104,17 @@ function mycartComponent(data){
     if (data.status) {
         $('#mycarttbl').empty();
         $('#mycarttbl').append(
-            "<tr><th>Item</th><th>Price</th><th>offer</th><th>Off Price</th><th>Qnty</th><th>total</th><th>Option</tr>"
+            "<tr><th></th><th>Item</th><th>Price</th><th>offer</th><th>Off Price</th><th>Qnty</th><th>total</th><th>Option</th></tr>"
         );
         if(data.data.length == 0){
-          $('#mycarttbl').append("<tr><td colspan='7' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
+          $('#mycarttbl').append("<tr><td colspan='8' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
         }else{
             for (ci = 0; ci < data.data.length; ci++) {
               off_price = calc_offer(data.data[ci].price,data.data[ci].offer);
               if(data.old_r == true && data.data[ci].cart_edit_flag == '1' || data.old_r == true && data.data[ci].cart_edit_flag == '0' || data.old_r == false && data.data[ci].cart_edit_flag == '0'){
                 cart_edit_flag='0';
-                $('#mycarttbl').append("<tr><td>" + data.data[
+                $('#mycarttbl').append("<tr><td><a href='index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid="+data.data[ci].p_id+"'><img  class='cart_img_holder' src='assets/product_images/" + data.data[
+                        ci].p_img + "' alt='"+data.data[ci].p_name+"'></a></td><td>" + data.data[
                         ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
                     .data[ci].quantity + " (" + data.data[ci].unit + ")</td><td>" + (off_price * data.data[ci].quantity) +
                     "rs</td><td>-</td></tr>");
@@ -120,10 +122,11 @@ function mycartComponent(data){
                 cart_edit_flag='1';
                 total_price += data.data[ci].price * data.data[ci].quantity;
                 off_total_price += off_price * data.data[ci].quantity;
-                $('#mycarttbl').append("<tr id='cartDataRow"+ci+"'><td>" + data.data[
+                $('#mycarttbl').append("<tr id='cartDataRow"+ci+"'><td><a href='index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid="+data.data[ci].p_id+"'><img  class='cart_img_holder' src='assets/product_images/" + data.data[
+                        ci].p_img + "' alt='"+data.data[ci].p_name+"'></a></td><td>" + data.data[
                         ci].p_name + "</td><td>" + data.data[ci].price + "rs</td><td>" + data.data[ci].offer + "%</td><td>" + off_price + "rs</td><td>" + data
                     .data[ci].quantity + " (" + data.data[ci].unit + ")</td><td>" + (off_price * data.data[ci].quantity) +
-                    "rs</td><td><button class='btn fa fa-trash' onclick='removefrommycart(" +
+                    "rs</td><td><button class='btn fa fa-eye' onclick='window.open(\"index.php?controller=product&key=5d551508d3cee059d6760a6ec69f708dc69a48f2596d2808f106e48db15e28e4&pid="+data.data[ci].p_id+"&editable="+(Math.floor(Math.random()*1000))+"\")'></button><button class='btn fa fa-trash' onclick='removefrommycart(" +
                     data.data[ci].cart_id + ","+ci+")'></button></td></tr>");
                 }
                 //   total_price += data.data[ci].price * data.data[ci].quantity;
@@ -133,7 +136,7 @@ function mycartComponent(data){
           }
 
         if(data.old_r == false && cart_edit_flag == '1'){
-          $('#mycarttbl').append("<tr><td colspan='7'><h3 align='center'>Total Price " + total_price +"rs</h3></td></tr><tr><td colspan='7'><h3 align='center'>( % ) Saving "+(total_price-off_total_price)+"rs</h3></td></tr><tr><td colspan='7'><h1 align='center'>Total Cost <b>"+off_total_price+"rs</b></h1></td></tr><tr><td colspan='7' style='text-align:center'><button style='background:cornflowerblue;' id='checkout' class='btn fa fa-check-circle' onclick='checkout()'>&nbsp;Check out</button></td></tr>");
+          $('#mycarttbl').append("<tr><td colspan='8'><h3 align='center'>Total Price " + total_price +"rs</h3></td></tr><tr><td colspan='8'><h3 align='center'>( % ) Saving "+(total_price-off_total_price)+"rs</h3></td></tr><tr><td colspan='8'><h1 align='center'>Total Cost <b>"+off_total_price+"rs</b></h1></td></tr><tr><td colspan='8' style='text-align:center'><button style='background:cornflowerblue;' id='checkout' class='btn fa fa-check-circle' onclick='checkout()'>&nbsp;Check out</button></td></tr>");
         }
           // <button id="checkout" class="btn fa fa-check-circle" onclick="checkout()">&nbsp;Check out</button>
 
@@ -144,8 +147,8 @@ function mycartComponent(data){
     $('.mycart').fadeIn(100);
     $('#mycarttbl').empty();
     $('#mycarttbl').append(
-        "<tr><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr>"
+        "<tr><th></th><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</th></tr>"
     );
-      $('#mycarttbl').append("<tr><td colspan='7' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
+      $('#mycarttbl').append("<tr><td colspan='8' style='text-align:center'><span class='fa fa-chain-broken'></span>&nbsp;&nbsp;Empty cart !</td></tr>");
   }
 }

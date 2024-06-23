@@ -139,7 +139,11 @@ function gen_fav_ind(x) {
     return (x == '' || x == null) ? 'fa fa-heart-o' : 'fa fa-heart';
 }
 
-function check_stock(x, stock, off_price, unit, p_name, p_id) {
+function check_stock(x, stock, off_price, unit, p_name, p_id,real_cart_item_count=0) {
+  if(real_cart_item_count !== 0){
+    //Some cart item num available for this user
+    real_cart_item_count = real_cart_item_count;
+  }
     if (stock <= 0) {
         return "<h3 style='text-align:center;color:tomato'>OUT OF STOCK</h3><br><button  onclick=\"add_fav('myfav"+x+"','" +
             p_id + "')\" class=\"fa fa-heart btn-active \">&nbsp;&nbsp;Add to fav</button>";
@@ -147,7 +151,7 @@ function check_stock(x, stock, off_price, unit, p_name, p_id) {
         return '<div style=\"padding-top:5px;border-top:.2px solid rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items: center;\"><div class="quantity-control"><h2>' +
             unit + '</h2><span class="fa fa-minus" onclick="decr_quantity(' + (x + 1) + ',' + stock + ',' +
             off_price + ')"></span><small id="quantity_' + (x + 1) +
-            '">0</small><span class="fa fa-plus" onclick="incr_quantity(' + (x + 1) + ',' + stock + ',' +
+            '">'+real_cart_item_count+'</small><span class="fa fa-plus" onclick="incr_quantity(' + (x + 1) + ',' + stock + ',' +
             off_price +
             ')"></span></div><span class=\"fa fa-long-arrow-right\"></span><div><span id=\"dis-cart-price-' + (x +
                 1) + '\">0</span><sup>rs</sup></div></div><button id=\"id-ty-' + (x + 1) +
@@ -286,7 +290,7 @@ function dis_my_cart(x) {
   $('.mycart').fadeIn(100);
   $('#mycarttbl').empty();
   $('#mycarttbl').append(
-      "<tr><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr><tr><th colspan='7'><br>Fetching Cart list ...</th></tr>"
+      "<tr><th></th><th>Item</th><th>price</th><th>offer</th><th>off price</th><th>quantity</th><th>total</th><th>Option</tr><tr><th colspan='8'><br>Fetching Cart list ...</th></tr>"
   );
     var arg;
     if (x == 'cart_date_filter') {
@@ -499,6 +503,7 @@ function fillEditForm(data){
   $('#disOldUrl').attr('href','assets/product_images/'+data.p_img);
   $('#p_id').val(data.p_id);
   $('#cate_name').val(data.cate_id);
+  $('#net_weight').val(data.net_weight);
   $('#p_img').val(data.p_img);
   $('#p_name').val(data.p_name);
   $('#desc').val(data.p_desc);

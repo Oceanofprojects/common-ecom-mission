@@ -1,5 +1,0 @@
-DATA-plate for
-
-EDIT account
-ADD/Edit product
-ADd/edit Cate

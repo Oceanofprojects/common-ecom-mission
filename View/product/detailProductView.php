@@ -137,12 +137,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #fff;
         margin: 10px 10px;
         padding: 8px;
         text-align: center;
         border-radius: 100px;
         border: .2px solid rgba(0, 0, 0, .1);
+        cursor: pointer;
     }
 
     .share_link_box a {
@@ -248,7 +248,6 @@ $info = $cusObj->business_info();
     <center>
         <section class="details" style="background:#fff">
             <div class="details-box-layer">
-
                 <div class="details-box-head">
                     <a href="#" class="fa fa-share-alt" onclick="$('.share_link_layer').css('display','flex')"></a>
                     <?php
@@ -282,6 +281,9 @@ $info = $cusObj->business_info();
 
 
                 ?>
+                <br>
+                <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
+                <br>
 
                 <?php
                   if($resData['offer'] > 0){
@@ -290,17 +292,15 @@ $info = $cusObj->business_info();
                     echo "<h1>".$resData['price'].'rs'."</h1>";
                   }
                   ?>
-                <br>
-                <h1><?php echo $resData['p_name'].' #'.$resData['p_id'];?></h1>
-                <br>
-                <div class="t" style="min-width:200px;width:40%">
+                  
+                <div class="t" style="width:90%">
                 </div>
                 <br>
                 <script>
                 $('.t').append(check_stock(1, <?php echo $resData['stock']?>, calc_offer(
                         <?php echo $resData['price'];?>, <?php echo $resData['offer'];?>),
                     '<?php echo $resData['unit'];?>', '<?php echo $resData['p_name'];?>',
-                    '<?php echo $resData['p_id'];?>'));
+                    '<?php echo $resData['p_id'];?>',<?=$data['selected_product']['default_cart']?>));
                 </script>
 
             </div>

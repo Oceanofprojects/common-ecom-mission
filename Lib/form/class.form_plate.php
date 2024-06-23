@@ -35,23 +35,23 @@ class form
                     'data-plate-11' => 'pin_code',
                     'data-plate-12' => 'pwd',
                     'data-plate-13' => 'con_pwd',
-                    'data-plate-14' => 'profile'                    
+                    'data-plate-14' => 'profile'
                 ],
                 'param' => [
-                    'c_name'=>'data-plate-1',
-                    'ph_num'=>'data-plate-2',
-                    'whatsapp_num'=>'data-plate-3',
-                    'email'=>'data-plate-4',
-                    'c_gender'=>'data-plate-5',
-                    'address_1'=>'data-plate-6',
-                    'address_2'=>'data-plate-7',
-                    'country'=>'data-plate-8',
-                    'state'=>'data-plate-9',
-                    'city'=>'data-plate-10',
-                    'pin_code'=>'data-plate-11',
-                    'pwd'=>'data-plate-12',
-                    'con_pwd'=>'data-plate-13',
-                    'profile'=>'data-plate-14'
+                    'c_name' => 'data-plate-1',
+                    'ph_num' => 'data-plate-2',
+                    'whatsapp_num' => 'data-plate-3',
+                    'email' => 'data-plate-4',
+                    'c_gender' => 'data-plate-5',
+                    'address_1' => 'data-plate-6',
+                    'address_2' => 'data-plate-7',
+                    'country' => 'data-plate-8',
+                    'state' => 'data-plate-9',
+                    'city' => 'data-plate-10',
+                    'pin_code' => 'data-plate-11',
+                    'pwd' => 'data-plate-12',
+                    'con_pwd' => 'data-plate-13',
+                    'profile' => 'data-plate-14'
                 ]
             ]
 
@@ -71,16 +71,16 @@ class form
         $ele = null;
         switch ($this->form_type) {
             case 'login_form':
-                $ele =  '<form action="#" class="form" id="frm">
+                $ele = '<form action="#" class="form" id="frm">
                 <div class="title">Login</div>
                 <br>
                 <p style="color:tomato" id="dis_err"></p>
                 <div class="input-box underline">
-                  <input type="text" name="'.$this->field_lock('cus_idnty').'" id="cus_idnty" placeholder="Enter CID or Email or Name or ph num" required>
+                  <input type="text" name="' . $this->field_lock('cus_idnty') . '" id="cus_idnty" placeholder="Enter CID or Email or Name or ph num" required>
                   <div class="underline"></div>
                 </div>
                 <div class="input-box">
-                  <input type="password" name="'.$this->field_lock('pwd').'" id="pwd" placeholder="Enter Your Password" required>
+                  <input type="password" name="' . $this->field_lock('pwd') . '" id="pwd" placeholder="Enter Your Password" required>
                   <div class="underline"></div>
                 </div>
                 <br>
@@ -109,24 +109,24 @@ class form
                 </center>
                 <div class="input-box">
                     <label>Full Name<sup class="imp">*</sup></label>
-                    <input type="text" placeholder="Enter full name" name="'.$this->field_lock('c_name').'" required />
+                    <input type="text" placeholder="Enter full name" name="' . $this->field_lock('c_name') . '" required />
                 </div>
     
                 <div class="column">
                     <div class="input-box">
                         <label>Contact Number<sup class="imp">*</sup></label>
-                        <input type="number" placeholder="Enter phone number" name="'.$this->field_lock('ph_num').'" min="1" required />
+                        <input type="number" placeholder="Enter phone number" name="' . $this->field_lock('ph_num') . '" min="1" required />
                     </div>
                     <div class="input-box">
                         <label>Whatspp Number<sup class="imp">*</sup></label>
-                        <input type="number" placeholder="Enter whatspp number" name="'.$this->field_lock('whatsapp_num').'" min="1" />
+                        <input type="number" placeholder="Enter whatspp number" name="' . $this->field_lock('whatsapp_num') . '" min="1" />
                     </div>
                 </div>
     
                 <div class="column">
                     <div class="input-box">
                         <label>Email Address<sup class="imp">*</sup></label>
-                        <input type="email" name="'.$this->field_lock('email').'" placeholder="Enter email ID" />
+                        <input type="email" name="' . $this->field_lock('email') . '" placeholder="Enter email ID" />
                     </div>
                 </div>
     
@@ -134,41 +134,41 @@ class form
                     <h3>Gender</h3>
                     <div class="gender-option">
                         <div class="gender">
-                            <input type="radio" id="check-male" value="male" name="'.$this->field_lock('c_gender').'" checked />
+                            <input type="radio" id="check-male" value="male" name="' . $this->field_lock('c_gender') . '" checked />
                             <label for="check-male">male</label>
                         </div>
                         <div class="gender">
-                            <input type="radio" id="check-female" value="female" name="'.$this->field_lock('c_gender').'" />
+                            <input type="radio" id="check-female" value="female" name="' . $this->field_lock('c_gender') . '" />
                             <label for="check-female">Female</label>
                         </div>
                         <div class="gender">
-                            <input type="radio" id="check-other" value="TBD" name="'.$this->field_lock('c_gender').'" />
+                            <input type="radio" id="check-other" value="TBD" name="' . $this->field_lock('c_gender') . '" />
                             <label for="check-other">prefer not to say</label>
                         </div>
                     </div>
                 </div>
                 <div class="input-box address">
                     <label>Address<sup class="imp">*</sup></label>
-                    <input type="text" name="'.$this->field_lock('address_1').'" placeholder="Enter street address" required />
-                    <input type="text" name="'.$this->field_lock('address_2').'" placeholder="Enter street address line 2" required />
+                    <input type="text" name="' . $this->field_lock('address_1') . '" placeholder="Enter street address" required />
+                    <input type="text" name="' . $this->field_lock('address_2') . '" placeholder="Enter street address line 2" required />
                     <div class="column">
-                        <input type="text" placeholder="Enter your Country" name="'.$this->field_lock('country').'" />
-                        <input type="text" placeholder="Enter your State" name="'.$this->field_lock('state').'" />
+                        <input type="text" placeholder="Enter your Country" name="' . $this->field_lock('country') . '" />
+                        <input type="text" placeholder="Enter your State" name="' . $this->field_lock('state') . '" />
                     </div>
                     <div class="column">
-                        <input type="text" placeholder="Enter your city" name="'.$this->field_lock('city').'" required />
-                        <input type="number" placeholder="Enter postal code" min="1" name="'.$this->field_lock('pin_code').'" required />
+                        <input type="text" placeholder="Enter your city" name="' . $this->field_lock('city') . '" required />
+                        <input type="number" placeholder="Enter postal code" min="1" name="' . $this->field_lock('pin_code') . '" required />
                     </div>
                 </div>
     
                 <div class="column">
                     <div class="input-box">
                         <label>Password<sup class="imp">*</sup></label>
-                        <input type="password" name="'.$this->field_lock('pwd').'" placeholder="Enter new password for account" required />
+                        <input type="password" name="' . $this->field_lock('pwd') . '" placeholder="Enter new password for account" required />
                     </div>
                     <div class="input-box">
                         <label>Confirm password<sup class="imp">*</sup></label>
-                        <input type="password" name="'.$this->field_lock('con_pwd').'" placeholder="Enter confirm password for account" required />
+                        <input type="password" name="' . $this->field_lock('con_pwd') . '" placeholder="Enter confirm password for account" required />
                     </div>
                 </div><br>
                 <span style="padding:10px 0px" id="dis_err"></span>
@@ -177,9 +177,10 @@ class form
                 <p align="center">Already resgistered?, Please <a
                         href="index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home">login</a>
                 </p>
-                <input type="text" id="profile" name="'.$this->field_lock('profile').'" value="default" hidden>
-            </form>';    
-            break;
+                <input type="text" id="profile" name="' . $this->field_lock('profile') . '" value="default" hidden>
+            </form>';
+                break;
+            
         }
         return $ele;//Return form UI
     }
@@ -229,18 +230,24 @@ class form
         $data_plate = [];
         $req_form_key = array_keys($req);
         $plate_form_key = array_keys($this->mask_params[$this->form_type]['mask_param']);
-
-        foreach ($req_form_key as $key => $val) {
+        $plate_key = 1;
+        foreach ($req_form_key as $val) {
             if (isset($this->mask_params[$this->form_type]['mask_param'][$val])) {
-                $ab_val = $this->mask_params[$this->form_type]['mask_param'][$val];
-                $data_plate[] = $val;
-                $myreq = array_merge($myreq, [$ab_val => $req[$val]]);
+                if ($val == 'data-plate-' . $plate_key) {
+                    $ab_val = $this->mask_params[$this->form_type]['mask_param'][$val];
+                    $data_plate[] = $val;
+                    $myreq = array_merge($myreq, [$ab_val => $req[$val]]);
+                    $plate_key++;
+                } else {
+                    return "Chain order missing, Please refresh the page!.";
+                }
+
             }
         }
         if (count($data_plate) == count($this->mask_params[$this->form_type]['mask_param'])) {
             return $myreq;
         } else {
-            die('Form chain broked some where, Missing::'.implode(',',array_diff($plate_form_key,$data_plate)));
+            return 'Chain broked some where, Missing::' . implode(',', array_diff($plate_form_key, $data_plate));
         }
     }
 }

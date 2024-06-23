@@ -180,11 +180,9 @@ class customerController extends commonController
       ];
       $data = $this->cusMdl->generateQuery($arr);
       if ($data['status'] && count($data['data']) !== 0) {
-        if (!isset($_COOKIE['uid'])) {
           setcookie('uid', $addLog['uid'], time() + (86400 * 30), "/");
-          $_SESSION[$addLog['uid']] = $data['data'][0]['cid'];
+          $_SESSION['user-data'][$addLog['uid']] = $data['data'][0]['cid'];
           echo json_encode(['status' => true, 'data' => [], 'msg' => 'Successfully logged in.']);
-        }
       } else {
         echo json_encode(['status' => false, 'data' => [], 'msg' => 'UnAnth User. Please login.']);
       }

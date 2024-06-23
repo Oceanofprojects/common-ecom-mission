@@ -254,7 +254,6 @@ class productController extends commonController
         $suggest_product['status'] = true;
         $suggest_product['message'] = 'Suggestion product fetched for Selected product';
         $suggest_product['data']=[];//default EMPTY
-
       }
       $products = $products['data'];
       $inc1 = 0;
@@ -264,6 +263,7 @@ class productController extends commonController
         for($i=0;$i<count($products['data']);$i++){
           if($products['data'][$i]['p_id'] == $pid){
             $selected_product['data'][$inc1] = $products['data'][$i];
+            $selected_product['default_cart'] = $this->productMdl->get_cart_item_count($pid);
             $inc1++;
           }else{
             $suggest_product['data'][$inc2] = $products['data'][$i];

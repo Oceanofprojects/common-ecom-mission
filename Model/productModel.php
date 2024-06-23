@@ -161,7 +161,7 @@ class products extends commonModel
 		}
 	}
 
-	public function get_cate_num()
+	public function get_cate_num($pid = 0)
 	{
 		if ($this->cid != null) {
 			return $this->get_cart_indicate($this->cid);
@@ -173,13 +173,15 @@ class products extends commonModel
 	public function get_cart_indicate($uid)
 	{
 		//GET CART NUMBER
+		
 		$arr = [
 			'tbl_name' => 'mycart',
 			'action' => 'select',
 			'data' => [],
-			'condition' => ["manual" => ["cid=$uid AND cart_edit_flag = 1"]],
+			'condition' => ["cid=$uid","cart_edit_flag = 1"],
 			'query-exc' => true
 		];
+
 		$flag = $this->generateQuery($arr);
 		if ($flag['status']) {
 			$res = $flag['data'];
@@ -192,6 +194,39 @@ class products extends commonModel
 		return $cart_indicate;
 	}
 
+	public function get_cart_item_count($pid){
+		
+		//also PID get cart number for particular item
+		if ($this->cid != null) {
+		
+			$arr = [
+				'tbl_name' => 'mycart',
+				'action' => 'join',
+				'data' => ['manual'=>['IF(products.stock > mycart.quantity,mycart.quantity,products.stock) as quantity']],
+				'join_param' => [
+					['products', 'left_join', 'p_id', 'p_id'," AND cid=$this->cid AND mycart.cart_edit_flag = 1 AND mycart.p_id='$pid'"]
+				],
+				'condition' => ["manual"=>["products.p_id='$pid'"]],
+				'query-exc' => true
+			];
+
+			$flag = $this->generateQuery($arr);
+			
+			if ($flag['status']) {
+				$res = $flag['data'];
+				if (count($res)>0) {
+					$cart_item_count = $res[0]['quantity'];
+				} else {
+					$cart_item_count = 0;
+				}
+			}
+		}else{
+			$cart_item_count = 0;
+		}
+		return $cart_item_count;
+
+	}
+
 	public function myfav()
 	{
 		if ($this->cid == null) {
@@ -199,7 +234,7 @@ class products extends commonModel
 		} else {
 			$arr = [
 				'tbl_name' => 'myfav',
-				'data' => [],
+				'data' => ['created_at','p_id'],
 				'action' => 'select',
 				'condition' => ['cid=' . $this->cid],
 				'query-exc' => true
@@ -377,7 +412,7 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',4)) as catesets"]],
+				'data' => ['manual' => ["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}default_cart=',0,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',4)) as catesets"]],
 				'join_param' => [
 					['product_category', 'left_join', 'cate_id', 'cate_id']
 				],
@@ -389,9 +424,10 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id,'{DATA_SEP}favExistCid=',(select if(count(myfav.p_id)=0,'',myfav.p_id) from myfav where myfav.p_id = products.p_id AND myfav.cid = '" . $this->cid . "') SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
+				'data' => ['manual' => ["$tmptbl.s_no,concat(product_category.cate_name,'{CATE_SEP}',SUBSTRING_INDEX(GROUP_CONCAT('p_id=',$tmptbl.p_id,'{DATA_SEP}p_img=',$tmptbl.p_img,'{DATA_SEP}p_name=',$tmptbl.p_name,'{DATA_SEP}price=',$tmptbl.price,'{DATA_SEP}offer=',$tmptbl.offer,'{DATA_SEP}default_cart=',if(mycart.quantity IS NULL OR mycart.quantity ='',0,if(products.stock > mycart.quantity,mycart.quantity,products.stock)),'{DATA_SEP}unit=',$tmptbl.unit,'{DATA_SEP}stock=',$tmptbl.stock,'{DATA_SEP}cate_id=',product_category.cate_id,'{DATA_SEP}favExistCid=',(select if(count(myfav.p_id)=0,'',myfav.p_id) from myfav where myfav.p_id = products.p_id AND myfav.cid = '" . $this->cid . "') SEPARATOR '{ROW_SEP}'),'{ROW_SEP}',5)) as catesets"]],
 				'join_param' => [
-					['product_category', 'left_join', 'cate_id', 'cate_id']
+					['product_category', 'left_join', 'cate_id', 'cate_id'],
+					['mycart','left_join','p_id','p_id',' AND mycart.cid="'.$this->cid.'" AND mycart.cart_edit_flag=1']
 				],
 				'condition' => ['raw-manual' => ["WHERE $tmptbl.is_subitem = 0 GROUP BY $tmptbl.cate_id ORDER BY RAND()"]],
 				'limit' => 4,
@@ -399,6 +435,7 @@ class products extends commonModel
 			];
 		}
 		$flag = $this->generateQuery($arr);
+		// echo $flag;exit;
 		if ($flag['status'] == 'success') {
 			return ['status' => true, 'data' => $flag['data'], 'message' => 'fetched successfully'];
 		} else {
@@ -492,7 +529,7 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_name,$tmptbl.unit,$tmptbl.price,$tmptbl.offer,mycart.quantity,mycart.cart_id,mycart.cart_edit_flag"]],
+				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.unit,$tmptbl.price,$tmptbl.offer,mycart.quantity,mycart.cart_id,mycart.cart_edit_flag"]],
 				'join_param' => [
 					['mycart', 'right_join', 'p_id', 'p_id']
 				],
@@ -550,7 +587,7 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,0 as default_cart,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param' => [
 					['product_category', 'left_join', 'cate_id', 'cate_id']
 				],
@@ -563,18 +600,21 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
+				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.price,IF(mycart.quantity IS NULL OR mycart.quantity = '',0,if(products.stock>mycart.quantity,mycart.quantity,products.stock)) as default_cart,$tmptbl.offer,$tmptbl.unit,$tmptbl.stock,myfav.cid AS favExistCid,product_category.cate_img as img,(SELECT cate_name FROM product_category WHERE cate_id=products.cate_id) AS cate"]],
 				'join_param' => [
 					['myfav', 'left_join', 'p_id', 'p_id', ' AND myfav.cid = ' . $this->cid],
+					['mycart', 'left_join', 'p_id', 'p_id', ' AND mycart.cid = ' . $this->cid.' AND mycart.cart_edit_flag = 1'],
 					['product_category', 'left_join', 'cate_id', 'cate_id']
 				],
 				'condition' => ['manual' => ["product_category.cate_id='$id'"]],
-				'limit' => 10,
+				'limit' => 30,
 				'order' => ['p_id', 'asc'],
 				'query-exc' => true
 			];
+		
 		}
 		$flag = $this->generateQuery($arr);
+		// echo $flag;exit;
 		if ($flag['status']) {
 			$res = $flag['data'];
 			return ['status' => 1, 'data' => $res, 'cartnum' => $this->get_cate_num()];
@@ -725,7 +765,7 @@ class products extends commonModel
 					$arr = [
 						'tbl_name' => 'products',
 						'action' => 'update',
-						'data' => ["subset_id=$cid"],
+						'data' => ["subset_id=$cid","is_subitem=1"],
 						'condition' => ["p_id=$pid"],
 						'query-exc' => true
 					];
@@ -845,11 +885,11 @@ class products extends commonModel
 			$p_id = $data['p_id'];
 			$rating = $data['rating'];
 			$review = $data['reviewmsg'];
-			if (preg_match('/[^a-zA-Z0-9\s]/', $review)) {
-				return ['status' => false, "data" => [], 'message' => 'Sepcial chars found!, Please remove it.'];
-			} else {
-				$review = htmlspecialchars($review);
-			}
+			// if (preg_match('/[^a-zA-Z0-9\s]/', $review)) {
+			// 	return ['status' => false, "data" => [], 'message' => 'Sepcial chars found!, Please remove it.'];
+			// } else {
+			// 	$review = htmlspecialchars($review);
+			// }
 			$arr = [
 				'tbl_name' => 'review',
 				'action' => 'insert',
@@ -1472,10 +1512,10 @@ class products extends commonModel
 		];
 
 		$flag = $this->generateQuery($arr);
+
 		if ($flag['status'] == 'success') {
 			if (count($flag['data']) > 0) {
-				$db_product = json_decode($flag['data'][0]['total_product'], true);
-
+				$db_product = unserialize($flag['data'][0]['total_product']);
 				if (count($db_product) !== count($product_list)) {
 					return ['status' => false, 'data' => [], 'message' => 'Changes in cart items'];
 				}
@@ -1516,11 +1556,10 @@ class products extends commonModel
 				'condition' => ['manual' => ["cid='" . $this->cid . "'"]],
 				'query-exc' => true
 			]);
-
 			$arr = [
 				'tbl_name' => 'cc_request',
 				'action' => 'insert',
-				'data' => ["cid=" . $this->cid, "cc_price=TBD", "total_product=" . json_encode($data), "req_status=1", "req_date=".PHP_CURRENTDATE],
+				'data' => ["cid=" . $this->cid, "cc_price=TBD", "total_product=" . serialize($data), "req_status=1", "req_date=".PHP_CURRENTDATE],
 				'query-exc' => true
 			];
 			if ($this->generateQuery($arr)['status'] == 'success') {

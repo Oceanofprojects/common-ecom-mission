@@ -154,7 +154,7 @@ border-radius:5px;
     z-index:15;
     display: none;
     overflow: scroll;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 #mycarttbl,
@@ -163,13 +163,15 @@ border-radius:5px;
     border-collapse: collapse;
 }
 
-#mycarttbl th {
+#mycarttbl th,#myfavtbl th {
     background: #123;
     color: #ddd;
     text-transform: capitalize;
+    padding: 5px;
+
 }
 
-#mycarttbl th,
+#myfavtbl td,
 #mycarttbl td {
     border: .2px solid rgba(0, 0, 0, .3);
     padding: 5px;
@@ -183,6 +185,12 @@ border-radius:5px;
 #mycarttbl td {
     text-align: left;
 }
+.cart_img_holder{
+  height:100px;
+  width:100px;
+  object-fit: cover;
+}
+
 
 .slider-layer{
   display:flex;

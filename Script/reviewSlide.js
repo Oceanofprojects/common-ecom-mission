@@ -5,7 +5,7 @@ if(review.data.length!==0){
 $('#review_bxs').empty();
   for(let i=0;i<review.data.length;i++){
     data = review.data[i];
-    $('#review_bxs').append('<div class="slide swiper-slide"><div style="border:1px solid rgba(0,0,0,.4);border-radius:5px;box-shadow:2px 2px 10px 3px rgba(0,0,0,.3);background:#fff;padding:20px;margin:0px 10%"><div style="display:flex;justify-content:flex-start;align-items:center"><img style="height:50px;width:50px;border-radius:50%" src="assets/common-images/profiles/'+data.profile+'.jpg" alt=""  id="testi_profile"/><div>&nbsp;&nbsp;<span id="testi_name">'+data.name+'</span><span id="testi_city">'+data.location+'</span>, <small id="testi_rating">'+getStarts(data.rating)+'</small></div></div><br/><p id="testi_message" style="padding:0px 10px">'+data.review+'</p><br/><h5 style="padding:10px" align="right" id="testi_time">'+data.created_at+'</h5></div></div>');
+    $('#review_bxs').append('<div class="slide swiper-slide"><div style="border:1px solid rgba(0,0,0,.4);border-radius:5px;box-shadow:2px 2px 10px 3px rgba(0,0,0,.3);background:#fff;padding:20px;margin:0px 10%;width:70%"><div style="display:flex;justify-content:flex-start;align-items:center"><img style="height:50px;width:50px;border-radius:50%" src="assets/common-images/profiles/'+data.profile+'.jpg" alt=""  id="testi_profile"/><div>&nbsp;&nbsp;<span id="testi_name">'+data.name.toUpperCase()+'</span> - <span id="testi_city">'+data.location+'</span>, <small id="testi_rating">'+getStarts(data.rating)+'</small></div></div><br/><p id="testi_message" style="padding:0px 10px;text-align:left">'+data.review+'</p><br/><h5 style="padding:10px" align="right" id="testi_time">'+data.created_at+'</h5></div></div>');
     
     // console.log(review.data[i].name)
   }

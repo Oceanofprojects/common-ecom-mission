@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="Style/global.css">
     <style media="screen">
     #frm {
-        width: 50%;
+        width: 90%;
         min-width: 250px;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .2);
         border-radius: 10px;
@@ -174,6 +174,10 @@ width:90%;
                     <tr>
                         <td>Name<sup>*</sup></td>
                         <td><input type="text" id="p_name" placeholder="Product name" name="p_name"></td>
+                    </tr>
+                    <tr>
+                        <td>Net weight(g)<sup>*</sup></td>
+                        <td><input type="number" id="net_weight" placeholder="Product weight" name="net_weight"></td>
                     </tr>
                     <tr>
                         <td>Description<sup>*</sup></td>
