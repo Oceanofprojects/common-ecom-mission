@@ -71,7 +71,9 @@ class form
         $ele = null;
         switch ($this->form_type) {
             case 'login_form':
-                $ele = '<form action="#" class="form" id="frm">
+                $ele = '<form action="index.php" method="get" class="form" id="frm">
+                <input type="hidden" value="3d95f6ccf7e91c1cd9ef2e1533131466c515c5d559419556a2a439e7110d7716" name="key">
+                <input type="hidden" value="customer" name="controller">
                 <div class="title">Login</div>
                 <br>
                 <p style="color:tomato" id="dis_err"></p>
@@ -84,9 +86,9 @@ class form
                   <div class="underline"></div>
                 </div>
                 <br>
-                <div class="option"><a href="">Forgot password</a></div>
+                <!--- <div class="option"><a href="">Forgot password</a></div> -->
                 <div class="input-box button">
-                  <input type="button" style="background:cornflowerblue" class="btn" value="Login" onclick="login()">
+                  <input type="submit" style="background:cornflowerblue" class="btn" value="Login" onsubmit="return login()">
                 </div>
                         <br>
                         <div class="option">New user? Please <a href="index.php?key=7ab9f0816f33d9932efd3468b387bd287546f9ee276cc0d53f75336761a9959d&controller=home">Signup</a></div>
@@ -118,7 +120,7 @@ class form
                         <input type="number" placeholder="Enter phone number" name="' . $this->field_lock('ph_num') . '" min="1" required />
                     </div>
                     <div class="input-box">
-                        <label>Whatspp Number<sup class="imp">*</sup></label>
+                        <label>Whatspp Number</label>
                         <input type="number" placeholder="Enter whatspp number" name="' . $this->field_lock('whatsapp_num') . '" min="1" />
                     </div>
                 </div>
@@ -149,26 +151,26 @@ class form
                 </div>
                 <div class="input-box address">
                     <label>Address<sup class="imp">*</sup></label>
-                    <input type="text" name="' . $this->field_lock('address_1') . '" placeholder="Enter street address" required />
-                    <input type="text" name="' . $this->field_lock('address_2') . '" placeholder="Enter street address line 2" required />
+                    <input type="text" name="' . $this->field_lock('address_1') . '" placeholder="Enter street address*" required />
+                    <input type="text" name="' . $this->field_lock('address_2') . '" placeholder="Enter street address line 2 (Optional)"/>
                     <div class="column">
-                        <input type="text" placeholder="Enter your Country" name="' . $this->field_lock('country') . '" />
-                        <input type="text" placeholder="Enter your State" name="' . $this->field_lock('state') . '" />
+                        <input type="text" placeholder="Enter your Country (Optional)" name="' . $this->field_lock('country') . '" />
+                        <input type="text" placeholder="Enter your State*" name="' . $this->field_lock('state') . '" required/>
                     </div>
                     <div class="column">
-                        <input type="text" placeholder="Enter your city" name="' . $this->field_lock('city') . '" required />
-                        <input type="number" placeholder="Enter postal code" min="1" name="' . $this->field_lock('pin_code') . '" required />
+                        <input type="text" placeholder="Enter your city*" name="' . $this->field_lock('city') . '" required />
+                        <input type="number" placeholder="Enter postal code*" min="1" name="' . $this->field_lock('pin_code') . '" required />
                     </div>
                 </div>
     
                 <div class="column">
                     <div class="input-box">
                         <label>Password<sup class="imp">*</sup></label>
-                        <input type="password" name="' . $this->field_lock('pwd') . '" placeholder="Enter new password for account" required />
+                        <input type="password" name="' . $this->field_lock('pwd') . '" placeholder="Enter new password" required />
                     </div>
                     <div class="input-box">
                         <label>Confirm password<sup class="imp">*</sup></label>
-                        <input type="password" name="' . $this->field_lock('con_pwd') . '" placeholder="Enter confirm password for account" required />
+                        <input type="password" name="' . $this->field_lock('con_pwd') . '" placeholder="Enter confirm password" required />
                     </div>
                 </div><br>
                 <span style="padding:10px 0px" id="dis_err"></span>

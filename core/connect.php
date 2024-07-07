@@ -5,7 +5,8 @@ class Connect
     private $host, $user, $pass, $database, $charset;
     public function __construct()
     {
-        $db_cfg = require_once __DIR__.'/../Config/database.php'; //EDITED
+        require_once __DIR__.'/../Config/database.php'; //EDITED
+        require_once __DIR__.'/../Config/global.php'; //EDITED
         $this->driver = DB_DRIVER;
         $this->host = DB_HOST;
         $this->user = DB_USER;
@@ -22,7 +23,7 @@ class Connect
             return $connection; //return Connection
         } catch (PDOException $e) {
             //We throw the exception
-            throw new Exception('Problem establishing the connection.');
+            throw new Exception('Problem establishing the connection.'.(DEBUG)?$e->getMessage():'');
         }
     }
 }

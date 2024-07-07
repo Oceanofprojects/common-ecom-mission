@@ -2,13 +2,13 @@
 
 require_once __DIR__ . "/../Controller/commonController.php"; //COMMON CONTOLLER
 
-require('Lib/form/class.form_plate.php');      
-
+require('./Lib/form/class.form_plate.php');      
 
 class homeController extends commonController
 {
 
   public $form_plate;
+  public $bis_info;
 
     public function __construct()
     {
@@ -16,7 +16,6 @@ class homeController extends commonController
         require_once __DIR__ . "/../Model/productModel.php";
         require_once __DIR__.'/../Controller/spacesettingController.php';
         $this->form_plate = new form();
-
         $this->validateResults = []; //init for auto validate looping arr in commonController.php
 
         //Product Model
@@ -122,6 +121,5 @@ class homeController extends commonController
 
 
 }
-
 
 ?>

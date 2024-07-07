@@ -33,7 +33,8 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('assets/common-images/bg.png');
+      background:rgba(0,0,0,.3);
+
         background-position: center;
         background-attachment: fixed;
         background-size: 200px;
@@ -191,10 +192,23 @@ background:linear-gradient(rgba(256,256,256,.8),rgba(256,256,256,.8)),url('asset
             row-gap: 15px;
         }
     }
+    #video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
     </style>
 </head>
 
 <body>
+<video id="video-background" autoplay loop muted>
+  <source src="assets/videos/bg/flower_garden.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
     <section class="container">
         <div style="text-align:right;">
             <a style="font-size:12pt;text-decoration:none;color:#123;padding:0px 5px;"

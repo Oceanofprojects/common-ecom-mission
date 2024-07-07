@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
   setInterval(loadDis,2000);
 });
@@ -60,19 +61,12 @@ function updtSetting(){
 function login(){
   if($('#cus_idnty').val().trim().length == 0){
     $('#dis_err').text('Please enter Name or Mobile or Email or CID').css('color','tomato');
+    return false;
   }else if($('#pwd').val().trim().length == 0){
     $('#dis_err').text('Please enter your password').css('color','tomato');
+    return false;
   }else{
-    performAjx('index.php', 'get','key=3d95f6ccf7e91c1cd9ef2e1533131466c515c5d559419556a2a439e7110d7716&controller=customer&'+$('#frm').serialize(), (res) => {
-      d = JSON.parse(res);
-      if(d.status){
-        $('#dis_err').text('');
-        $('#frm')[0].reset();
-      window.open('index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6','_self');
-      }else{
-        $('#dis_err').text(d.msg).css('color','tomato');
-      }
-    });
+    return true;
   }
 }
 
@@ -206,36 +200,20 @@ function check_price_digit(x) {
         }
     }
 }
-
 function dis_msg_box(color,bgcolor,content){
-  $('#common_dis_msg_box').slideDown(100);
-  $('#common_dis_msg_box').css('background-color',bgcolor);
-  $('#common_dis_msg_box').css('color',color);
-  $('#msg_content_to_display').text(content);
-  setTimeout(function(){
-  $('#common_dis_msg_box').slideUp(3000);
-  },2000);
+  $('#common_dis_msg_box').show();
+  let rnd_id = Math.floor(Math.random()*999999);
+  $('#common_dis_msg_box').append('<div id="msg_flt_'+rnd_id+'" style="background:'+bgcolor+';color:'+color+';" class="msg_content_to_display">'+content+'</div>');
+  setTimeout(()=>{
+    $('#msg_flt_'+rnd_id).hide(1000);
+  },2000)
 }
 
-// function getFav() {
-//     $.ajax({
-//         url: 'EP.php?key=myfav&uid=' + uid,
-//         type: 'get',
-//         success: function(e) {
-//             data = JSON.parse(e);
-//             if (parseInt(data.status)) {
-//
-//
-//             }
-//         }
-//     });
-// }
 function getMyFav(){
   performAjx('index.php', 'get','key=94f224e95c2fe21dfe0085d5665bc248d55a0c1be7dc574729ebaa12d97b4ed3&controller=home&action=index', (res) => {
     myfavComponent(JSON.parse(res))
   });
 }
-//94f224e95c2fe21dfe0085d5665bc248d55a0c1be7dc574729ebaa12d97b4ed3
 function cls_my_fav() {
     $('.myfav').fadeOut(100);
 }
@@ -333,7 +311,11 @@ function validate(flow){
 		return [false,'warning','Please select image !'];
 	}else if($('#p_name').val().trim()==''){
 		return [false,'warning','Product name field required !'];
-	}else if($('#desc').val().trim()==''){
+	}
+  // else if($('#net_weight').val().trim()==''){
+	// 	return [false,'warning','Net weight field required !'];
+	// }
+  else if($('#desc').val().trim()==''){
 		return [false,'warning','Product description field required !'];
 	}else if($('#price').val().trim()==''){
 		return [false,'warning','Price field required !'];
@@ -341,8 +323,6 @@ function validate(flow){
 		return [false,'warning','Unit field required !'];
 	}else if($('#stock').val().trim()==''){
 		return [false,'warning','Stock field required !'];
-	}else if($('#tags').val().trim()==''){
-		return [false,'warning','Tags field required !'];
 	}else{
 		return [true,'success',''];
 	}
@@ -420,11 +400,10 @@ function logout(){
 function checkout(){
   performAjx('index.php', 'get','controller=product&key=c2d97bc89eeb6ca8b1f370a7d3d3f0c990626a58815536a103e0068a4207cbcf', (res) => {
     d = JSON.parse(res)
-
     if(d.status){
       cls_my_cart();
-      window.open('index.php?key=a773cdf359b5e5059a18b9c4d994502d457261015c98d6c22575997dfc8fc544&controller=product','_self');
       dis_msg_box('#000','lightgreen',d.message);
+      window.open('index.php?key=a773cdf359b5e5059a18b9c4d994502d457261015c98d6c22575997dfc8fc544&controller=product','_self');
     }else{
       dis_msg_box('#000','tomato',d.message);
     }

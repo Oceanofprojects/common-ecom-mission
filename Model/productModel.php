@@ -2,13 +2,14 @@
 
 require_once __DIR__ . '/../core/connect.php';
 require_once __DIR__ . '/../Model/commonModel.php';
+require_once __DIR__ . '/../Model/orderModel.php';
 require_once __DIR__ . '/../Model/customerModel.php';
-
+require_once __DIR__ . '/../Model/paymentModel.php';
 class products extends commonModel
 {
 	use userData;
 	public $db;
-	public $cid;
+	// public $cid;
 	public function __construct()
 	{
 		$connect = new Connect();
@@ -529,7 +530,7 @@ class products extends commonModel
 			$arr = [
 				'tbl_name' => $tmptbl,
 				'action' => 'join',
-				'data' => ['manual' => ["$tmptbl.p_id,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.unit,$tmptbl.price,$tmptbl.offer,mycart.quantity,mycart.cart_id,mycart.cart_edit_flag"]],
+				'data' => ['manual' => ["$tmptbl.p_id,IF(products.stock>0,'','Out of stock') as stock_state,$tmptbl.p_img,$tmptbl.p_name,$tmptbl.unit,$tmptbl.price,$tmptbl.offer,mycart.quantity,mycart.cart_id,mycart.cart_edit_flag"]],
 				'join_param' => [
 					['mycart', 'right_join', 'p_id', 'p_id']
 				],
@@ -722,6 +723,9 @@ class products extends commonModel
 				return ['status' => false, 'data' => [], 'message' => $fileFlag['message']];
 			}
 		}
+		if(empty($_POST['offer'])){
+			$_POST['offer']=0;
+		}
 
 		$arr = [
 			'tbl_name' => 'products',
@@ -729,6 +733,7 @@ class products extends commonModel
 			'data' => $this->genArAssocToColSep($_POST),
 			'query-exc' => true
 		];
+
 		$flag = $this->generateQuery($arr);
 		if ($flag['status']) {
 			return ['status' => true, 'data' => [], 'message' => 'Product uploaded Successfully'];
@@ -912,8 +917,11 @@ class products extends commonModel
 		} else {
 			$arr = [
 				'tbl_name' => 'mycart',
-				'action' => 'select',
-				'data' => ['p_id', 'quantity'],
+				'action' => 'join',
+				'data' => ['manual'=>['mycart.p_id,mycart.quantity,products.net_weight,products.price,products.offer']],
+				'join_param'=>[
+					['products', 'left_join', 'p_id', 'p_id']
+				],
 				'condition' => ["cid=" . $this->cid, "cart_edit_flag=1"],
 				'query-exc' => true
 			];
@@ -937,7 +945,7 @@ class products extends commonModel
 				for ($i = 0; $i < count($mycart_data); $i++) {//get customer ordered  product ID and qunty sep
 					$cus_or_pr_id_list[] = '"' . $mycart_data[$i]['p_id'] . '"';
 					$cur_or_data_list[$i] = ['p_id' => $mycart_data[$i]['p_id'], 'qnty' => $mycart_data[$i]['quantity']];
-					$product_detail[$i] = ['p_id' => $mycart_data[$i]['p_id'], 'p_name' => $this->getProductById($mycart_data[$i]['p_id'])[1], 'qnty' => $mycart_data[$i]['quantity']];
+					$product_detail[$i] = ['p_id' => $mycart_data[$i]['p_id'], 'p_name' => $this->getProductById($mycart_data[$i]['p_id'])[1], 'qnty' => $mycart_data[$i]['quantity'],'weight'=>$mycart_data[$i]['net_weight'],'price'=>$mycart_data[$i]['price'],'offer'=>$mycart_data[$i]['offer']];
 				}
 
 				$pro_data_list_flag = $this->getProductOriginalQntyForCheckout($cus_or_pr_id_list);
@@ -960,6 +968,7 @@ class products extends commonModel
 	public function cQtyWToQty($cur_or_data_list, $pro_data_list, $product_detail, $cus_or_pr_id_list)
 	{
 		$total = 0;
+		$of = 0;
 		sort($cur_or_data_list);
 		sort($pro_data_list);
 		for ($i = 0; $i < count($pro_data_list); $i++) {
@@ -968,14 +977,16 @@ class products extends commonModel
 				$p_name = $this->getProductById($pro_data_list[$i]['p_id']);
 				$outOfStockItems[] = ($p_name[0]) ? $p_name[1] : '';
 				//outof stock return
-				return ['status' => false, 'data' => [], 'message' => "Sorry, (" . implode(',', $outOfStockItems) . ") product is OUT OF STOCK, Please remove from cart !."];
+				return ['status' => false, 'data' => [], 'message' => "We are sorry, (" . implode(',', $outOfStockItems) . ") product is OUT OF STOCK, Please remove from cart !."];
 			} else {
-				$total += $this->calcOffer($pro_data_list[$i]['price'], $pro_data_list[$i]['offer'], $cur_or_data_list[$i]['qnty']);
+				$p_info = $this->calcOffer($pro_data_list[$i]['price'], $pro_data_list[$i]['offer'], $cur_or_data_list[$i]['qnty']);
+				$total += $p_info['total'];
+				$of += $p_info['off'];
 				$orderRes[$i] = ['p_id' => $pro_data_list[$i]['p_id'], 'quantity' => $qnty];
 			}
 		}//CALC ORDE END
 
-		return ['status' => true, 'data' => [], 'message' => "All products available.", "upt_qnty" => $orderRes, "product_detail" => $product_detail, 'ids' => $cus_or_pr_id_list, 'total_cost' => $total];
+		return ['status' => true, 'data' => [], 'message' => "All products available.", "upt_qnty" => $orderRes, "product_detail" => $product_detail, 'ids' => $cus_or_pr_id_list, 'total_cost' => $total,"off_price"=>$of];
 
 	}
 
@@ -983,76 +994,122 @@ class products extends commonModel
 	{
 		$offer = ($price * $off) / 100;
 		$or_price = $price - $offer;
-		return $or_price * $qnty;
+		return ['total'=>$or_price * $qnty,'off'=>$offer];
 	}
-
-	public function changeCcReqAccess()
-	{
-		if ($this->cid == null) {
-			return ['status' => false, 'data' => [], 'message' => "Please login to make action !"];
-		} else {
-			$arr = [
-				'tbl_name' => 'cc_request',
-				'action' => 'update',
-				'data' => ['req_status=0'],
-				'condition' => ["cid=" . $this->cid],
-				'query-exc' => true
-			];
-			$flag = $this->generateQuery($arr);
-			if ($flag['status'] == 'success') {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-	}
-
 
 	public function checkoutFinal()
 	{
+
+
+		if(!isset($_REQUEST['cc_service']) && empty($_REQUEST['cc_service'])){
+			echo json_encode(['status' => false, 'data' => [], 'message' => "Oops, Something went wrong,(cc param empty/not found)"]);exit;
+		}
+		$services = CC_GLOBAL_SERIVE_KEY;
+
+		if (isset($_GET['cc_service']) && !empty($_GET['cc_service']) && in_array($_GET['cc_service'], $services)) {
+			// if ($_GET['cc_service'] == 'pf') {
+			//     $cc = COURIER['PROFESSIONAL_CC'];
+			// } else 
+			if ($_GET['cc_service'] == 'st') {
+				$cc = COURIER['ST_CC'];
+			} else if ($_GET['cc_service'] == 'dtdc') {
+				$cc = COURIER['DTDC'];
+			} else if ($_GET['cc_service'] == 'indp') {
+				$cc = COURIER['INDIA_POST'];
+			}
+		} else {
+			$cc = COURIER[DEFAULT_COURIER_SERVICE];
+		}
+		
 		$cart_date = date('Y-m-d');
 		$checkout_flag = $this->checkout();
-		$client_item_count = base64_decode(base64_decode($_GET['item']));//dbl check cart client count
-		$client_item_count = (is_numeric($client_item_count)) ? intval($client_item_count) : 0;
-		// echo '<pre>'.json_encode($checkout_flag,JSON_PRETTY_PRINT);exit;
+		$tot_qnt = 0;
 
-		$tot_qnt = null;
 		foreach ($checkout_flag['product_detail'] as $item) {
 			$tot_qnt += $item['qnty'];
+			$net_weight += $item['weight'];
 		}
-		if (($client_item_count - 9050) !== $tot_qnt) {//9050 temp
-			die(json_encode(['status' => false, 'data' => [], 'message' => 'item count mismatched !', 'ac' => 'reload_required']));
-		}
-		if ($checkout_flag['status']) {//if all product aval
-			$upPrds_flag = $this->updateCusPrdWTOrPrd($checkout_flag['upt_qnty']);
-			if ($upPrds_flag['status']) {
-				//CREATE NEW ORDER
-				$createOrder = $this->createNewOrder($cart_date, $checkout_flag['product_detail']);
-				if ($createOrder['status']) {
-					//DISABLE CART EDIT OPTION
 
-					if ($this->changeCcReqAccess()) {
-						if ($this->disableCartEdit(implode(',', $checkout_flag['ids']), $cart_date)) {
-							return ['status' => true, 'data' => $createOrder['data'], 'message' => "Your order successfully Pleaced. You will track your order status in "];
-							//END OF CART PROCCESS
-						} else {
-							return ['status' => false, 'data' => [], 'message' => "Oops, Something went wrong,(Err in final)"];
-						}//END OF CART PROCCESS
-					} else {
-						return ['status' => false, 'data' => [], 'message' => "Oops, Something went wrong, Update CC req"];
+		$amt_hash = hash_hmac('sha256',$checkout_flag['total_cost'],'AMT_HASH_9050');
+		$qnty_hash = hash_hmac('sha256',$tot_qnt,'QNT_HASH_9050');
+
+		if(isset($_REQUEST['trans'])){
+			$trans_data = explode('_',$_REQUEST['trans']); 
+			if(count($trans_data) == 2){
+				if(hash_equals($amt_hash,$trans_data[0])){
+					if(hash_equals($qnty_hash,$trans_data[1])){
+						$orderMdl = new orderMdl();
+						$cc_price_flag = $orderMdl->get_courier_fee($net_weight,$cc);
+						if($cc_price_flag['status']){
+							$cc_price = $cc_price_flag['price'];
+							$total_cost = $cc_price + $checkout_flag['total_cost'];
+							$online_pay_cost = $total_cost * ONLINE_PAYMENT_CHARGE / 100;
+							$payment = $total_cost + $online_pay_cost;
+							$payMdl = new rayzorPayMdl();
+							$pay_load = [
+								'online_charge'=>$online_pay_cost,
+								'payment'=>round($payment),
+								'product_price'=>$checkout_flag['total_cost'],
+								'cc_price'=>$cc_price,
+								'off_price'=>$checkout_flag['off_price'],
+								'cc_id'=>$cc['SERVICE'],
+								'cc_label'=>$cc['LABEL'],
+								'order_id'=> $this->genRnd('alpha_numeric', 12)
+							];
+							$payMdl->make_payment_info($this->cid,$pay_load);
+							exit;
+						}else{
+							echo json_encode($cc_price_flag);
+							exit;
+						}
+
+						//nxt
+					}else{
+						echo json_encode(['status'=>false,'data'=>[],'message'=>'Quantity count miss matched !','details'=>'invalid hash sign']);
 					}
-				} else {
-					return ['status' => false, 'data' => [], 'message' => 'Oops, Something went wrong, (Err in Create order)'];
+				}else{
+					echo json_encode(['status'=>false,'data'=>[],'message'=>'Amount miss matched !','details'=>'invalid hash sign']);
 				}
-				//					CREATE ORDER END
-			} else {
-				return $upPrds_flag;//IF FAILED. update QNT with original product
+			}else{
+			echo json_encode(['status'=>false,'data'=>[],'message'=>'trans missing !']);
 			}
-
-		} else {
-			return $checkout_flag;
+		}else{
+			echo json_encode(['status'=>false,'data'=>[],'message'=>'trans not defined !']);
 		}
+		exit;
+
+		
+		// if ($checkout_flag['status']) {//if all product aval
+
+			
+		// 	// $upPrds_flag = $this->updateCusPrdWTOrPrd($checkout_flag['upt_qnty']);
+		// 	// if ($upPrds_flag['status']) {
+		// 	// 	//CREATE NEW ORDER
+		// 	// 	$createOrder = $this->createNewOrder($cart_date, $checkout_flag['product_detail']);
+		// 	// 	if ($createOrder['status']) {
+		// 	// 		//DISABLE CART EDIT OPTION
+
+		// 	// 		if ($this->changeCcReqAccess()) {
+		// 	// 			if ($this->disableCartEdit(implode(',', $checkout_flag['ids']), $cart_date)) {
+		// 	// 				return ['status' => true, 'data' => $createOrder['data'], 'message' => "Your order successfully Pleaced. You will track your order status in "];
+		// 	// 				//END OF CART PROCCESS
+		// 	// 			} else {
+		// 	// 				return ['status' => false, 'data' => [], 'message' => "Oops, Something went wrong,(Err in final)"];
+		// 	// 			}//END OF CART PROCCESS
+		// 	// 		} else {
+		// 	// 			return ['status' => false, 'data' => [], 'message' => "Oops, Something went wrong, Update CC req"];
+		// 	// 		}
+		// 	// 	} else {
+		// 	// 		return ['status' => false, 'data' => [], 'message' => 'Oops, Something went wrong, (Err in Create order)'];
+		// 	// 	}
+		// 	// 	//					CREATE ORDER END
+		// 	// } else {
+		// 	// 	return $upPrds_flag;//IF FAILED. update QNT with original product
+		// 	// }
+
+		// } else {
+		// 	return $checkout_flag;
+		// }
 
 	}
 
@@ -1102,8 +1159,8 @@ class products extends commonModel
 			'tbl_name' => 'mycart',
 			'action' => 'UPDATE',
 			'data' => ['cart_edit_flag=0'],
-			'condition' => ['manual' => ['p_id IN(' . $ids . ')']],
-			'query-exc' => true
+			'condition' => ['manual' => ['p_id IN(' . $ids . ') AND cid='.$this->cid]],
+			'query-exc' => true	
 		];
 		$flag = $this->generateQuery($arr);
 		if ($flag['status'] == 'success') {
@@ -1113,25 +1170,18 @@ class products extends commonModel
 		}
 	}
 
-	public function createNewOrder($cart_date, $product_list)
+	public function createNewOrder($oid,$paymentId,$cart_date, $product_list)
 	{
-		$fileFlag = $this->uploadFile('assets/payment_proof_images/', 'file1');
-		if ($fileFlag['status']) {
-			$fname = $fileFlag['data'];
-		} else {
-			return ['status' => false, 'data' => [], 'message' => "Err in store payment proof image"];
-		}
-		$order_id = $this->genRnd('alpha_numeric', 10);
 		$order_status = 'Pending';
 		$arr = [
 			'tbl_name' => 'myorder',
 			'action' => 'insert',
-			'data' => ["order_id=" . $order_id, "payment_proof=" . $fname, "cid=$this->cid", "product_list=" . json_encode($product_list), "cart_date=$cart_date", "cart_status=$order_status"],
+			'data' => ["order_id=" . $oid,"cid=$this->cid", "product_list=" . json_encode($product_list),"payment_id=$paymentId", "cart_date=$cart_date", "cart_status=$order_status"],
 			'query-exc' => true
 		];
 		$flag = $this->generateQuery($arr);
 		if ($flag['status'] == 'success') {
-			return ['status' => true, 'data' => $order_id, 'message' => $flag['msg']];
+			return ['status' => true, 'data' => $oid, 'message' => $flag['msg']];
 		} else {
 			return ['status' => false, 'data' => [], 'message' => $flag['msg']];
 		}
@@ -1381,7 +1431,6 @@ class products extends commonModel
 		} else {
 			$arr = [
 				'tbl_name' => 'myorder',
-				//					'data'=>['manual'=>['order_id as id,cart_date as date,to_base64(cart_status) as status']],
 				'data' => ['manual' => ['cart_date as date ,cart_status as status,order_id as id,product_list as list']],
 				'action' => 'select',
 				'condition' => ["cid=" . $this->cid, "order_id=" . $order_id],
@@ -1427,56 +1476,17 @@ class products extends commonModel
 		if ($this->cid == null) {
 			return ['status' => false, 'data' => [], 'message' => "Please login to make action !"];
 		} else {
-			if (isset($_FILES['file1'])) {
-				if ($_FILES['file1']['size'] !== 0) {
+			// if (isset($_FILES['file1'])) {
+				// if ($_FILES['file1']['size'] !== 0) {
 					return $this->checkoutFinal();//Client final checkout
-				} else {
-					return ['status' => false, 'data' => [], 'message' => "Please select payment proof image"];
-				}
-			}
+				// } else {
+					// return ['status' => false, 'data' => [], 'message' => "Please select payment proof image"];
+				// }
+			// }
 		}
 	}
 
-	public function getCcReqFromInv()
-	{
-		return $this->generateQuery([
-			'tbl_name' => 'cc_request',
-			'action' => 'select',
-			'data' => [],
-			'condition' => ['manual' => ["cid='" . $this->cid . "'"]],
-			'order' => ['cc_req_id', 'desc'],
-			'limit' => 1,
-			'query-exc' => true
-		]);
-		;
-	}
-
-	public function getCcReq($defid = '')
-	{
-		$arr = [
-			'tbl_name' => 'cc_request',
-			'action' => 'select',
-			'data' => [],
-			'query-exc' => true
-		];
-		if (!empty($defid)) {
-			$arr['condition'] = ["cid=" . $defid, "req_status=1"];
-			$arr['order'] = ['cc_req_id', 'desc'];
-			$arr['limit'] = 1;
-		} else {
-			$arr['condition'] = ["req_status=1"];
-			$arr['order'] = ['cc_req_id', 'asc'];
-		}
-		$flag = $this->generateQuery($arr);
-		if ($flag['status'] == 'success') {
-			if (count($flag['data']) > 0) {
-				return ['status' => true, 'data' => $flag['data'], 'message' => "CC reqst"];
-			} else {
-				return ['status' => false, 'data' => [], 'message' => "Needs to raise CC req"];
-			}
-		}
-	}
-
+	
 	public function compare_my_assoc($arr1, $arr2)
 	{
 
@@ -1498,96 +1508,7 @@ class products extends commonModel
 
 
 	}
-
-	public function is_any_new_product_in_cart($id, $product_list)
-	{
-		$arr = [
-			'tbl_name' => 'cc_request',
-			'action' => 'select',
-			'condition' => ['manual' => ["cid='" . $id . "'", "req_status=1"]],
-			'order' => ['cc_req_id', 'desc'],
-			'limit' => 1,
-			'data' => [],
-			'query-exc' => true
-		];
-
-		$flag = $this->generateQuery($arr);
-
-		if ($flag['status'] == 'success') {
-			if (count($flag['data']) > 0) {
-				$db_product = unserialize($flag['data'][0]['total_product']);
-				if (count($db_product) !== count($product_list)) {
-					return ['status' => false, 'data' => [], 'message' => 'Changes in cart items'];
-				}
-				if ($this->compare_my_assoc($db_product, $product_list)) {
-					return ['status' => true, 'data' => [], 'message' => 'No changes, Good to go and cc req already exists.'];
-				} else {
-					return ['status' => false, 'data' => [], 'message' => 'Changes in cart items'];
-				}
-			} else {
-				return ['status' => false, 'data' => [], 'message' => "Needs to raise CC req"];
-			}
-		}
-	}
-
-	public function raiseCcReq($data)
-	{
-		//$data contains product id and qnty
-		if ($this->cid == null) {
-			return ['status' => false, 'data' => [], 'message' => "Please login to make action !"];
-		} else {
-			$cc_info = $this->getCcReq($this->cid);
-			if ($cc_info['status']) {
-				$check_cart_item = $this->is_any_new_product_in_cart($this->cid, $data);
-				if ($check_cart_item['status']) {
-					if (count($cc_info) > 0) {
-						return ['status' => true, 'data' => $cc_info['data'][0]['cc_price'], 'message' => 'Cc price'];
-					}
-				}
-			}
-
-
-
-			//UPDATE REQ to 0
-			$this->generateQuery([
-				'tbl_name' => 'cc_request',
-				'action' => 'update',
-				'data' => ["req_status=0"],
-				'condition' => ['manual' => ["cid='" . $this->cid . "'"]],
-				'query-exc' => true
-			]);
-			$arr = [
-				'tbl_name' => 'cc_request',
-				'action' => 'insert',
-				'data' => ["cid=" . $this->cid, "cc_price=TBD", "total_product=" . serialize($data), "req_status=1", "req_date=".PHP_CURRENTDATE],
-				'query-exc' => true
-			];
-			if ($this->generateQuery($arr)['status'] == 'success') {
-				return ['status' => true, 'data' => [], 'message' => 'Request sent successfully'];
-			} else {
-				return ['status' => false, 'data' => [], 'message' => 'err in raise cc req'];
-			}
-		}
-	}
-
-	public function upCcPrice($id, $price)
-	{
-		$arr = [
-			'tbl_name' => 'cc_request',
-			'data' => ["cc_price=$price"],
-			'action' => 'update',
-			'condition' => ["manual" => ["cid='" . base64_decode($id) . "' AND req_status=1"]],
-			'query-exc' => true
-		];
-		$flag = $this->generateQuery($arr);
-		if ($flag['status']) {
-			return ['status' => true, 'data' => $flag['data'], 'message' => "CC price updated!."];
-		} else {
-			return ['status' => false, 'data' => [], 'message' => "Err in update CC price"];
-		}
-	}
-
-
+	
 
 }//CLASS END
 

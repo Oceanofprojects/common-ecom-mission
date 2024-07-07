@@ -7,7 +7,6 @@ header("Accept: application/json");
 header('Access-Control-Allow-Headers:Access-Control-Allow-Origin,Access-Control-Allow-Methods,Content-Type');
 
 if(isset($_POST['action']) && $_POST['action']='payOrder'){
-
 $razorpay_mode='test';
 
 $razorpay_test_key='rzp_test_dLar8Yj5rx9pzZ'; //Your Test Key
@@ -35,10 +34,10 @@ $order_id = uniqid();
 $billing_name=$_POST['billing_name'];
 $billing_mobile=$_POST['billing_mobile'];
 $billing_email=$_POST['billing_email'];
-$shipping_name=$_POST['shipping_name'];
-$shipping_mobile=$_POST['shipping_mobile'];
-$shipping_email=$_POST['shipping_email'];
-$paymentOption=$_POST['paymentOption'];
+$shipping_name='shippname';
+$shipping_mobile='shipping_mobile';
+$shipping_email='shipping_email';
+$paymentOption='paymentOption';
 $payAmount=$_POST['payAmount'];
 
 $note="Payment of amount Rs. ".$payAmount;
@@ -73,6 +72,7 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 
 curl_close($curl);
+
 $orderRes= json_decode($response);
  
 if(isset($orderRes->id)){

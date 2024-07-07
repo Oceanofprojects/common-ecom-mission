@@ -60,12 +60,6 @@
         <center>
         <br>
         <h1 align="center"><b>Replacement Policy</b></h1>
-        <br><br><br>   
-        <div>
-            <p>Dear Valued Customer,
-<br>
-We hope this message finds you well and thriving in your plant-filled journey. At [Your Plant Shop], we are committed to ensuring that your experience with us is nothing short of exceptional. That's why we're thrilled to introduce our new Plant Replacement Policy, accompanied by an exciting unboxing video initiative.</p>
-        </div>
         <br><br>
         <div>
             <h3>Plant Replacement Policy:</h3>

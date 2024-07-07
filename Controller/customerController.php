@@ -86,12 +86,11 @@ class customerController extends commonController
       ['c_name', 'check', 'isNotEmpty'],
       ['ph_num', 'check', 'isNotEmpty'],
       ['ph_num', 'checkLengthMust', 10],
-      ['whatsapp_num', 'check', 'isNotEmpty'],
-      ['whatsapp_num', 'checkLengthMust', 10],
       ['email', 'check', 'isEmail'],
       ['address_1', 'check', 'isNotEmpty'],
-      ['address_2', 'check', 'isNotEmpty'],
       ['city', 'check', 'isNotEmpty'],
+      ['state', 'check', 'isNotEmpty'],
+      ['pin_code', 'check', 'isNotEmpty'],
       ['pwd', 'check', 'isConPwd'],
       ['pwd', 'check', 'isPwd'],
       ['remove', 'auto_remove']
@@ -135,6 +134,7 @@ class customerController extends commonController
 
   public function login($idnty, $pwd)
   {
+    $loginURL = 'index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home';
     $flag = $this->cusMdl->getCusListByIdnty($idnty);//getting user info
     if ($flag['status'] == 'success') {
       if (count($flag['data']) !== 0) {
@@ -145,30 +145,40 @@ class customerController extends commonController
             if ($pwds[$i]['role'] != 'block') {
               $this->checkNmakeLog($pwds[$i]['cid']);
             } else {
-              echo json_encode(['status' => false, 'data' => [], 'msg' => 'Oops!, This account blocked by admin.']);
-              exit;
+              $err_msg = 'Oops!, This account blocked by admin.';
+              //Redirecting with error message.
+              header("Location:$loginURL&err_msg=$err_msg");
             }
           } else {
             $loop++;
           }
         }
         if ($loop == $i) {
-          echo json_encode(['status' => false, 'data' => [], 'msg' => 'invalid credentials']);
+        $err_msg = 'Invalid credentials';
+        //Redirecting with error message.
+        header("Location:$loginURL&err_msg=$err_msg");
         } else {
-          echo json_encode(['status' => false, 'data' => [], 'msg' => 'Something went wrong, Contact Admin !']);
+        $err_msg = 'Something went wrong, Contact Admin !';
+        //Redirecting with error message.
+        header("Location:$loginURL&err_msg=$err_msg");
         }
         exit;
       } else {
-        echo json_encode(['status' => false, 'data' => [], 'msg' => 'Name or Email or Mobile or CID not found']);
+        $err_msg = 'Name or Email or Mobile or CID not found';
+        //Redirecting with error message.
+      header("Location:$loginURL&err_msg=$err_msg");
       }
     } else {
-      echo json_encode(['status' => false, 'data' => [], 'msg' => $flag['msg']]);
+      $err_msg = 'Error found customer !';
+      //Redirecting with error message.
+      header("Location:$loginURL&err_msg=$err_msg");
     }
   }
 
   public function checkNmakeLog($cid)
   {
     $addLog = $this->cusMdl->addCustomerLog($cid);
+   
     if ($addLog['status'] == 'success') {
       $dd = PHP_CURRENTDATE;
       $arr = [
@@ -182,7 +192,7 @@ class customerController extends commonController
       if ($data['status'] && count($data['data']) !== 0) {
           setcookie('uid', $addLog['uid'], time() + (86400 * 30), "/");
           $_SESSION['user-data'][$addLog['uid']] = $data['data'][0]['cid'];
-          echo json_encode(['status' => true, 'data' => [], 'msg' => 'Successfully logged in.']);
+          header('Location:index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6');
       } else {
         echo json_encode(['status' => false, 'data' => [], 'msg' => 'UnAnth User. Please login.']);
       }

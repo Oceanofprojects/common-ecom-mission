@@ -1,153 +1,105 @@
+<?php
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>How to Integrate Razorpay payment gateway in PHP | tutorialswebsite.com</title>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
 
-    //Pay Amount
-    jQuery(document).ready(function($){
+require 'rpay/Razorpay.php';
+session_start();
+use Razorpay\Api\Api;
+$key='rzp_test_dLar8Yj5rx9pzZ'; //Your Test Key
+$sec='PVksEdKHwymDV2QS4L87uaNm'; //Your Test Secret Key
 
-jQuery('#PayNow').click(function(e){
+// Create order - cURL
+// $postdata=array(
+//     "amount"=>10*100,
+//     "currency"=> "INR",
+//     "receipt"=> 'asd',
+//     "notes" =>array(
+//                   "notes_key_1"=> 'asd',
+//                   "notes_key_2"=> ""
+//                   )
+//     );
+//     $curl = curl_init();
+    
+//     curl_setopt_array($curl, array(
+//       CURLOPT_URL => 'https://api.razorpay.com/v1/orders',
+//       CURLOPT_RETURNTRANSFER => true,
+//       CURLOPT_ENCODING => '',
+//       CURLOPT_MAXREDIRS => 10,
+//       CURLOPT_TIMEOUT => 0,
+//       CURLOPT_FOLLOWLOCATION => true,
+//       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//       CURLOPT_CUSTOMREQUEST => 'POST',
+//       CURLOPT_POSTFIELDS =>json_encode($postdata),
+//       CURLOPT_HTTPHEADER => array(
+//         'Content-Type: application/json',
+//         'Authorization: '."Basic ".base64_encode($key.":".$sec)
+//       ),
+//     ));
+    
+//     $response = curl_exec($curl);
+    
+//     curl_close($curl);
+    
+//     print_r($response);exit;
 
-	var paymentOption='';
-let billing_name = $('#billing_name').val();
-	let billing_mobile = $('#billing_mobile').val();
-	let billing_email = $('#billing_email').val();
-  var shipping_name = $('#billing_name').val();
-	var shipping_mobile = $('#billing_mobile').val();
-	var shipping_email = $('#billing_email').val();
-var paymentOption= "netbanking";
-var payAmount = $('#payAmount').val();
-			
-var request_url="submitpayment.php";
-		var formData = {
-			billing_name:billing_name,
-			billing_mobile:billing_mobile,
-			billing_email:billing_email,
-			shipping_name:shipping_name,
-			shipping_mobile:shipping_mobile,
-			shipping_email:shipping_email,
-			paymentOption:paymentOption,
-			payAmount:payAmount,
-			action:'payOrder'
-		}
-		
-		$.ajax({
-			type: 'POST',
-			url:request_url,
-			data:formData,
-			dataType: 'json',
-			encode:true,
-		}).done(function(data){
-		
-		if(data.res=='success'){
-				var orderID=data.order_number;
-				var orderNumber=data.order_number;
-				var options = {
-    "key": data.razorpay_key, // Enter the Key ID generated from the Dashboard
-    "amount": data.userData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "Tutorialswebsite", //your business name
-    "description": data.userData.description,
-    "image": "https://www.tutorialswebsite.com/wp-content/uploads/2022/02/cropped-logo-tw.png",
-    "order_id": data.userData.rpay_order_id, //This is a sample Order ID. Pass 
-    "handler": function (response){
 
-    window.location.replace("payment-success.php?oid="+orderID+"&rp_payment_id="+response.razorpay_payment_id+"&rp_signature="+response.razorpay_signature);
+//Create order -  SDK
+// $api = new Api($key, $sec);
+// $postdata=array(
+//     "amount"=>10*100,
+//     "currency"=> "INR",
+//     "receipt"=> 'asd',
+//     "notes" =>array(
+//                   "notes_key_1"=> 'asd',
+//                   "notes_key_2"=> ""
+//                   )
+//     );
+// $razorpayOrder = $api->order->create($postdata);
+// $razorpayOrderId = $razorpayOrder['id'];
+// $_SESSION['razorpay_order_id'] = $razorpayOrderId;
+// $displayAmount = $amount = $orderData['amount'];
+// echo "<pre>";
+// print_r($razorpayOrder);
 
-    },
-    "modal": {
-    "ondismiss": function(){
-         window.location.replace("payment-success.php?oid="+orderID);
-     }
-},
-    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-        "name": data.userData.name, //your customer's name
-        "email": data.userData.email,
-        "contact": data.userData.mobile //Provide the customer's phone number for better conversion rates 
-    },
-    "notes": {
-        "address": "Tutorialswebsite"
-    },
-    "config": {
-    "display": {
-      "blocks": {
-        "banks": {
-          "name": 'Pay using '+paymentOption,
-          "instruments": [
-           
-            {
-                "method": paymentOption
-            },
-            ],
-        },
-      },
-      "sequence": ['block.banks'],
-      "preferences": {
-        "show_default_blocks": true,
-      },
-    },
-  },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.on('payment.failed', function (response){
+// Razorpay\Api\Order Object
+// (
+//     [attributes:protected] => Array
+//         (
+//             [amount] => 1000
+//             [amount_due] => 1000
+//             [amount_paid] => 0
+//             [attempts] => 0
+//             [created_at] => 1719837632
+//             [currency] => INR
+//             [entity] => order
+//             [id] => order_OTN5BxHn8IGTFG
+//             [notes] => Razorpay\Api\Order Object
+//                 (
+//                     [attributes:protected] => Array
+//                         (
+//                             [notes_key_1] => asd
+//                             [notes_key_2] => 
+//                         )
 
-    window.location.replace("payment-failed.php?oid="+orderID+"&reason="+response.error.description+"&paymentid="+response.error.metadata.payment_id);
+//                 )
 
-         });
-      rzp1.open();
-     e.preventDefault(); 
-}
- 
-});
- });
-    });
+//             [offer_id] => 
+//             [receipt] => asd
+//             [status] => created
+//         )
 
-</script>
-</head>
-<body style="background-repeat: no-repeat;">
-<div class="container">
-<div class="row">
-<div class="col-xs-12 col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">Charge Rs.10 INR  </h4>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" name="billing_name" id="billing_name" placeholder="Enter name" required="" autofocus="">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" name="billing_email" id="billing_email" placeholder="Enter email" required="">
-                        </div>
-                        
-                  <div class="form-group">
-                            <label>Mobile Number</label>
-                            <input type="number" class="form-control" name="billing_mobile" id="billing_mobile" min-length="10" max-length="10" placeholder="Enter Mobile Number" required="" autofocus="">
-                        </div>
-                        
-                         <div class="form-group">
-                            <label>Payment Amount</label>
-                            <input type="text" class="form-control" name="payAmount" id="payAmount" value="10" placeholder="Enter Amount" required="" autofocus="">
-                        </div>
-						
-	<!-- submit button -->
-	<button  id="PayNow" class="btn btn-success btn-lg btn-block" >Submit & Pay</button>
-                       
-                    </div>
-                </div>
-            </div>
-</div>
-</div>
-</body>
-</html>
+// )
+
+
+// {
+//     "razorpay_payment_id": "pay_OTSAAEqrJVVRiW",
+//     "razorpay_order_id": "order_OTS7qia2BJbwpl",
+//     "razorpay_signature": "f90767f519e149362837c605c13e2c037cf2d36668f8372b7140f5400325b4a8"
+// }
+// //Get payment details
+// $api = new Api($key, $sec);
+// $paymentId = 'pay_OSBN9fO62yZcC1';
+// $r = $api->payment->fetch($paymentId);
+// echo "<pre>";
+// print_r($r);
+
+echo "HEL";

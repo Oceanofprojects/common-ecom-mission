@@ -1,9 +1,18 @@
 <?php
 
+
+
+
+require_once __DIR__.'/Config/global.php';
+
 session_start();
 
-ini_set('display_errors', 1);
-require_once __DIR__.'/Config/global.php';
+
+if(DEBUG){
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(1);
+}
 if (isset($_GET["controller"])) {
     $controllerObj = loadController($_GET["controller"]);
     launchAction($controllerObj);
@@ -26,7 +35,15 @@ function loadController($controller)
         case 'admin':
             require_once __DIR__.'/Controller/adminController.php';
             $controllerObj = new adminController();
+            break;      
+        case 'payment':
+            require_once __DIR__.'/Controller/paymentController.php';
+            $controllerObj = new paymentController();
             break;             
+        case 'home':
+            // require_once __DIR__.'/Controller/homeController.php';
+            // $controllerObj = new homeController();
+            // break;      
         default:
             require_once __DIR__.'/Controller/homeController.php';
             $controllerObj = new homeController();

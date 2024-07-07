@@ -6,7 +6,6 @@ require_once __DIR__ . '/../Model/commonModel.php';
 class customer extends commonModel
 {
 	use userData;
-	public $db;
 	public $cid;
 	public function __construct()
 	{
@@ -22,12 +21,13 @@ class customer extends commonModel
 		$tmpPwd = password_hash($data['pwd'], PASSWORD_DEFAULT);
 		$data['pwd'] = $tmpPwd;
 		$data['role'] = 'customer';
+
 		$arr = [
-			// 'pre_condition' => ['isDuplicate' => [
-			//     ['email',$data['email']],
-			//     ['ph_num',$data['ph_num']],
-			//     ['whatsapp_num',$data['whatsapp_num']]
-			// ]],
+			'pre_condition' => ['isDuplicate' => [
+			    ["email=$data[email]"],
+			    ["ph_num=$data[ph_num]"],
+			    ["whatsapp_num=$data[whatsapp_num]"]
+			]],
 			'tbl_name' => 'customers',
 			'action' => 'INSERT',
 			'data' => $this->genArAssocToColSep($data),

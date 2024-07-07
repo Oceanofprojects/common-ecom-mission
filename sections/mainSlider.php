@@ -25,7 +25,7 @@
 
         if(count($sImgs)!==0){
           for($i=0;$i<count($sImgs);$i++){
-            echo '<li class="glide__slide" style="background:url(\'assets/slide_images/'.$sImgs[$i].'\');background-size:cover;background-position:center;height:70vh;width:100%;"></li>';
+            echo '<li class="glide__slide" style="background:url(\'assets/slide_images/'.$sImgs[$i].'\');background-size:cover;background-position:center;height:50vh;width:100%;"></li>';
           }
         }
 ?>
@@ -58,7 +58,7 @@ new Glide('.glide').mount();
 new Glide('.glide', {
 
     // Auto change slides after specifed interval.
-    autoplay: 4000,
+    autoplay: 1000,
 
     // <a href="https://www.jqueryscript.net/slider/">Slider</a> type.
     // carousel, slider or slideshow.

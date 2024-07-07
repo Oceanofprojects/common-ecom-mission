@@ -3,6 +3,8 @@
 
 class commonController
 {
+
+    public $validateResults;
     /**
      * Create the view that we pass to it with the indicated data.
      *
@@ -140,23 +142,7 @@ class commonController
 
     public function removeUniqueWordForLabel($validateArrs, $arrData)
     {
-        // for($i = 0;$i < count($validateArrs);$i++){
-        //     if($validateArrs[$i][1] == "remove"){
-        //         return strtoupper(str_replace($validateArrs[$i][0],'',str_replace('_',' ',$arrData)));
-        //     }else if($validateArrs[$i][1] == "auto_remove"){
-        //        $d = explode('_',$arrData);
-        //         if(is_array($d) && count($d)>0){
-        //             for ($i=0; $i <count($d); $i++) { 
-        //                 if(strlen($d[$i]) != 1){
-        //                     $tmp_d[] = $d[$i];
-        //                 }
-        //             }
-        //                 $arrData = implode('_',$tmp_d); 
-
-        //         }
-        //         return strtoupper(str_replace('_',' ',$arrData));
-        //     }
-        // }
+       
         switch ($arrData) {
             case 'cus_idnty':
                 $pre_fix = 'Name, ID , Email, Phone';

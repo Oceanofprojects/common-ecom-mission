@@ -129,12 +129,12 @@ width:90%;
             <form id="frm" action="">
                 <table id="tbl_data_1">
                     <tr>
-                        <td>Child ID<sup>*</sup></td>
-                        <td><input type="text" name="pid" id="pid" placeholder="Parent ID"></td>
+                        <td>Main product ID<sup>*</sup></td>
+                        <td><input type="text" name="cid" id="cid" placeholder="Child ID"></td>
                     </tr>
                     <tr>
-                        <td>Parent ID<sup>*</sup></td>
-                        <td><input type="text" name="cid" id="cid" placeholder="Child ID"></td>
+                        <td>Sub product ID<sup>*</sup></td>
+                        <td><input type="text" name="pid" id="pid" placeholder="Parent ID"></td>
                     </tr>
                     <tr>
                         <td>
@@ -157,6 +157,7 @@ width:90%;
                 $('#pid').val()+'&cid='+$('#cid').val(), (res) => {
                     d = JSON.parse(res);
                     if (d.status) {
+                        $('#frm')[0].reset();
                         dis_msg_box('#000', 'lightgreen', d.message);
                     } else {
                         dis_msg_box('#000', 'tomato', d.message);

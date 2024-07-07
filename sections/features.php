@@ -1,17 +1,22 @@
 <section class="features_layer">
     <div class="features_box">
         <h1 class="fa fa-leaf"></h1>
-        <p>TOP QUALITY</p>
+        <p>Top Quality</p>
+    </div>
+
+    <div class="features_box">
+        <h1 class="fa fa-lock"></h1>
+        <p>Secure Payment</p>
     </div>
 
     <div class="features_box">
         <h1 class="fa fa-cubes"></h1>
-        <p>SAFE PACKING</p>
+        <p>Safe Packing</p>
     </div>
 
     <div class="features_box">
         <h1 class="fa fa-truck"></h1>
-        <p>ONLINE TRACK</p>
+        <p>Track Order</p>
     </div>
 
     <div class="features_box">
@@ -21,7 +26,7 @@
 
     <div class="features_box">
         <h1 class="fa fa-percent"></h1>
-        <p>EXCLUSIVE OFFER</p>
+        <p>Exclusive Offer</p>
     </div>
 
 

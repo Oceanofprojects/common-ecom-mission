@@ -5,5 +5,6 @@ define("DB_USER", "root");
 define("DB_PASS", "");
 define("DB_DATABASE", "blossomcorner"); //EDITED
 define("DB_CHARSET", "utf8");
+session_start();
 
 ?>

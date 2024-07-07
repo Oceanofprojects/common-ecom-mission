@@ -36,7 +36,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
                         <li><span class="nav-link"><span class="fa fa-cube"></span><a href="#">Sub Items</a>
                             <span class="fa fa-caret-right"></span></span>
                             <ul class="sub_menu_2">
-                                <!---<li><span class="nav-link"><span class="fa fa-plus"></span><a href="index.php?controller=product&key=8a0f72fd3fcbf1251465c4c08ca83ec220d386abdadda14deea943df38b79d22">Add</a></span></li>--->
+                                <li><span class="nav-link"><span class="fa fa-plus"></span><a href="index.php?controller=product&key=8a0f72fd3fcbf1251465c4c08ca83ec220d386abdadda14deea943df38b79d22">Add</a></span></li>
                                 <li><span class="nav-link"><span class="fa fa-refresh"></span><a href="index.php?controller=product&key=d02d50e91c94b56391c8a26675321efacaa55b019ea4c4e43a8da6ac3e8336e9">Transfer</a></span></li>
                             </ul>
                         </li>
@@ -47,18 +47,18 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
                             <!---<li><span class="nav-link"><span class="fa fa-plus"></span><a href="#">Add-beta</a></span></li>
                             <li><span class="nav-link"><span class="fa fa-wrench"></span><a href="#">Edit-beta</a></span></li>--->
                         </ul></li>
-                        <li><span class="nav-link"><span class="fa fa-bar-chart-o"></span><a href="#">Couriers</a>
-                            <span class="fa fa-caret-right"></span></span>
+                        <li><span class="nav-link"><span class="fa fa-bar-chart-o"></span><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin">Orders</a>
+                            <!---<span class="fa fa-caret-right"></span></span>
                             <ul class="sub_menu_2">
                             <li><span class="nav-link"><span class="fa fa-list"></span><a href="index.php?key=f688a5ac3f3f4edbd7172d430360ad7c7a5f4a968e2f50774b911592ffd6592c&controller=admin">List</a></span></li>
                             <li><span class="nav-link"><span class="fa fa-inbox"></span><a href="index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9">Request</a></span></li>
-                        </ul></li>
+                        </ul>--></li>
                         <li><span class="nav-link"><span class="fa fa-upload"></span><a href="#">Bluk upload</a></span></li>
                     </ul>
                 </li>'.$account_nav;
 
 }else{
-  $extraLinks = '<li><a href="index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home"><span class="fa fa-sign-in"></span>login</a></li>';
+  $extraLinks = '<li><span class="nav-link"><span class="fa fa-sign-in"></span><a href="index.php?key=f01f773c6da80db08b2b3150fe2f0dcdb68ab5d8c0caa5fa9517e75b7896fdc3&controller=home">Login</a></span></li>';
 }
 ?>
 
@@ -307,7 +307,7 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
         <nav class="top_nav">
             <div>
                 <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">
-                    <img height="90px" src="./assets/common-images/logo.png" alt="" style="height:80px;width:250px;">
+                    <img height="90px" src="./assets/common-images/logo.png" alt="" style="border-radius:50px;height:60px;width:60px;margin:15px">
                 </a>
             </div>
             <div class="search">
@@ -322,11 +322,11 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
             </div>
             <div class="icon-layer">
                 <span style="display: flex;justify-content:flex-end;align-items: center;">
-                    <a href="#" style="padding:5px 10px;border-radius:5px;background-color:lightgreen;"><span class="fa fa-phone"></span><i style="padding-left: 5px; font-size: 13pt;">Contact us</i></a>                    
+                    <a href="tel:<?=$info['business']['phone']?>" style="padding:5px 10px;border-radius:5px;background-color:lightgreen;"><span class="fa fa-phone"></span><i style="padding-left: 5px; font-size: 13pt;">Contact us</i></a>                    
                 </span>
             </div>
         </nav>
-        <nav class="menu">
+        <nav class="menu" style="padding:3px">
             <ul style="border:.1px solid rgba(0,0,0,.1);">
                 <li><span class="nav-link"><span class="fa fa-home"></span><a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6">Home</a></span></li>
                 <li><span class="nav-link"><span class="fa fa-truck"></span><a href="index.php?key=450fa328dcada230a73f8b9797e504445116170dc6e0180da5d35b63d5b05e29&controller=product">Track</a></span></li>
@@ -428,6 +428,9 @@ if($userState[0] && $userState[2] == 'customer'){//CUSTOMER VIEW MENU
     <p><b>Please wait</b></p>
 </div>
 <!-- Common message box  -->
+ <center>
 <div id="common_dis_msg_box">
-    <div id="msg_content_to_display"></div>
+    <!-- <div class="msg_content_to_display">
+    </div> -->
 </div>
+</center>

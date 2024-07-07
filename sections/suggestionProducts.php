@@ -28,6 +28,7 @@
     padding: 20px 1px;
     width:100%;
     min-width: 240px;
+    min-width: 300px;
     margin: 10px;
     border-radius: 5px;
     border: .2px solid rgba(0, 0, 0, .2);

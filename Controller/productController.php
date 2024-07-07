@@ -36,13 +36,12 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'addProduct',$skey),$req['key'])){
         $validateArgs = [
             ['p_name', 'check', 'isNotEmpty'],
-            ['p_name', 'check', 'isNotContainSpecialChars_allow_space'],
             ['unit', 'check', 'isNotEmpty'],
-            ['unit', 'check', 'isNotContainSpecialChars_allow_space'],
             ['p_desc', 'check', 'isNotEmpty'],
-            ['p_desc', 'check', 'isNotContainSpecialChars_allow_space'],
-            ['tags', 'check', 'isNotEmpty'],
-            ['tags', 'check', 'isNotContainSpecialChars_allow_space'],
+            ['net_weight', 'check', 'isNotEmpty'],
+            ['price', 'check', 'isNotEmpty'],
+            ['unit', 'check', 'isNotEmpty'],
+            ['stock', 'check', 'isNotEmpty'],
             ['', 'auto_remove', 'forLabelMsg']//auto remove ext
         ]; //VALIDATE CONDITIONS ARGS
         $flag = $this->autoValidate($_POST, $validateArgs)[0];
@@ -116,7 +115,12 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'sendReview',$skey),$req['key'])){
         echo json_encode($this->productMdl->sendReview($_GET));
       }else if(hash_equals(hash_hmac($algo,'checkout',$skey),$req['key'])){
-        echo json_encode($this->productMdl->checkout());
+        $checkout_flag = $this->productMdl->checkout();
+        if($checkout_flag['status']){
+          echo json_encode(['status'=>$checkout_flag['status'],'message'=>$checkout_flag['message']]);//Moving to final checkout page
+        }else{
+          echo json_encode($checkout_flag);exit;
+        }
       }else if(hash_equals(hash_hmac($algo,'getCateById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getCateById($_GET['cid']));
       }else if(hash_equals(hash_hmac($algo,'editCategory',$skey),$req['key'])){
@@ -124,21 +128,9 @@ class productController extends commonController
       }else if(hash_equals(hash_hmac($algo,'getProductDetailById',$skey),$req['key'])){
         echo json_encode($this->productMdl->getProductDetailById($_GET['pid']));
       }else if(hash_equals(hash_hmac($algo,'completedClientOrder',$skey),$req['key'])){
-        // $check_dbl_check = $this->productMdl->checkout();
-        // print_r($check_dbl_check);
-        // $tot_qnt=null;
-        // foreach ($check_dbl_check['product_detail'] as $item) {
-        //   $tot_qnt += $item['qnty'];
-        // }
-        // if(is_array($check_dbl_check['product_detail']) && count($check_dbl_check['product_detail'])>0){
-        // (!isset($_GET['item']))?die(json_encode(['status'=>false,'data'=>[],'message'=>'item count not exists'])):true;
-        //   $sec_item = intval(base64_decode($_GET['item']));
-        //   if(($sec_item-9050) == $tot_qnt){
+        
             echo json_encode($this->productMdl->completedClientOrder());
-        //   }else{
-        //     echo json_encode(['status'=>false,'data'=>[],'message'=>'New product founded. Please wait..','flag'=>'refresh']);
-        //   }
-        // }
+      
       }else if(hash_equals(hash_hmac($algo,'deleteProduct',$skey),$req['key'])){
         echo json_encode($this->productMdl->deleteProduct());
       }else if(hash_equals(hash_hmac($algo,'deleteCategory',$skey),$req['key'])){

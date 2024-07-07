@@ -50,6 +50,7 @@
 .ft-r-bm-box ul li a {
     color: #fffa;
     text-decoration: none;
+    justify-content: flex-start;
 }
 
 .ft-social-links ul a:hover,
@@ -75,12 +76,13 @@
 
 .ft-r-bm-box ul {
     min-width: 100px;
+    text-align: left;
     margin: 10px 0px;
 }
 
 .ft-r-bm-box ul li {
     list-style: none;
-    padding: 10px
+    padding: 10px;
 }
 
 .ft-subscribe-layer {
@@ -167,7 +169,7 @@ $info = $cusObj->business_info();
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="ft-r-info ft-sub-div">
-            <div class="ft-r-tp-box">
+            <div class="ft-r-tp-box" style="text-align:left">
                 <div class="ft-social-links">
                     <span>Follow us</span>
                     <ul>
@@ -192,10 +194,10 @@ $info = $cusObj->business_info();
             <div class="ft-r-bm-box">
                 <ul>
                     <li><span>Reach us</span></li>
-                    <li><a href="#"><?php echo $info['business']['address'];?></a></li>
-                    <li><a
+                    <li><a href="#"><?php echo $info['business']['address'].', '.$info['business']['city'].'-'.$info['business']['pincode'];?></a></li>
+                    <!-- <li><a
                             href="tel:<?php echo '+91 '.$info['business']['phone'];?>"><?php echo '+91 '.$info['business']['phone'];?></a>
-                    </li>
+                    </li> -->
                     <li><a
                             href="<?php echo 'https://wa.me/91'.$info['business']['whatsapp'];?>"><?php echo '+91 '.$info['business']['whatsapp'];?></a>
                     </li>
@@ -233,9 +235,9 @@ $info = $cusObj->business_info();
                     <li><a
                             href="index.php?controller=home&key=d75c9c5bdb3499137659ecfe86f846bbc126a25bd6fe91ef16f6983b3536df02">Shipping
                             Policy</a></li>
-                    <li><a
+                    <!-- <li><a
                             href="index.php?controller=home&key=d45cd0f4c84fe88efa0fc4f23105a7ed1d868302f794afba92eccce80c286742">Refund
-                            Policy</a></li>
+                            Policy</a></li> -->
                     <li><a
                             href="index.php?controller=home&key=ae8e01dd7500c73fe6762c7d13811f29326bce000c76851fba66fe39c57524e4">Replacement
                             Policy</a></li>

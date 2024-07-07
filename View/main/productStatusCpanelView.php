@@ -45,8 +45,8 @@
     <a href="index.php?controller=home&key=723502982ca5d2790c1f9464af3613117a3bd4e55ee0a68b6c29ab76d23b71b6"
         style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">Home</a>
 
-        <a href="index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9"
-        style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">CC Request</a>
+        <!-- <a href="index.php?controller=admin&key=f76543c3830696dbcdb775d38ebe9b6a763086d2a86be47c449c7b5a55f8d3e9"
+        style="margin:10px;background:cornflowerblue;color:#fff;text-decoration:none;padding:10px;border-radius:5px;border:1px solid #555;">CC Request</a> -->
 
     <br><br><br>
     <center>
@@ -98,7 +98,7 @@
                 if($data['data'] !==0){
                     $res = $data['data']; 
                     for($i=0;$i<count($res);$i++){
-                        echo "<tr><td><a href='index.php?key=1037d9ea3af16d70f0ce197f737e4ca6a3d1f436ce0365689334069ea9772565&cid=".base64_encode($res[$i]['cid'])."&controller=admin'>".$res[$i]['cid']."</a></td><td>".$res[$i]['name']."</td><td><a href='Invoice?invoice_id=".$res[$i]['order_id']."'>".$res[$i]['order_id']."</a></td><td><a href=\"assets/payment_proof_images/".$res[$i]['pay_proof']."\">Image link</a></td><td>".$res[$i]['cart_date']."</td><td>".getStatusDP($res[$i]['status'],"'".$res[$i]['order_id']."'")."</td></tr>";
+                        echo "<tr><td><a href='index.php?key=1037d9ea3af16d70f0ce197f737e4ca6a3d1f436ce0365689334069ea9772565&cid=".base64_encode($res[$i]['cid'])."&controller=admin'>".$res[$i]['cid']."</a></td><td>".$res[$i]['name']."</td><td><a href='Invoice?invoice_id=".$res[$i]['order_id']."'>".$res[$i]['order_id']."</a></td><td><!-- <a href=\"pay/orderdetail/?id=".$res[$i]['pay_proof']."\">Payment proof</a>-->-</td><td>".$res[$i]['cart_date']."</td><td>".getStatusDP($res[$i]['status'],"'".$res[$i]['order_id']."'")."</td></tr>";
                     }
                 }else{
                     echo "<tr><td>Zero fetch !</td></tr>";

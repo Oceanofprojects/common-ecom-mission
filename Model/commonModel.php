@@ -53,17 +53,25 @@ class commonModel
             //PREPARE QUERY
             if (isset($this->arColVal['pre_condition']['isDuplicate']) == 1) {
                 for($preIndi=0;$preIndi<count($this->arColVal['pre_condition']['isDuplicate']);$preIndi++){
-                    $colName = $this->arColVal['pre_condition']['isDuplicate'][$preIndi][0];
-                    $colValue = $this->arColVal['pre_condition']['isDuplicate'][$preIndi][1];
-                    $q = "SELECT * FROM {$this->table} WHERE `{$colName}` = {$colValue}";
-                    $sql = $this->db->prepare($q);
-                    //RUNNING QUERY
-                    if ($sql->execute()) {
-                        $res = $sql->fetchAll(PDO::FETCH_ASSOC);
-                        if (count($res)) { //If duplicate founded
-                            return ['status' => 'failed', 'data' => [], 'msg' => 'Duplicate value founded in ' . str_replace('_', ' ', $this->arColVal['pre_condition']['isDuplicate'][$preIndi][0])];
+                    $pre_param = explode('=',$this->arColVal['pre_condition']['isDuplicate'][$preIndi][0]);
+                    if(is_array($pre_param) && count($pre_param)>=2){
+                        $this->bind_values[':'.$pre_param[0]] = $pre_param[1];
+                        $q = "SELECT TRUE FROM $this->table WHERE $pre_param[0]=:$pre_param[0]";
+                        $res = $this->query($q);
+                        if($res['status'] == 'success'){
+                            if(isset($res['numrows']) && $res['numrows'] > 0){
+                            return ['status' => 'failed', 'data' => [], 'msg' => 'Duplicate value founded in ' . str_replace('_', ' ',$pre_param[0])];
+                            }
+                        }else{
+                            return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Pre-condition failed'];
                         }
+                        $this->bind_values = [];
                     }
+                }
+                //Checking, There is any query to generated
+                if(isset($this->arColVal['data'])){
+                    unset($this->arColVal['pre_condition']);
+                    $this->generateQuery($this->arColVal);//Restart gen-query
                 }
             }
         }
@@ -168,27 +176,31 @@ class commonModel
             }
         }
 
-        if(isset($this->arColVal['query-exc']) && $this->arColVal['query-exc'] == true){
-
-          //PREPARE QUERY
-          $sql = $this->db->prepare($this->query);
-          //RUNNING QUERY
-
-          if ($sql->execute($this->bind_values)) {
-                $this->bind_values = [];//Reset params
-                  $num = $sql->rowCount();
-              if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
-                  //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
-                  $res = $sql->fetchAll(PDO::FETCH_ASSOC);//GETTING ALL DATA
-                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', $res,$num);
-              } else {
-                      return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', '',$num);
-              }
-          } else {
-              return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Query Exec Failed','details'=>['code'=>$sql->errorInfo()[1],'message'=>$sql->errorInfo()[2]]];
-          }
+        if(isset($this->arColVal['query-exc']) && $this->arColVal['query-exc']){
+            return $this->query($this->query);
         }else{
-          return $this->query;
+            return $this->query;
+        }
+    }
+
+    public function query($query){
+        // !empty($query) or die(json_encode(['status'=>'failed','data'=>[],'message'=>'empty query string !'])); 
+
+        //PREPARE QUERY
+        $sql = $this->db->prepare($query);
+        //RUNNING QUERY
+        if ($sql->execute($this->bind_values)) {
+              $this->bind_values = [];//Reset params
+                $num = $sql->rowCount();
+            if (strtoupper($this->arColVal['action']) == 'SELECT' || strtoupper($this->arColVal['action']) == 'JOIN') {
+                //IF ACTION IS FETCHING SOME VALUES IT'S RETURN DATA IN RESPONSE.
+                $res = $sql->fetchAll(PDO::FETCH_ASSOC);//GETTING ALL DATA
+                    return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', $res,$num);
+            } else {
+                    return $this->outPut((isset($this->arColVal['type']) == 1 && strlen($this->arColVal['type']) !== 0) ? $this->arColVal['type'] : 'array', '',$num);
+            }
+        } else {
+            return ['status' => 'failed', 'data' => [], 'msg' => 'Err : Query Exec Failed','details'=>['code'=>$sql->errorInfo()[1],'message'=>$sql->errorInfo()[2]]];
         }
     }
 
